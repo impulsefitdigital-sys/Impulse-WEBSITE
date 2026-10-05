@@ -1,0 +1,3 @@
+# Lu AVANT netlify.toml : la route de la fonction doit précéder la règle générale.
+/api/content  /.netlify/functions/content  200
+/*            /index.html                  200

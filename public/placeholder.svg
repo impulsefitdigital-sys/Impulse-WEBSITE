@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+  <rect width="800" height="600" fill="#17171b"/>
+  <g fill="#45454e">
+    <rect x="352" y="266" width="96" height="14" rx="7"/>
+    <rect x="330" y="250" width="16" height="46" rx="5"/>
+    <rect x="312" y="260" width="13" height="26" rx="4"/>
+    <rect x="454" y="250" width="16" height="46" rx="5"/>
+    <rect x="475" y="260" width="13" height="26" rx="4"/>
+  </g>
+  <text x="400" y="360" text-anchor="middle" fill="#63636c" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="600" letter-spacing="4">PHOTO BIENTÔT DISPONIBLE</text>
+</svg>

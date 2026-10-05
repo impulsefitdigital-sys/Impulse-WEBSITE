@@ -1,0 +1,46 @@
+# Configuration Netlify — Impulse Fitness Maroc
+[build]
+  # Les 1 068 images du site sont dans images/*.zip (envoi web GitHub limité à 100 fichiers et
+  # 25 Mo par fichier) : décompressées dans public/storage/ avant la compilation.
+  command = "mkdir -p public/storage && for f in images/*.zip; do [ -f \"$f\" ] && (unzip -oq \"$f\" -d public/storage || python3 -m zipfile -e \"$f\" public/storage); done; npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # puppeteer (pré-rendu SEO optionnel) : inutile sur Netlify, on évite de télécharger Chromium
+  PUPPETEER_SKIP_DOWNLOAD = "true"
+
+[functions]
+  directory = "netlify/functions"
+
+# Aperçus de PR et branches : toujours en mode démo, pour ne jamais modifier
+# la base de production depuis un site de test.
+[context.deploy-preview.environment]
+  VITE_DATA_MODE = "demo"
+
+[context.branch-deploy.environment]
+  VITE_DATA_MODE = "demo"
+
+# Contenu public en cache (netlify/functions/content.mjs) — AVANT la règle générale
+[[redirects]]
+  from = "/api/content"
+  to = "/.netlify/functions/content"
+  status = 200
+
+# Application React (SPA) : toutes les URL renvoient vers index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Cache long pour les fichiers versionnés par Vite
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Images du site : 30 jours dans le navigateur
+[[headers]]
+  for = "/storage/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
