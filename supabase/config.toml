@@ -1,0 +1,7 @@
+# Configuration locale de la CLI Supabase (sert seulement à `supabase start`).
+# Le projet en ligne se configure dans le tableau de bord — cf. supabase/restauration/README.md.
+project_id = "impulse-fitness"
+
+[auth]
+# Pas d'inscription publique : les comptes admin sont créés à la main.
+enable_signup = false
