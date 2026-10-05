@@ -1,0 +1,249 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 9%;
+    --card: 0 0% 96%;
+    --card-foreground: 0 0% 9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 94%;
+    --secondary-foreground: 0 0% 25%;
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 0 85% 50%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 85% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 89%;
+    --input: 0 0% 89%;
+    --ring: 0 85% 50%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 9%;
+    --sidebar-primary: 0 0% 9%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 94%;
+    --sidebar-accent-foreground: 0 0% 9%;
+    --sidebar-border: 0 0% 89%;
+    --sidebar-ring: 0 85% 50%;
+
+    --shadow-product: 0 4px 20px -4px rgba(0, 0, 0, 0.08);
+    --shadow-hero: 0 10px 30px -10px rgba(0, 0, 0, 0.15);
+
+    --font-display: 'Montserrat', sans-serif;
+    --font-body: 'Montserrat', sans-serif;
+  }
+
+  .dark {
+    --background: 0 0% 4%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 64%;
+    --accent: 0 85% 50%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 85% 45%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 0 85% 50%;
+    --sidebar-background: 0 0% 6%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 0 85% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 12%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 0 0% 12%;
+    --sidebar-ring: 0 85% 50%;
+  }
+}
+
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.04em;
+  }
+}
+
+@layer components {
+  .hero-overlay {
+    background: linear-gradient(
+      to right,
+      hsl(0 0% 0%) 0%,
+      hsl(0 0% 0% / 0.75) 30%,
+      hsl(0 0% 0% / 0.3) 60%,
+      transparent 100%
+    );
+  }
+
+  .product-card-shadow {
+    box-shadow: var(--shadow-product);
+  }
+
+  .section-divider {
+    border-top: 1px solid hsl(var(--border));
+  }
+
+  .text-gradient-accent {
+    background: linear-gradient(135deg, hsl(var(--accent)), hsl(0 85% 60%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Global button: filled red default — on hover, the red fill slides out to the right
+     progressively revealing the transparent/outlined state underneath. Smooth color transitions. */
+  .btn-slide,
+  .btn-slide-accent {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    overflow: hidden;
+    border-radius: 0.375rem;
+    border: 1.5px solid hsl(var(--accent));
+    background-color: transparent;
+    color: hsl(var(--accent-foreground));
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: color 0.4s ease, border-color 0.3s ease, transform 0.3s ease;
+    z-index: 0;
+    isolation: isolate;
+  }
+  .btn-slide::before,
+  .btn-slide-accent::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: hsl(var(--accent));
+    transform: translateX(0);
+    transition: transform 0.55s cubic-bezier(0.65, 0, 0.35, 1);
+    z-index: -1;
+  }
+  .btn-slide:hover::before,
+  .btn-slide-accent:hover::before {
+    transform: translateX(101%);
+  }
+  .btn-slide:hover,
+  .btn-slide-accent:hover {
+    color: hsl(var(--accent));
+    border-color: hsl(var(--accent));
+  }
+
+  /* Inverted variant for dark backgrounds: white fill that slides out to the right */
+  .btn-slide-inverse {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    overflow: hidden;
+    border-radius: 0.375rem;
+    border: 1.5px solid hsl(var(--background));
+    background-color: transparent;
+    color: hsl(var(--foreground));
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: color 0.4s ease, border-color 0.3s ease, transform 0.3s ease;
+    z-index: 0;
+    isolation: isolate;
+  }
+  .btn-slide-inverse::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: hsl(var(--background));
+    transform: translateX(0);
+    transition: transform 0.55s cubic-bezier(0.65, 0, 0.35, 1);
+    z-index: -1;
+  }
+  .btn-slide-inverse:hover::before {
+    transform: translateX(101%);
+  }
+  .btn-slide-inverse:hover {
+    color: hsl(var(--background));
+  }
+
+  /* Auto-apply slide effect to any button/link with bg-accent across the site */
+  button.bg-accent,
+  a.bg-accent {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    z-index: 0;
+    border-radius: 0.375rem;
+    border: 1.5px solid hsl(var(--accent));
+    transition: color 0.4s ease, border-color 0.3s ease, background-color 0.3s ease;
+  }
+  button.bg-accent::before,
+  a.bg-accent::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: hsl(var(--accent));
+    transform: translateX(0);
+    transition: transform 0.55s cubic-bezier(0.65, 0, 0.35, 1);
+    z-index: -1;
+  }
+  button.bg-accent:hover::before,
+  a.bg-accent:hover::before {
+    transform: translateX(101%);
+  }
+  button.bg-accent:hover,
+  a.bg-accent:hover {
+    background-color: transparent !important;
+    color: hsl(var(--accent)) !important;
+  }
+
+  .progress-bar-fill {
+    background: hsl(var(--accent));
+    transition: width linear;
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+  }
+}
