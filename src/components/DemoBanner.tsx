@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { IS_DEMO } from "@/integrations/supabase/client";
 
 /** Bandeau discret affiché uniquement en mode démo (aucune clé de base de données). */
 const DemoBanner = () => {
   const [open, setOpen] = useState(true);
+  const { pathname } = useLocation();
   if (!IS_DEMO) return null;
   // Une démo ne doit jamais être indexée (contenu dupliqué avec le vrai site)
   const noindex = (
@@ -13,7 +14,8 @@ const DemoBanner = () => {
       <meta name="robots" content="noindex, nofollow" />
     </Helmet>
   );
-  if (!open) return noindex;
+  // Pas de bandeau dans le back-office : il masquerait les boutons du formulaire
+  if (!open || pathname.startsWith("/admin") || pathname.startsWith("/login")) return noindex;
   return (
     <>
     {noindex}

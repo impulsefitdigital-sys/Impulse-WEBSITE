@@ -580,6 +580,7 @@ export type Database = {
       product_images: {
         Row: {
           alt_text: string | null
+          color: string | null
           created_at: string
           id: string
           image_url: string
@@ -588,6 +589,7 @@ export type Database = {
         }
         Insert: {
           alt_text?: string | null
+          color?: string | null
           created_at?: string
           id?: string
           image_url: string
@@ -596,6 +598,7 @@ export type Database = {
         }
         Update: {
           alt_text?: string | null
+          color?: string | null
           created_at?: string
           id?: string
           image_url?: string
@@ -682,6 +685,7 @@ export type Database = {
           description: string | null
           features: Json | null
           hover_image_url: string | null
+          default_color: string | null
           id: string
           image_url: string | null
           is_published: boolean
@@ -702,6 +706,7 @@ export type Database = {
           description?: string | null
           features?: Json | null
           hover_image_url?: string | null
+          default_color?: string | null
           id?: string
           image_url?: string | null
           is_published?: boolean
@@ -722,6 +727,7 @@ export type Database = {
           description?: string | null
           features?: Json | null
           hover_image_url?: string | null
+          default_color?: string | null
           id?: string
           image_url?: string | null
           is_published?: boolean

@@ -6,7 +6,20 @@ import { toast } from "sonner";
 
 interface Spec { label: string; value: string; }
 interface WarrantyItem { component: string; duration: string; }
-interface GalleryImage { id?: string; image_url: string; alt_text: string; sort_order: number; isNew?: boolean; }
+interface GalleryImage { id?: string; image_url: string; alt_text: string; sort_order: number; color?: string | null; isNew?: boolean; }
+
+// Couleurs disponibles pour les photos (doivent correspondre au sélecteur de la fiche produit)
+const PHOTO_COLORS: { value: string; label: string }[] = [
+  { value: "", label: "Toutes couleurs" },
+  { value: "noir", label: "Noir" },
+  { value: "rouge", label: "Rouge" },
+  { value: "argent", label: "Argent" },
+  { value: "argent-rouge", label: "Argent / rouge" },
+  { value: "noir-rouge", label: "Noir / rouge" },
+  { value: "blanc-noir", label: "Blanc / noir" },
+  { value: "noir-marron", label: "Noir / marron" },
+  { value: "jaune", label: "Jaune" },
+];
 
 const categories = ["Cardio", "Musculation", "Fonctionnel"];
 const usageTypes = [
@@ -73,6 +86,7 @@ const ProductForm = ({ product, onClose }: { product: any | null; onClose: () =>
   const [features, setFeatures] = useState<string[]>(draft?.features ?? (product?.features as string[]) ?? []);
   const [imageUrl, setImageUrl] = useState(draft?.imageUrl ?? product?.image_url ?? "");
   const [hoverImageUrl, setHoverImageUrl] = useState(draft?.hoverImageUrl ?? product?.hover_image_url ?? "");
+  const [defaultColor, setDefaultColor] = useState<string>(draft?.defaultColor ?? (product as any)?.default_color ?? "");
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
   const [isTrending, setIsTrending] = useState(draft?.isTrending ?? product?.is_trending ?? false);
   const [isPublished, setIsPublished] = useState(draft?.isPublished ?? product?.is_published ?? false);
@@ -87,12 +101,12 @@ const ProductForm = ({ product, onClose }: { product: any | null; onClose: () =>
     const timer = setTimeout(() => {
       localStorage.setItem(DRAFT_KEY, JSON.stringify({
         name, category, usageType, subcategory, shortDesc, description,
-        warrantyItems, specs, features, imageUrl, hoverImageUrl,
+        warrantyItems, specs, features, imageUrl, hoverImageUrl, defaultColor,
         isTrending, isPublished, sortOrder, rangeCode,
       }));
     }, 500);
     return () => clearTimeout(timer);
-  }, [DRAFT_KEY, name, category, usageType, subcategory, shortDesc, description, warrantyItems, specs, features, imageUrl, hoverImageUrl, isTrending, isPublished, sortOrder, rangeCode]);
+  }, [DRAFT_KEY, name, category, usageType, subcategory, shortDesc, description, warrantyItems, specs, features, imageUrl, hoverImageUrl, defaultColor, isTrending, isPublished, sortOrder, rangeCode]);
 
   const mainImageRef = useRef<HTMLInputElement>(null);
   const hoverImageRef = useRef<HTMLInputElement>(null);
@@ -205,6 +219,7 @@ const ProductForm = ({ product, onClose }: { product: any | null; onClose: () =>
         features: features.filter((f) => f.trim()) as any,
         image_url: imageUrl || null,
         hover_image_url: hoverImageUrl || null,
+        default_color: defaultColor || null,
         is_trending: isTrending,
         is_published: isPublished,
         sort_order: sortOrder,
@@ -226,7 +241,7 @@ const ProductForm = ({ product, onClose }: { product: any | null; onClose: () =>
         await supabase.from("product_images").delete().eq("product_id", productId);
         if (galleryImages.length > 0) {
           const { error } = await supabase.from("product_images").insert(
-            galleryImages.map((img, i) => ({ product_id: productId, image_url: img.image_url, alt_text: img.alt_text || null, sort_order: i }))
+            galleryImages.map((img, i) => ({ product_id: productId, image_url: img.image_url, alt_text: img.alt_text || null, color: img.color || null, sort_order: i }))
           );
           if (error) throw error;
         }
@@ -381,11 +396,16 @@ const ProductForm = ({ product, onClose }: { product: any | null; onClose: () =>
 
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <label className="mb-1 block text-xs font-medium text-muted-foreground">Image principale</label>
+            <div className="mb-1 flex items-center justify-between gap-2">
+              <label className="block text-xs font-medium text-muted-foreground">Image principale</label>
+              <select value={defaultColor} onChange={(e) => setDefaultColor(e.target.value)} className="rounded-sm border border-border bg-background px-1 py-0.5 text-[11px]" aria-label="Couleur de l'image principale et de survol" title="Couleur de l'image principale et de survol (couleur affichée par défaut)">
+                {PHOTO_COLORS.map((c) => <option key={c.value} value={c.value}>{c.value ? `Couleur : ${c.label}` : "Couleur : —"}</option>)}
+              </select>
+            </div>
             <input type="file" ref={mainImageRef} className="hidden" accept="image/*" onChange={(e) => handleImageUpload(e, setImageUrl, "main")} />
             {imageUrl ? (
               <div className="relative">
-                <img src={imageUrl} alt="" className="h-40 w-full rounded-sm object-cover" />
+                <img src={imageUrl} alt="" className="h-40 w-full rounded-sm bg-white object-contain" />
                 <button onClick={() => mainImageRef.current?.click()} className="absolute bottom-2 right-2 rounded-sm bg-background/80 px-2 py-1 text-xs text-foreground backdrop-blur-sm">Changer</button>
               </div>
             ) : (
@@ -399,7 +419,7 @@ const ProductForm = ({ product, onClose }: { product: any | null; onClose: () =>
             <input type="file" ref={hoverImageRef} className="hidden" accept="image/*" onChange={(e) => handleImageUpload(e, setHoverImageUrl, "hover")} />
             {hoverImageUrl ? (
               <div className="relative">
-                <img src={hoverImageUrl} alt="" className="h-40 w-full rounded-sm object-cover" />
+                <img src={hoverImageUrl} alt="" className="h-40 w-full rounded-sm bg-white object-contain" />
                 <button onClick={() => hoverImageRef.current?.click()} className="absolute bottom-2 right-2 rounded-sm bg-background/80 px-2 py-1 text-xs text-foreground backdrop-blur-sm">Changer</button>
               </div>
             ) : (
@@ -420,7 +440,10 @@ const ProductForm = ({ product, onClose }: { product: any | null; onClose: () =>
             <div className="grid grid-cols-4 gap-2">
               {galleryImages.map((img, i) => (
                 <div key={i} className="group relative">
-                  <img src={img.image_url} alt="" className="h-24 w-full rounded-sm object-cover" />
+                  <img src={img.image_url} alt="" className="h-24 w-full rounded-sm object-contain bg-white" />
+                  <select value={img.color || ""} onChange={(e) => setGalleryImages((prev) => prev.map((g, j) => (j === i ? { ...g, color: e.target.value || null } : g)))} className="mt-1 w-full rounded-sm border border-border bg-background px-1 py-0.5 text-[11px]" aria-label="Couleur de la photo">
+                    {PHOTO_COLORS.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
+                  </select>
                   <button onClick={() => removeGalleryImage(i)} className="absolute right-1 top-1 rounded-full bg-background/80 p-1 opacity-0 transition-opacity group-hover:opacity-100"><X className="h-3 w-3 text-destructive" /></button>
                 </div>
               ))}

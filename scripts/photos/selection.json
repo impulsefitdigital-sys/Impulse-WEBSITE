@@ -1,0 +1,7064 @@
+{
+"f1ef3784-cd86-4f63-a485-3603fef7669a": {
+"name": "Tapis de Course AC2990",
+"key": "AC Series/AC2990",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "AC Series/AC2990/AC2990-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "AC Series/AC2990/AC2990-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "AC Series/AC2990/AC2990-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "AC Series/AC2990/AC2990-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "AC Series/AC2990/AC2990-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "AC Series/AC2990/AC2990-06.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"132097b8-0006-4e93-abb8-1005028b1798": {
+"name": "Tapis de course AC4000",
+"key": "AC Series/AC4000",
+"default_color": "argent",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "AC Series/AC4000/argent/AC4000-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "AC Series/AC4000/argent/AC4000-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "AC Series/AC4000/argent/AC4000-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "AC Series/AC4000/argent/AC4000-argent-04.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "AC Series/AC4000/argent/AC4000-argent-05.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "AC Series/AC4000/noir/AC4000-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "AC Series/AC4000/noir/AC4000-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "AC Series/AC4000/noir/AC4000-noir-03.webp",
+"color": "noir",
+"grp": "A"
+}
+]
+},
+"56fb4990-3833-4cbb-b654-4d170a44a904": {
+"name": "Tapis de course AC4050",
+"key": "AC Series/AC4050",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "AC Series/AC4050/noir/AC4050-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "AC Series/AC4050/noir/AC4050-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "AC Series/AC4050/noir/AC4050-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "AC Series/AC4050/noir/AC4050-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "AC Series/AC4050/argent/AC4050-argent-01.webp",
+"color": "argent",
+"grp": "A"
+}
+]
+},
+"11901f9d-672d-4933-80bb-1052578933b1": {
+"name": "Tapis de Course AC810",
+"key": "AC Series/AC810",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "AC Series/AC810/AC810-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "AC Series/AC810/AC810-06.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "AC Series/AC810/AC810-01.webp",
+"color": "",
+"grp": "B"
+},
+{
+"p": "AC Series/AC810/AC810-04.webp",
+"color": "",
+"grp": "B"
+},
+{
+"p": "AC Series/AC810/AC810-05.webp",
+"color": "",
+"grp": "B"
+},
+{
+"p": "AC Series/AC810/AC810-02.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "AC Series/AC810/_autres-visuels/AC810-visuel-01.webp",
+"color": "",
+"grp": "C"
+}
+]
+},
+"9b514548-29f3-480e-9f40-a76393af401e": {
+"name": "Tapis de course AC850",
+"key": "AC Series/AC850",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "AC Series/AC850/AC850-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "AC Series/AC850/AC850-01.webp",
+"color": "",
+"grp": "B"
+},
+{
+"p": "AC Series/AC850/AC850-02.webp",
+"color": "",
+"grp": "B"
+},
+{
+"p": "AC Series/AC850/AC850-03.webp",
+"color": "",
+"grp": "B"
+},
+{
+"p": "AC Series/AC850/AC850-05.webp",
+"color": "",
+"grp": "B"
+},
+{
+"p": "AC Series/AC850/AC850-06.webp",
+"color": "",
+"grp": "B"
+},
+{
+"p": "AC Series/AC850/AC850-07.webp",
+"color": "",
+"grp": "B"
+}
+]
+},
+"c06bd5e8-6abc-48ec-a1c3-dcc94f1b9114": {
+"name": "Abdominal Crunch ECP401",
+"key": "ECP Series/ECP401",
+"default_color": "rouge",
+"colors": [
+"rouge"
+],
+"images": [
+{
+"p": "ECP Series/ECP401/ECP401-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP401/ECP401-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP401/ECP401-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP401/ECP401-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"d4cba920-60cc-487b-a12f-e2db0d7cceee": {
+"name": "Biceps Curl ECP501",
+"key": "ECP Series/ECP501",
+"default_color": "rouge",
+"colors": [
+"rouge"
+],
+"images": [
+{
+"p": "ECP Series/ECP501/ECP501-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP501/ECP501-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP501/ECP501-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP501/ECP501-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"1307efb3-6a90-451c-a141-728983ca1c31": {
+"name": "Chest press ECP201",
+"key": "ECP Series/ECP201",
+"default_color": "rouge",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "ECP Series/ECP201/rouge/ECP201-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP201/rouge/ECP201-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP201/rouge/ECP201-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP201/rouge/ECP201-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP201/noir/ECP201-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP201/noir/ECP201-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP201/noir/ECP201-noir-03.webp",
+"color": "noir",
+"grp": "A"
+}
+]
+},
+"8d900d2f-97f7-48fd-a83a-2a3db45c27c4": {
+"name": "French Press ECP504",
+"key": "ECP Series/ECP504",
+"default_color": "rouge",
+"colors": [
+"rouge"
+],
+"images": [
+{
+"p": "ECP Series/ECP504/ECP504-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP504/ECP504-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP504/ECP504-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP504/ECP504-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"a66ca3ef-1016-42ce-897b-912872078361": {
+"name": "Glute Kick Back ECP625",
+"key": "ECP Series/ECP625",
+"default_color": "rouge",
+"colors": [
+"rouge"
+],
+"images": [
+{
+"p": "ECP Series/ECP625/ECP625-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP625/ECP625-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP625/ECP625-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP625/ECP625-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"02ad1c23-c651-4a29-9474-b6d4545a8233": {
+"name": "Hack Squat Dual ECP617",
+"key": "ECP Series/ECP617",
+"default_color": "rouge",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "ECP Series/ECP617/rouge/ECP617-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP617/rouge/ECP617-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP617/rouge/ECP617-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP617/rouge/ECP617-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP617/rouge/ECP617-rouge-05.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP617/rouge/ECP617-rouge-06.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP617/rouge/ECP617-rouge-07.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP617/noir/ECP617-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP617/noir/ECP617-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP617/noir/ECP617-noir-03.webp",
+"color": "noir",
+"grp": "A"
+}
+]
+},
+"8e4eeb7a-d55a-4f42-aca2-b3ecc60b7ac6": {
+"name": "High Row ECP308",
+"key": "ECP Series/ECP308",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "ECP Series/ECP308/noir/ECP308-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP308/noir/ECP308-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP308/noir/ECP308-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP308/noir/ECP308-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP308/noir/ECP308-noir-05.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP308/rouge/ECP308-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP308/rouge/ECP308-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP308/rouge/ECP308-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP308/rouge/ECP308-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"a973ee94-ceef-44c4-b1bb-ddad6adccc3f": {
+"name": "Horizontal Decline Chest Press ECP204",
+"key": "ECP Series/ECP204",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "ECP Series/ECP204/noir/ECP204-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP204/noir/ECP204-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP204/noir/ECP204-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP204/noir/ECP204-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP204/noir/ECP204-noir-05.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP204/rouge/ECP204-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP204/rouge/ECP204-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP204/rouge/ECP204-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP204/rouge/ECP204-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP204/rouge/ECP204-rouge-05.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"14d29a40-db96-4016-ae6d-eaab171b1ebb": {
+"name": "Impulse Horizontal Incline & Decline Pectoral Fly ECP207",
+"key": "ECP Series/ECP207",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "ECP Series/ECP207/noir/ECP207-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP207/noir/ECP207-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP207/noir/ECP207-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP207/noir/ECP207-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP207/rouge/ECP207-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP207/rouge/ECP207-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP207/rouge/ECP207-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP207/rouge/ECP207-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"db6d0c5c-be38-4b6a-807c-d289133a599c": {
+"name": "Kneeling Hip Thrust Impulse ECP630",
+"key": "ECP Series/ECP630",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "ECP Series/ECP630/noir/ECP630-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP630/noir/ECP630-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP630/noir/ECP630-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP630/noir/ECP630-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP630/noir/ECP630-noir-05.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP630/rouge/ECP630-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP630/rouge/ECP630-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP630/rouge/ECP630-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP630/rouge/ECP630-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP630/rouge/ECP630-rouge-05.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"b64fb676-4c57-4f8f-ac48-3439dfef438b": {
+"name": "Lat Pulldown ECP301",
+"key": "ECP Series/ECP301",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "ECP Series/ECP301/noir/ECP301-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP301/noir/ECP301-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP301/noir/ECP301-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP301/rouge/ECP301-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP301/rouge/ECP301-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP301/rouge/ECP301-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"7b02064a-1189-45d9-b186-68a264eaf68d": {
+"name": "Leg Extension ECP605",
+"key": "ECP Series/ECP605",
+"default_color": "rouge",
+"colors": [
+"rouge"
+],
+"images": [
+{
+"p": "ECP Series/ECP605/ECP605-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP605/ECP605-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP605/ECP605-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP605/ECP605-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"7d41d5a4-c343-4ece-8237-f8203d25c22b": {
+"name": "Multi Lat Pulldown ECP307",
+"key": "ECP Series/ECP307",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "ECP Series/ECP307/noir/ECP307-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP307/noir/ECP307-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP307/noir/ECP307-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP307/noir/ECP307-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP307/noir/ECP307-noir-05.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP307/rouge/ECP307-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP307/rouge/ECP307-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP307/rouge/ECP307-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP307/rouge/ECP307-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP307/rouge/ECP307-rouge-05.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"3368b330-26cd-4d31-b1dd-6f0f72b6c071": {
+"name": "Multi Squat ECP624",
+"key": "ECP Series/ECP624",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "ECP Series/ECP624/noir/ECP624-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP624/noir/ECP624-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP624/noir/ECP624-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP624/noir/ECP624-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP624/noir/ECP624-noir-05.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP624/rouge/ECP624-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP624/rouge/ECP624-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP624/rouge/ECP624-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP624/rouge/ECP624-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP624/rouge/ECP624-rouge-05.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"3eb98276-3868-41af-966f-810f5331695b": {
+"name": "Prone Leg Curl ECP604",
+"key": "ECP Series/ECP604",
+"default_color": "rouge",
+"colors": [
+"rouge"
+],
+"images": [
+{
+"p": "ECP Series/ECP604/ECP604-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP604/ECP604-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP604/ECP604-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP604/ECP604-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"1c20e759-acfe-42e6-b48e-2bdb165cebf3": {
+"name": "Pull Over ECP306",
+"key": "ECP Series/ECP306",
+"default_color": "rouge",
+"colors": [
+"rouge"
+],
+"images": [
+{
+"p": "ECP Series/ECP306/ECP306-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP306/ECP306-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP306/ECP306-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP306/ECP306-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"c37ec399-41b3-4bd2-9b24-a5c5c3253efc": {
+"name": "Seated Row ECP302",
+"key": "ECP Series/ECP302",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "ECP Series/ECP302/noir/ECP302-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP302/noir/ECP302-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP302/noir/ECP302-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP302/rouge/ECP302-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP302/rouge/ECP302-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"9017547d-2921-40fe-abc5-2275216f7198": {
+"name": "Shoulder press ECP101",
+"key": "ECP Series/ECP101",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "ECP Series/ECP101/noir/ECP101-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP101/noir/ECP101-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP101/noir/ECP101-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP101/rouge/ECP101-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP101/rouge/ECP101-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP101/rouge/ECP101-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"32258f6e-3659-446c-aea1-513e79bbb1d5": {
+"name": "Super Squat ECP713",
+"key": "ECP Series/ECP713",
+"default_color": "rouge",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "ECP Series/ECP713/rouge/ECP713-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP713/rouge/ECP713-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP713/rouge/ECP713-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP713/rouge/ECP713-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP713/rouge/ECP713-rouge-05.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP713/noir/ECP713-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP713/noir/ECP713-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "ECP Series/ECP713/noir/ECP713-noir-03.webp",
+"color": "noir",
+"grp": "A"
+}
+]
+},
+"7d7c182e-5af8-4075-bf76-b873f0da0dad": {
+"name": "Abdominal FE9714",
+"key": "EXOFORM/FE9714",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "EXOFORM/FE9714/noir/FE9714-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9714/noir/FE9714-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9714/noir/FE9714-noir-03.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9714/noir/FE9714-noir-04.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9714/noir/FE9714-noir-05.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9714/noir/FE9714-noir-06.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9714/argent/FE9714-argent-06.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9714/argent/FE9714-argent-08.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9714/argent/FE9714-argent-01.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9714/argent/FE9714-argent-02.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9714/argent/FE9714-argent-03.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9714/argent/FE9714-argent-04.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9714/argent/FE9714-argent-05.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9714/argent/FE9714-argent-07.webp",
+"color": "argent",
+"grp": "B"
+}
+]
+},
+"2a7b88ff-245f-4194-a285-b66d3693c0d8": {
+"name": "Abductor/Adductor FE9708",
+"key": "EXOFORM/FE9708",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "EXOFORM/FE9708/noir/FE9708-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9708/noir/FE9708-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9708/noir/FE9708-noir-03.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9708/noir/FE9708-noir-04.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9708/argent/FE9708-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9708/argent/FE9708-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9708/argent/FE9708-argent-03.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9708/argent/FE9708-argent-04.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9708/argent/FE9708-argent-05.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9708/argent/FE9708-argent-06.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9708/argent/FE9708-argent-07.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9708/argent/FE9708-argent-08.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9708/argent/FE9708-argent-09.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9708/argent/FE9708-argent-10.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9708/argent/FE9708-argent-11.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9708/argent/FE9708-argent-12.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9708/argent/FE9708-argent-13.webp",
+"color": "argent",
+"grp": "B"
+}
+]
+},
+"887f2364-daf3-4b42-b0fc-76644b964b36": {
+"name": "Arm curl FE9703",
+"key": "EXOFORM/FE9703",
+"default_color": "argent",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "EXOFORM/FE9703/argent/FE9703-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9703/argent/FE9703-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9703/argent/FE9703-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9703/argent/FE9703-argent-04.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9703/noir/FE9703-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9703/noir/FE9703-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9703/noir/FE9703-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9703/noir/FE9703-noir-03.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9703/noir/FE9703-noir-05.webp",
+"color": "noir",
+"grp": "B"
+}
+]
+},
+"1e418f0e-a08b-4ab4-ac58-5ed1800fba96": {
+"name": "Back extension FE9732",
+"key": "EXOFORM/FE9732",
+"default_color": "argent",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "EXOFORM/FE9732/argent/FE9732-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9732/argent/FE9732-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9732/argent/FE9732-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9732/argent/FE9732-argent-04.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9732/noir/FE9732-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9732/noir/FE9732-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9732/noir/FE9732-noir-03.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9732/noir/FE9732-noir-04.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9732/noir/FE9732-noir-05.webp",
+"color": "noir",
+"grp": "B"
+}
+]
+},
+"681401a4-fe14-49fc-bf61-782100169fa3": {
+"name": "Chest press FE9701",
+"key": "EXOFORM/FE9701",
+"default_color": "argent",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "EXOFORM/FE9701/argent/FE9701-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9701/argent/FE9701-argent-04.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9701/argent/FE9701-argent-06.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9701/argent/FE9701-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9701/argent/FE9701-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9701/argent/FE9701-argent-05.webp",
+"color": "argent",
+"grp": "C"
+},
+{
+"p": "EXOFORM/FE9701/noir/FE9701-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9701/noir/FE9701-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9701/noir/FE9701-noir-03.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9701/noir/FE9701-noir-04.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9701/noir/FE9701-noir-05.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9701/noir/FE9701-noir-06.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9701/_autres-visuels/FE9701-visuel-01.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "EXOFORM/FE9701/_autres-visuels/FE9701-visuel-02.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "EXOFORM/FE9701/_autres-visuels/FE9701-visuel-03.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "EXOFORM/FE9701/_autres-visuels/FE9701-visuel-04.webp",
+"color": "",
+"grp": "C"
+}
+]
+},
+"ad428b9b-c933-4093-96ae-b8213cd3f763": {
+"name": "Glute FE9726",
+"key": "EXOFORM/FE9726",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "EXOFORM/FE9726/noir/FE9726-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9726/noir/FE9726-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9726/noir/FE9726-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9726/noir/FE9726-noir-04.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9726/argent/FE9726-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9726/argent/FE9726-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9726/argent/FE9726-argent-03.webp",
+"color": "argent",
+"grp": "A"
+}
+]
+},
+"ff1c3f0b-58b0-4d3f-954a-00fc72b5e57d": {
+"name": "Lat pulldown FE9702",
+"key": "EXOFORM/FE9702",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "EXOFORM/FE9702/noir/FE9702-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9702/noir/FE9702-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9702/noir/FE9702-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9702/noir/FE9702-noir-04.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9702/argent/FE9702-argent-01.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9702/argent/FE9702-argent-02.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9702/argent/FE9702-argent-03.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9702/argent/FE9702-argent-04.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9702/argent/FE9702-argent-05.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9702/argent/FE9702-argent-06.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9702/argent/FE9702-argent-07.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9702/argent/FE9702-argent-08.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9702/argent/FE9702-argent-09.webp",
+"color": "argent",
+"grp": "B"
+}
+]
+},
+"06f5eb9d-014c-4fbd-a445-f48c74374599": {
+"name": "Lateral raise FE9724",
+"key": "EXOFORM/FE9724",
+"default_color": "argent",
+"colors": [
+"argent"
+],
+"images": [
+{
+"p": "EXOFORM/FE9724/FE9724-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9724/FE9724-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9724/FE9724-argent-03.webp",
+"color": "argent",
+"grp": "A"
+}
+]
+},
+"b671344e-dff4-41d0-9828-7fa5822700e2": {
+"name": "Leg extension FE9705",
+"key": "EXOFORM/FE9705",
+"default_color": "argent",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "EXOFORM/FE9705/argent/FE9705-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9705/argent/FE9705-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9705/argent/FE9705-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9705/argent/FE9705-argent-04.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9705/argent/FE9705-argent-05.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9705/argent/FE9705-argent-06.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9705/noir/FE9705-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9705/noir/FE9705-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9705/noir/FE9705-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9705/noir/FE9705-noir-03.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9705/noir/FE9705-noir-05.webp",
+"color": "noir",
+"grp": "B"
+}
+]
+},
+"550fa455-10cf-418e-b886-d0f59da79d03": {
+"name": "Leg press FE9710",
+"key": "EXOFORM/FE9710",
+"default_color": "argent",
+"colors": [
+"argent"
+],
+"images": [
+{
+"p": "EXOFORM/FE9710/FE9710-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9710/FE9710-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9710/FE9710-argent-03.webp",
+"color": "argent",
+"grp": "A"
+}
+]
+},
+"2ef8d25c-6cbd-4e36-bb31-ede525ce17f0": {
+"name": "Pec fly / Rear delt FE9715",
+"key": "EXOFORM/FE9715",
+"default_color": "argent",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "EXOFORM/FE9715/argent/FE9715-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9715/argent/FE9715-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9715/argent/FE9715-argent-04.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9715/argent/FE9715-argent-05.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9715/argent/FE9715-argent-01.webp",
+"color": "argent",
+"grp": "C"
+},
+{
+"p": "EXOFORM/FE9715/argent/FE9715-argent-06.webp",
+"color": "argent",
+"grp": "C"
+},
+{
+"p": "EXOFORM/FE9715/noir/FE9715-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9715/noir/FE9715-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9715/_autres-visuels/FE9715-visuel-01.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "EXOFORM/FE9715/_autres-visuels/FE9715-visuel-02.webp",
+"color": "",
+"grp": "C"
+}
+]
+},
+"88d4ea15-a368-4643-b13e-dceb79d8aef1": {
+"name": "Prone Leg curl FE9721",
+"key": "EXOFORM/FE9721",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "EXOFORM/FE9721/noir/FE9721-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9721/noir/FE9721-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9721/argent/FE9721-argent-12.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9721/argent/FE9721-argent-13.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9721/argent/FE9721-argent-01.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9721/argent/FE9721-argent-02.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9721/argent/FE9721-argent-03.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9721/argent/FE9721-argent-04.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9721/argent/FE9721-argent-05.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9721/argent/FE9721-argent-06.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9721/argent/FE9721-argent-07.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9721/argent/FE9721-argent-08.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9721/argent/FE9721-argent-09.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9721/argent/FE9721-argent-10.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9721/argent/FE9721-argent-11.webp",
+"color": "argent",
+"grp": "B"
+}
+]
+},
+"639a6cb5-ad14-45ab-ab3c-28821f2db4dc": {
+"name": "Seated Row FE9719",
+"key": "EXOFORM/FE9719",
+"default_color": "argent",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "EXOFORM/FE9719/argent/FE9719-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9719/argent/FE9719-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9719/argent/FE9719-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9719/argent/FE9719-argent-04.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9719/argent/FE9719-argent-05.webp",
+"color": "argent",
+"grp": "C"
+},
+{
+"p": "EXOFORM/FE9719/noir/FE9719-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9719/noir/FE9719-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9719/noir/FE9719-noir-03.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9719/noir/FE9719-noir-04.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9719/noir/FE9719-noir-05.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9719/_autres-visuels/FE9719-visuel-01.webp",
+"color": "",
+"grp": "C"
+}
+]
+},
+"05c9f8c4-3371-4388-9a7a-0a83c818a0d7": {
+"name": "Seated leg curl FE9706",
+"key": "EXOFORM/FE9706",
+"default_color": "argent",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "EXOFORM/FE9706/argent/FE9706-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9706/argent/FE9706-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9706/argent/FE9706-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9706/noir/FE9706-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9706/noir/FE9706-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9706/noir/FE9706-noir-03.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9706/noir/FE9706-noir-04.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9706/noir/FE9706-noir-05.webp",
+"color": "noir",
+"grp": "B"
+}
+]
+},
+"ee603be4-4aba-4216-a903-1a1d0a332998": {
+"name": "Shoulder press FE9712",
+"key": "EXOFORM/FE9712",
+"default_color": "argent",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "EXOFORM/FE9712/argent/FE9712-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9712/argent/FE9712-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9712/argent/FE9712-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9712/noir/FE9712-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9712/noir/FE9712-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9712/noir/FE9712-noir-03.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9712/noir/FE9712-noir-04.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9712/noir/FE9712-noir-05.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9712/_autres-visuels/FE9712-visuel-01.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "EXOFORM/FE9712/_autres-visuels/FE9712-visuel-02.webp",
+"color": "",
+"grp": "C"
+}
+]
+},
+"946a0168-11ab-4f53-93e1-8332415b27c8": {
+"name": "Triceps FE9723",
+"key": "EXOFORM/FE9723",
+"default_color": "argent",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "EXOFORM/FE9723/argent/FE9723-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9723/argent/FE9723-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9723/argent/FE9723-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9723/argent/FE9723-argent-04.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9723/noir/FE9723-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9723/noir/FE9723-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9723/noir/FE9723-noir-03.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9723/noir/FE9723-noir-04.webp",
+"color": "noir",
+"grp": "B"
+}
+]
+},
+"bbe73fb6-a86e-4c7f-b777-c0ad6268f619": {
+"name": "Weight assisted chin/Dip FE9720",
+"key": "EXOFORM/FE9720",
+"default_color": "argent",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "EXOFORM/FE9720/argent/FE9720-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9720/argent/FE9720-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9720/argent/FE9720-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9720/noir/FE9720-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9720/noir/FE9720-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "EXOFORM/FE9720/noir/FE9720-noir-03.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9720/noir/FE9720-noir-04.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "EXOFORM/FE9720/noir/FE9720-noir-05.webp",
+"color": "noir",
+"grp": "B"
+}
+]
+},
+"b137a058-c3dc-4311-81f5-bfdce118c542": {
+"name": "Air Bike HIIT HB005",
+"key": "Hi-Ultra Series/HB005",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "Hi-Ultra Series/HB005/HB005-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HB005/HB005-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HB005/HB005-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HB005/HB005-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HB005/HB005-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HB005/HB005-06.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HB005/HB005-07.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HB005/HB005-08.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"798d3c7e-f168-4592-b3de-a48e181de1b6": {
+"name": "Airbike IMPULSE HB007",
+"key": "Hi-Ultra Series/HB007",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "Hi-Ultra Series/HB007/HB007-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HB007/HB007-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HB007/HB007-03.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"863f31d5-266c-4ef2-9ba1-05999aa10db0": {
+"name": "Rameur & Ski Erg HSR007",
+"key": "Hi-Ultra Series/HSR007",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "Hi-Ultra Series/HSR007/HSR007-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HSR007/HSR007-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HSR007/HSR007-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HSR007/HSR007-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HSR007/HSR007-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HSR007/HSR007-06.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HSR007/HSR007-07.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HSR007/HSR007-08.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HSR007/HSR007-09.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"2fc9441a-4186-4d2c-b187-5b2a58c5cf5f": {
+"name": "Rameur à Air HIIT Professionnel HSR005",
+"key": "Hi-Ultra Series/HSR005",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "Hi-Ultra Series/HSR005/HSR005-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HSR005/HSR005-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HSR005/HSR005-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HSR005/HSR005-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HSR005/HSR005-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HSR005/_autres-visuels/HSR005-visuel-01.webp",
+"color": "",
+"grp": "C"
+}
+]
+},
+"6929a40e-cdac-476b-a599-04210913db1e": {
+"name": "Tapis de course incurvé Impulse Arc Runner HR007",
+"key": "Hi-Ultra Series/HR007",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "Hi-Ultra Series/HR007/HR007-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HR007/HR007-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HR007/HR007-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "Hi-Ultra Series/HR007/HR007-04.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"e57f8c57-366f-4a1c-9792-9833df050085": {
+"name": "ASSISTED CHINDIP IF9320",
+"key": "IF93 Series/IF9320",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IF93 Series/IF9320/IF9320-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9320/IF9320-07.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9320/IF9320-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9320/IF9320-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9320/IF9320-06.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9320/IF9320-04.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "IF93 Series/IF9320/IF9320-05.webp",
+"color": "",
+"grp": "C"
+}
+]
+},
+"c7a627bd-ab03-4d5e-a90e-d89aaa580b5b": {
+"name": "Abdos - Lombaires IF9334",
+"key": "IF93 Series/IF9334",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IF93 Series/IF9334/IF9334-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9334/IF9334-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9334/IF9334-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9334/IF9334-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9334/IF9334-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9334/IF9334-06.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9334/IF9334-07.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9334/IF9334-08.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9334/IF9334-09.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9334/IF9334-10.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9334/IF9334-11.webp",
+"color": "",
+"grp": "B"
+}
+]
+},
+"27ca6c36-3a37-4853-bca4-4309e91fdf2c": {
+"name": "Adducteurs - Abducteurs IF9308",
+"key": "IF93 Series/IF9308",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IF93 Series/IF9308/IF9308-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9308/IF9308-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9308/IF9308-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9308/IF9308-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9308/IF9308-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9308/IF9308-06.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9308/IF9308-07.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9308/IF9308-08.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9308/IF9308-09.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9308/IF9308-10.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9308/IF9308-11.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"3e589b83-1ef0-4bf3-92ad-334fb2733838": {
+"name": "Cable Crossover IF9327+IF9325",
+"key": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-06.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-07.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-08.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-09.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-10.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-11.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-12.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-13.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"3ee67d5c-e107-4447-b3b6-b5b29c88482d": {
+"name": "Chest Press IF9301",
+"key": "IF93 Series/IF9301",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IF93 Series/IF9301/IF9301-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9301/IF9301-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9301/IF9301-02.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "IF93 Series/IF9301/IF9301-03.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "IF93 Series/IF9301/IF9301-04.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "IF93 Series/IF9301/_autres-visuels/IF9301-visuel-01.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "IF93 Series/IF9301/_autres-visuels/IF9301-visuel-02.webp",
+"color": "",
+"grp": "C"
+}
+]
+},
+"60de087b-4a89-496a-9d39-8842aa0f3075": {
+"name": "Double Jungle Machine 8 postes IF9327+IF9327",
+"key": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-06.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-07.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-08.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-09.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-10.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-11.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-12.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/_CONFIGURATIONS/IF9325+IF9327+IF9327OPT/IF9325+IF9327+IF9327OPT-13.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"eaa3dd12-44f8-452a-9eb2-3189a495ea76": {
+"name": "LAT PULLDOWN IF9302",
+"key": "IF93 Series/IF9302",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IF93 Series/IF9302/IF9302-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9302/IF9302-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9302/IF9302-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9302/IF9302-02.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "IF93 Series/IF9302/IF9302-04.webp",
+"color": "",
+"grp": "C"
+}
+]
+},
+"30c50310-b06d-4ec6-a8e4-7cffe55776c0": {
+"name": "LAT PULLDOWN/ VERTICAL ROW IF9322",
+"key": "IF93 Series/IF9322",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IF93 Series/IF9322/IF9322-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9322/IF9322-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9322/IF9322-02.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "IF93 Series/IF9322/IF9322-03.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "IF93 Series/IF9322/IF9322-04.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "IF93 Series/IF9322/_autres-visuels/IF9322-visuel-01.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "IF93 Series/IF9322/_autres-visuels/IF9322-visuel-02.webp",
+"color": "",
+"grp": "C"
+}
+]
+},
+"1b630ca8-5190-49ae-9358-339a620a520a": {
+"name": "Leg Press IF9310",
+"key": "IF93 Series/IF9310",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IF93 Series/IF9310/IF9310-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9310/IF9310-06.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9310/IF9310-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9310/IF9310-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9310/IF9310-03.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "IF93 Series/IF9310/IF9310-05.webp",
+"color": "",
+"grp": "C"
+}
+]
+},
+"1f79ca44-f832-4247-91bc-2be17882e4fc": {
+"name": "PEC FLY/REAR DELT IF9315",
+"key": "IF93 Series/IF9315",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IF93 Series/IF9315/IF9315-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9315/IF9315-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9315/IF9315-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9315/IF9315-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9315/IF9315-03.webp",
+"color": "",
+"grp": "B"
+},
+{
+"p": "IF93 Series/IF9315/_autres-visuels/IF9315-visuel-01.webp",
+"color": "",
+"grp": "C"
+}
+]
+},
+"bdb78d74-054e-4f6e-9866-2d7384bd0101": {
+"name": "Pec Fly & Rear delt IF9304",
+"key": "IF93 Series/IF9304",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IF93 Series/IF9304/IF9304-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9304/IF9304-06.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9304/IF9304-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9304/IF9304-02.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "IF93 Series/IF9304/IF9304-04.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "IF93 Series/IF9304/IF9304-05.webp",
+"color": "",
+"grp": "C"
+}
+]
+},
+"0f257939-69e4-4d1a-ac27-7bec33bb1a46": {
+"name": "Rowing IF9319",
+"key": "IF93 Series/IF9319",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IF93 Series/IF9319/IF9319-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9319/IF9319-06.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9319/IF9319-02.webp",
+"color": "",
+"grp": "B"
+},
+{
+"p": "IF93 Series/IF9319/IF9319-03.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "IF93 Series/IF9319/IF9319-04.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "IF93 Series/IF9319/IF9319-05.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "IF93 Series/IF9319/_autres-visuels/IF9319-visuel-01.webp",
+"color": "",
+"grp": "C"
+}
+]
+},
+"dc9ad337-d634-4e1f-81c7-8cfe1a96e533": {
+"name": "Shoulder Press IF9312",
+"key": "IF93 Series/IF9312",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IF93 Series/IF9312/IF9312-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9312/IF9312-06.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IF93 Series/IF9312/IF9312-02.webp",
+"color": "",
+"grp": "B"
+},
+{
+"p": "IF93 Series/IF9312/IF9312-05.webp",
+"color": "",
+"grp": "B"
+},
+{
+"p": "IF93 Series/IF9312/IF9312-03.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "IF93 Series/IF9312/IF9312-04.webp",
+"color": "",
+"grp": "C"
+}
+]
+},
+"ddb50631-9c76-45f2-bb6e-b825774bfa26": {
+"name": "Belt Squat IFP1615",
+"key": "IFP Series/IFP1615",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1615/IFP1615-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1615/IFP1615-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1615/IFP1615-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1615/IFP1615-04.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"c42ab053-22bd-44e1-a6a1-ed28f7bec30d": {
+"name": "Biceps Curl IFP1501",
+"key": "IFP Series/IFP1501",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1501/IFP1501-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1501/IFP1501-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1501/IFP1501-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1501/IFP1501-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1501/IFP1501-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1501/IFP1501-06.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"1050d136-8c42-48b2-a8a1-e8bc22c2d499": {
+"name": "Biceps-Triceps IFP1706",
+"key": "IFP Series/IFP1706",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1706/IFP1706-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1706/IFP1706-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1706/IFP1706-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1706/IFP1706-04.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"09e83bc3-ffdd-4183-b80e-22fcbd51bc86": {
+"name": "Chest Press IFP1201",
+"key": "IFP Series/IFP1201",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1201/IFP1201-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1201/IFP1201-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1201/IFP1201-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1201/IFP1201-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1201/IFP1201-04.webp",
+"color": "",
+"grp": "B"
+}
+]
+},
+"36d0b684-038c-4916-9efd-9f3ff19ac4b2": {
+"name": "Hack Squat 45° IFP1617",
+"key": "IFP Series/IFP1617",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1617/IFP1617-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1617/IFP1617-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1617/IFP1617-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1617/IFP1617-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1617/IFP1617-04.webp",
+"color": "",
+"grp": "B"
+}
+]
+},
+"d8a8b812-8efd-443a-93a0-1499d883e311": {
+"name": "Half Rack - Smith IFP1721",
+"key": "IFP Series/IFP1721",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1721/IFP1721-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1721/IFP1721-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1721/IFP1721-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1721/IFP1721-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1721/IFP1721-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1721/IFP1721-06.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"ca753bc3-9ea8-4374-991c-91d3b34e553b": {
+"name": "Hyper Extension IFP1619",
+"key": "IFP Series/IFP1619",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1619/IFP1619-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1619/IFP1619-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1619/IFP1619-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1619/IFP1619-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1619/IFP1619-05.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"b3141206-d74d-4e63-97ea-e37e8701f60d": {
+"name": "Lat Pull down IFP1301",
+"key": "IFP Series/IFP1301",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1301/IFP1301-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1301/IFP1301-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1301/IFP1301-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1301/IFP1301-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1301/IFP1301-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1301/IFP1301-06.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"92cf8555-7385-4c0e-9765-8568403d5080": {
+"name": "Lat Pulldown/Seated Row Attachment IFP1721OPT",
+"key": "IFP Series/IFP1721OPT1",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1721OPT1/IFP1721OPT1-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1721OPT1/IFP1721OPT1-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1721OPT1/IFP1721OPT1-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1721OPT1/IFP1721OPT1-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1721OPT1/IFP1721OPT1-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1721OPT1/IFP1721OPT1-06.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1721OPT1/IFP1721OPT1-07.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"93cea994-5bcc-4dea-b465-6393ed31d6b1": {
+"name": "Lateral Raise IFP1103",
+"key": "IFP Series/IFP1103",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1103/IFP1103-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1103/IFP1103-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1103/IFP1103-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1103/IFP1103-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1103/IFP1103-04.webp",
+"color": "",
+"grp": "B"
+}
+]
+},
+"16824cc4-0338-41cc-88fd-3b0074e093aa": {
+"name": "Leg Extension IFP1605",
+"key": "IFP Series/IFP1605",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1605/IFP1605-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1605/IFP1605-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1605/IFP1605-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1605/IFP1605-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1605/IFP1605-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1605/IFP1605-06.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1605/IFP1605-07.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1605/IFP1605-08.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"299a02b7-abcf-4a60-ad3e-5026fd7fd35c": {
+"name": "Leg Press 45° - Hack Squat IFP1711",
+"key": "IFP Series/IFP1711",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1711/IFP1711-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1711/IFP1711-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1711/IFP1711-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1711/IFP1711-04.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"d5de4067-cc67-431c-a7f5-f7b564ff68af": {
+"name": "Lverage Squat & Calf IFP1707",
+"key": "IFP Series/IFP1707",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1707/IFP1707-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1707/IFP1707-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1707/IFP1707-03.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"de476873-cd33-4357-bee8-32ff351c272d": {
+"name": "Pec Fly debout IFP1206",
+"key": "IFP Series/IFP1206",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1206/IFP1206-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1206/IFP1206-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1206/IFP1206-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1206/IFP1206-04.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"e85cc550-ced0-41ed-81b3-a6d65c816024": {
+"name": "Prone Leg Curl IFP1604",
+"key": "IFP Series/IFP1604",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1604/IFP1604-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1604/IFP1604-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1604/IFP1604-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1604/IFP1604-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1604/IFP1604-04.webp",
+"color": "",
+"grp": "B"
+},
+{
+"p": "IFP Series/IFP1604/IFP1604-06.webp",
+"color": "",
+"grp": "B"
+}
+]
+},
+"b3a2e5d0-28f4-473f-b09e-f233d1d7db0a": {
+"name": "Seated Row IFP1302",
+"key": "IFP Series/IFP1302",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1302/IFP1302-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1302/IFP1302-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1302/IFP1302-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1302/IFP1302-04.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"8f501ac5-30f3-4c1f-b44f-edc3cd022351": {
+"name": "Shoulder Press IFP1101",
+"key": "IFP Series/IFP1101",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1101/IFP1101-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1101/IFP1101-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1101/IFP1101-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1101/IFP1101-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1101/IFP1101-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1101/IFP1101-06.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"8182a19e-b1ab-4251-be2d-6e47bed44430": {
+"name": "Standing Abductor IFP1622",
+"key": "IFP Series/IFP1622",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1622/IFP1622-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1622/IFP1622-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1622/IFP1622-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1622/IFP1622-04.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"3c40932a-5440-49e1-9092-4d1799e7e341": {
+"name": "T-Bar Row IFP1305",
+"key": "IFP Series/IFP1305",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1305/IFP1305-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1305/IFP1305-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1305/IFP1305-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1305/IFP1305-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1305/IFP1305-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1305/IFP1305-06.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"05d9ad3b-054a-48b2-8d39-1d3c3cc9e4dd": {
+"name": "Vertical Hip Thrust IFP1616",
+"key": "IFP Series/IFP1616",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1616/IFP1616-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1616/IFP1616-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1616/IFP1616-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1616/IFP1616-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1616/IFP1616-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1616/IFP1616-06.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"30397ab1-09ee-4ccb-96f9-aedc04a04a48": {
+"name": "Vertical Leg Press IFP1613",
+"key": "IFP Series/IFP1613",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "IFP Series/IFP1613/IFP1613-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1613/IFP1613-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1613/IFP1613-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1613/IFP1613-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IFP Series/IFP1613/IFP1613-04.webp",
+"color": "",
+"grp": "B"
+}
+]
+},
+"8e3f5059-2034-4adb-99e3-c32298b83710": {
+"name": "Leg press & Hack Squat IT9539",
+"key": "IT95 Series/IT9539",
+"default_color": "noir",
+"colors": [
+"argent",
+"argent-rouge",
+"noir"
+],
+"images": [
+{
+"p": "IT95 Series/IT9539/noir/IT9539-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9539/noir/IT9539-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9539/noir/IT9539-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9539/noir/IT9539-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9539/noir/IT9539-noir-05.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9539/argent/IT9539-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9539/argent/IT9539-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9539/argent/IT9539-argent-01.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "IT95 Series/IT9539/argent-rouge/IT9539-argent-rouge-01.webp",
+"color": "argent-rouge",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9539/argent-rouge/IT9539-argent-rouge-02.webp",
+"color": "argent-rouge",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9539/argent-rouge/IT9539-argent-rouge-03.webp",
+"color": "argent-rouge",
+"grp": "A"
+}
+]
+},
+"9c0693df-c409-4688-a542-d4d0fcbff5c9": {
+"name": "Biceps & Triceps IT9533",
+"key": "IT95 Series/IT9533",
+"default_color": "argent",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "IT95 Series/IT9533/argent/IT9533-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9533/argent/IT9533-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9533/argent/IT9533-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9533/argent/IT9533-argent-04.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9533/argent/IT9533-argent-05.webp",
+"color": "argent",
+"grp": "C"
+},
+{
+"p": "IT95 Series/IT9533/argent/IT9533-argent-06.webp",
+"color": "argent",
+"grp": "C"
+},
+{
+"p": "IT95 Series/IT9533/noir/IT9533-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9533/noir/IT9533-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9533/noir/IT9533-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9533/_autres-visuels/IT9533-visuel-01.webp",
+"color": "",
+"grp": "C"
+}
+]
+},
+"b5349e8a-ae3b-4b02-a091-d609dd0693c1": {
+"name": "Butterfly IT9504-235-PL",
+"key": "IT95 Series/IT9504",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "IT95 Series/IT9504/noir/IT9504-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9504/noir/IT9504-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9504/noir/IT9504-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9504/argent/IT9504-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9504/argent/IT9504-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9504/argent/IT9504-argent-03.webp",
+"color": "argent",
+"grp": "A"
+}
+]
+},
+"457b7462-90e4-429a-90c9-4cd42a63c968": {
+"name": "Chest Press IT9501",
+"key": "IT95 Series/IT9501",
+"default_color": "noir",
+"colors": [
+"argent",
+"blanc-noir",
+"noir",
+"noir-marron"
+],
+"images": [
+{
+"p": "IT95 Series/IT9501/noir/IT9501-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9501/noir/IT9501-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9501/noir/IT9501-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9501/argent/IT9501-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9501/argent/IT9501-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9501/argent/IT9501-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9501/blanc-noir/IT9501-blanc-noir-01.webp",
+"color": "blanc-noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9501/blanc-noir/IT9501-blanc-noir-02.webp",
+"color": "blanc-noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9501/blanc-noir/IT9501-blanc-noir-03.webp",
+"color": "blanc-noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9501/noir-marron/IT9501-noir-marron-01.webp",
+"color": "noir-marron",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9501/noir-marron/IT9501-noir-marron-02.webp",
+"color": "noir-marron",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9501/noir-marron/IT9501-noir-marron-03.webp",
+"color": "noir-marron",
+"grp": "A"
+}
+]
+},
+"884064be-7a93-46af-a58f-af95262f6b59": {
+"name": "Hip Thrust IT9538",
+"key": "IT95 Series/IT9538",
+"default_color": "argent-rouge",
+"colors": [
+"argent-rouge",
+"noir"
+],
+"images": [
+{
+"p": "IT95 Series/IT9538/argent-rouge/IT9538-argent-rouge-02.webp",
+"color": "argent-rouge",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9538/argent-rouge/IT9538-argent-rouge-03.webp",
+"color": "argent-rouge",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9538/argent-rouge/IT9538-argent-rouge-01.webp",
+"color": "argent-rouge",
+"grp": "B"
+},
+{
+"p": "IT95 Series/IT9538/noir/IT9538-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9538/noir/IT9538-noir-02.webp",
+"color": "noir",
+"grp": "B"
+}
+]
+},
+"2268d7a5-b1fb-49da-bef8-a06adc45a671": {
+"name": "Jungle Machine 8 postes IT9527+IT9527",
+"key": "IT95 Series/_CONFIGURATIONS/IT9527",
+"default_color": "argent",
+"colors": [
+"argent"
+],
+"images": [
+{
+"p": "IT95 Series/_CONFIGURATIONS/IT9527/IT9527-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/_CONFIGURATIONS/IT9527/IT9527-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/_CONFIGURATIONS/IT9527/IT9527-argent-03.webp",
+"color": "argent",
+"grp": "A"
+}
+]
+},
+"7c046f4b-069e-4dc5-a617-e93b3d480dc7": {
+"name": "Lat pulldown - Seated Row IT9522",
+"key": "IT95 Series/IT9522",
+"default_color": "argent",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "IT95 Series/IT9522/argent/IT9522-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9522/argent/IT9522-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9522/argent/IT9522-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9522/argent/IT9522-argent-04.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9522/argent/IT9522-argent-06.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9522/argent/IT9522-argent-05.webp",
+"color": "argent",
+"grp": "C"
+},
+{
+"p": "IT95 Series/IT9522/noir/IT9522-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9522/noir/IT9522-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9522/noir/IT9522-noir-03.webp",
+"color": "noir",
+"grp": "A"
+}
+]
+},
+"12102d26-ee7a-4a8f-86d7-ac00c690ec7b": {
+"name": "Leg curl & Leg Extension IT9528",
+"key": "IT95 Series/IT9528",
+"default_color": "argent",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "IT95 Series/IT9528/argent/IT9528-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9528/argent/IT9528-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9528/argent/IT9528-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9528/argent/IT9528-argent-04.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9528/noir/IT9528-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9528/noir/IT9528-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9528/noir/IT9528-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9528/_autres-visuels/IT9528-visuel-01.webp",
+"color": "",
+"grp": "C"
+}
+]
+},
+"ef8a9e48-db64-4247-b27e-b57e2c1085d6": {
+"name": "Leg press IT9510",
+"key": "IT95 Series/IT9510",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "IT95 Series/IT9510/noir/IT9510-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9510/noir/IT9510-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9510/noir/IT9510-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9510/argent/IT9510-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9510/argent/IT9510-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9510/argent/IT9510-argent-03.webp",
+"color": "argent",
+"grp": "A"
+}
+]
+},
+"9e6623e6-747c-4d65-9b62-52d6a36b0215": {
+"name": "MULTISTATIONS 4 POSTES IT9527",
+"key": "IT95 Series/IT9527",
+"default_color": "argent",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "IT95 Series/IT9527/argent/IT9527-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9527/argent/IT9527-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9527/argent/IT9527-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9527/argent/IT9527-argent-04.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9527/argent/IT9527-argent-05.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9527/argent/IT9527-argent-06.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9527/argent/IT9527-argent-07.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9527/argent/IT9527-argent-08.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9527/argent/IT9527-argent-09.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9527/argent/IT9527-argent-10.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9527/argent/IT9527-argent-11.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9527/noir/IT9527-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9527/noir/IT9527-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9527/noir/IT9527-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9527/noir/IT9527-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9527/noir/IT9527-noir-05.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9527/noir/IT9527-noir-06.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9527/IT9527-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9527/IT9527-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9527/IT9527-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9527/IT9527-04.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"f99fa8cd-d17e-4f6b-9005-e052c7baeec7": {
+"name": "Multi-Presse IT9529",
+"key": "IT95 Series/IT9529",
+"default_color": "argent",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "IT95 Series/IT9529/argent/IT9529-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9529/argent/IT9529-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9529/argent/IT9529-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9529/argent/IT9529-argent-04.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9529/argent/IT9529-argent-05.webp",
+"color": "argent",
+"grp": "C"
+},
+{
+"p": "IT95 Series/IT9529/argent/IT9529-argent-06.webp",
+"color": "argent",
+"grp": "C"
+},
+{
+"p": "IT95 Series/IT9529/noir/IT9529-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9529/noir/IT9529-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9529/noir/IT9529-noir-03.webp",
+"color": "noir",
+"grp": "A"
+}
+]
+},
+"cef6bbf7-6aab-4e26-8536-35fbe013d40d": {
+"name": "PEC FLY/REAR DELT IT9515",
+"key": "IT95 Series/IT9515",
+"default_color": "argent",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "IT95 Series/IT9515/argent/IT9515-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9515/argent/IT9515-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9515/argent/IT9515-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9515/argent/IT9515-argent-04.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9515/argent/IT9515-argent-05.webp",
+"color": "argent",
+"grp": "C"
+},
+{
+"p": "IT95 Series/IT9515/argent/IT9515-argent-06.webp",
+"color": "argent",
+"grp": "C"
+},
+{
+"p": "IT95 Series/IT9515/noir/IT9515-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9515/noir/IT9515-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9515/noir/IT9515-noir-03.webp",
+"color": "noir",
+"grp": "A"
+}
+]
+},
+"5bfae0e3-6204-4e27-9ecf-e109d07679ce": {
+"name": "Rotary Torso IT9518",
+"key": "IT95 Series/IT9518",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "IT95 Series/IT9518/noir/IT9518-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9518/noir/IT9518-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9518/noir/IT9518-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9518/argent/IT9518-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9518/argent/IT9518-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9518/argent/IT9518-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9518/argent/IT9518-argent-04.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "IT95 Series/IT9518/argent/IT9518-argent-05.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "IT95 Series/IT9518/argent/IT9518-argent-06.webp",
+"color": "argent",
+"grp": "B"
+}
+]
+},
+"48b52a0c-057c-49fc-834f-3e1c5d7b807b": {
+"name": "Shoulder Press IT9512",
+"key": "IT95 Series/IT9512",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "IT95 Series/IT9512/noir/IT9512-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9512/noir/IT9512-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9512/noir/IT9512-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9512/argent/IT9512-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9512/argent/IT9512-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9512/argent/IT9512-argent-03.webp",
+"color": "argent",
+"grp": "A"
+}
+]
+},
+"d8d19d6c-e698-4178-920c-ad4d5f45e162": {
+"name": "Standing Pec Fly IT9537",
+"key": "IT95 Series/IT9537",
+"default_color": "argent-rouge",
+"colors": [
+"argent-rouge",
+"noir"
+],
+"images": [
+{
+"p": "IT95 Series/IT9537/argent-rouge/IT9537-argent-rouge-01.webp",
+"color": "argent-rouge",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9537/argent-rouge/IT9537-argent-rouge-02.webp",
+"color": "argent-rouge",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9537/noir/IT9537-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9537/noir/IT9537-noir-02.webp",
+"color": "noir",
+"grp": "B"
+}
+]
+},
+"47d0f39b-d3bb-4e77-9d98-8156fbd2af94": {
+"name": "Triceps Dip IT9517",
+"key": "IT95 Series/IT9517",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "IT95 Series/IT9517/noir/IT9517-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9517/noir/IT9517-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9517/noir/IT9517-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9517/argent/IT9517-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9517/argent/IT9517-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "IT95 Series/IT9517/argent/IT9517-argent-03.webp",
+"color": "argent",
+"grp": "A"
+}
+]
+},
+"0ec21609-098e-4418-8dc0-7d11dd05f17e": {
+"name": "Banc Abdominaux Réglable ITF8401",
+"key": "ITF8 Series/ITF8401",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8401/ITF8401-01.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"77636195-2db2-4bf0-b875-1e0920789baa": {
+"name": "Banc Adjustable ITF8802",
+"key": "ITF8 Series/ITF8802",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8802/ITF8802-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "ITF8 Series/ITF8802/ITF8802-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "ITF8 Series/ITF8802/ITF8802-03.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"4a799e66-7a9f-454e-8a39-8e1e61d52166": {
+"name": "Banc Assis ITF8102",
+"key": "ITF8 Series/ITF8102",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8102/ITF8102-01.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"7a263b34-4666-4c4a-8eb0-15f05ce4a237": {
+"name": "Banc Epaul Impulse ITF8102",
+"key": "ITF8 Series/ITF8102",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8102/ITF8102-01.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"c02825fb-7b3e-4096-a846-25ca3e943484": {
+"name": "Banc Lombaires ITF8402",
+"key": "ITF8 Series/ITF8402",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8402/ITF8402-01.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"2bb5ca7c-054c-4a32-90ae-9d528a1f73e1": {
+"name": "Banc Olympic Décliné ITF8204",
+"key": "ITF8 Series/ITF8204",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8204/ITF8204-01.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"d658d60e-1c17-4dae-b7f6-a34496cb4a60": {
+"name": "Banc Olympic Multipositions ITF8201",
+"key": "ITF8 Series/ITF8201",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8201/ITF8201-01.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"4499d316-29cb-49a1-a963-b32d3d9433b5": {
+"name": "Banc Olympique Epaules ITF8101",
+"key": "ITF8 Series/ITF8101",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8101/ITF8101-01.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"dd481386-1321-4a53-ab76-23e09ad81747": {
+"name": "Banc Olympique Incliné ITF8203",
+"key": "ITF8 Series/ITF8203",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8203/ITF8203-01.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"370c6631-b833-4e17-8971-c855c85bd694": {
+"name": "Banc Plat ITF8801",
+"key": "ITF8 Series/ITF8801",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8801/ITF8801-01.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"e3f7791d-61f5-456d-bb8f-1f73193e753e": {
+"name": "Banc Romain ITF8404",
+"key": "ITF8 Series/ITF8404",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8404/ITF8404-01.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"9a571ff7-a1c3-42b2-865c-3072356a9fdb": {
+"name": "Banc adjustable Impulse ITF8802",
+"key": "ITF8 Series/ITF8802",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8802/ITF8802-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "ITF8 Series/ITF8802/ITF8802-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "ITF8 Series/ITF8802/ITF8802-03.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"db8f75cd-79dc-4738-bd51-395a09b0cac4": {
+"name": "Barbell Rack ITF8805",
+"key": "ITF8 Series/ITF8805",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8805/ITF8805-01.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"26cf7c28-c655-4b64-b7a7-7327f265c0fc": {
+"name": "Chin Dip Leg Raise ITF8702",
+"key": "ITF8 Series/ITF8702",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8702/ITF8702-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "ITF8 Series/ITF8702/ITF8702-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "ITF8 Series/ITF8702/ITF8702-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "ITF8 Series/ITF8702/ITF8702-04.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"7237ea6b-a680-4c67-95d1-2e4658a9c32f": {
+"name": "Hip Thrust Bench ITF8613",
+"key": "ITF8 Series/ITF8613",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8613/ITF8613-01.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"1a5d5607-5c6b-450b-ab0b-19872f758a38": {
+"name": "Olympic Flat Bench Impulse ITF8202",
+"key": "ITF8 Series/ITF8202",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8202/ITF8202-01.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"d2f97bfd-5447-4a14-96c9-c745f3d0ac90": {
+"name": "Rack Haltères Hexagonaux ITF8809",
+"key": "ITF8 Series/ITF8809",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8809/ITF8809-01.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"6e2750a6-2c16-4e37-bee4-8175f4ad16f7": {
+"name": "Rack à Squat ITF8601",
+"key": "ITF8 Series/ITF8601",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8601/ITF8601-01.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"5811963f-83f2-4dd7-9ea3-342de791fe9a": {
+"name": "Rack à squats Impulse ITF8601",
+"key": "ITF8 Series/ITF8601",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8601/ITF8601-01.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"2cbc6c52-d0d1-4340-ba77-070eab1f8f9f": {
+"name": "Range-haltères 15 paires ITF8810",
+"key": "ITF8 Series/ITF8810",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8810/ITF8810-01.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"ddbf81c5-924f-4315-8c74-fd2cdc69818d": {
+"name": "Rangement de disques ITF8806",
+"key": "ITF8 Series/ITF8806",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8806/ITF8806-01.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"d1d6309e-4d4e-4526-9a30-51d98b4e4f68": {
+"name": "Seated Arm Curl ITF8501",
+"key": "ITF8 Series/ITF8501",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8501/ITF8501-01.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"a26827a8-0a08-4459-aaa1-26c8e9003cf5": {
+"name": "Sissy Squat & Split Bench ITF8618",
+"key": "ITF8 Series/ITF8618",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "ITF8 Series/ITF8618/ITF8618-01.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"473d8223-7f2f-4139-973b-735d27a5de8a": {
+"name": "Spining Auto-Alimenté PS460",
+"key": "PS Series/PS460",
+"default_color": "argent",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "PS Series/PS460/argent/PS460-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "PS Series/PS460/argent/PS460-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "PS Series/PS460/argent/PS460-argent-06.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "PS Series/PS460/argent/PS460-argent-07.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "PS Series/PS460/argent/PS460-argent-02.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "PS Series/PS460/argent/PS460-argent-04.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "PS Series/PS460/argent/PS460-argent-05.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "PS Series/PS460/noir/PS460-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "PS Series/PS460/noir/PS460-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "PS Series/PS460/noir/PS460-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "PS Series/PS460/noir/PS460-noir-04.webp",
+"color": "noir",
+"grp": "B"
+}
+]
+},
+"f290c6d1-63a0-4cd3-9438-a6024567d953": {
+"name": "Elliptique RE500C",
+"key": "R Series/RE500",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "R Series/RE500/noir/RE500-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RE500/noir/RE500-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RE500/noir/RE500-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RE500/noir/RE500-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RE500/noir/RE500-noir-05.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RE500/noir/RE500-noir-06.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RE500/argent/RE500-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "R Series/RE500/argent/RE500-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "R Series/RE500/argent/RE500-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "R Series/RE500/argent/RE500-argent-04.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "R Series/RE500/argent/RE500-argent-05.webp",
+"color": "argent",
+"grp": "A"
+}
+]
+},
+"49a84bdf-7bfd-4986-8252-c1aee252c1c6": {
+"name": "Elliptique RE700 Led",
+"key": "R Series/RE700",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "R Series/RE700/noir/RE700-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RE700/noir/RE700-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RE700/noir/RE700-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RE700/noir/RE700-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RE700/argent/RE700-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "R Series/RE700/argent/RE700-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "R Series/RE700/argent/RE700-argent-03.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "R Series/RE700/argent/RE700-argent-04.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RE700/argent/RE700-argent-05.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RE700/argent/RE700-argent-06.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RE700/argent/RE700-argent-07.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RE700/argent/RE700-argent-08.webp",
+"color": "argent",
+"grp": "B"
+}
+]
+},
+"c0f7b9d7-0f0b-4b67-b2a7-bda5fdeaa518": {
+"name": "Elliptique RE970 Touchscreen",
+"key": "R Series/RE970",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "R Series/RE970/noir/RE970-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RE970/noir/RE970-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RE970/noir/RE970-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RE970/noir/RE970-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RE970/argent/RE970-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "R Series/RE970/argent/RE970-argent-02.webp",
+"color": "argent",
+"grp": "A"
+}
+]
+},
+"61815ee1-9f2f-42f0-83d9-a9326948d553": {
+"name": "Vélo Semi-Allongé Tactile RR970H",
+"key": "R Series/RR970",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "R Series/RR970/noir/RR970-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RR970/noir/RR970-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RR970/noir/RR970-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RR970/noir/RR970-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RR970/argent/RR970-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "R Series/RR970/argent/RR970-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "R Series/RR970/argent/RR970-argent-03.webp",
+"color": "argent",
+"grp": "A"
+}
+]
+},
+"3d4f0eb8-b0d8-4e22-9e8f-ffdfa31f647b": {
+"name": "Vélo Semi-Allongé RR700",
+"key": "R Series/RR700",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "R Series/RR700/noir/RR700-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RR700/noir/RR700-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RR700/noir/RR700-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RR700/noir/RR700-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RR700/argent/RR700-argent-01.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RR700/argent/RR700-argent-02.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RR700/argent/RR700-argent-03.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RR700/argent/RR700-argent-04.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RR700/argent/RR700-argent-05.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RR700/argent/RR700-argent-06.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RR700/argent/RR700-argent-07.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RR700/argent/RR700-argent-08.webp",
+"color": "argent",
+"grp": "B"
+}
+]
+},
+"ec6b2027-cf03-45cb-8126-beecccf7b4ee": {
+"name": "Vélo Semi-Allongé RR500",
+"key": "R Series/RR500",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "R Series/RR500/noir/RR500-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RR500/noir/RR500-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RR500/noir/RR500-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RR500/noir/RR500-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RR500/noir/RR500-noir-05.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RR500/argent/RR500-argent-01.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RR500/argent/RR500-argent-02.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RR500/argent/RR500-argent-03.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RR500/argent/RR500-argent-04.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RR500/argent/RR500-argent-05.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RR500/argent/RR500-argent-06.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RR500/argent/RR500-argent-07.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RR500/argent/RR500-argent-08.webp",
+"color": "argent",
+"grp": "B"
+}
+]
+},
+"40021e3d-0134-4313-b436-83184acbdb10": {
+"name": "Tapis de Course RT700",
+"key": "R Series/RT700",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "R Series/RT700/noir/RT700-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RT700/noir/RT700-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RT700/noir/RT700-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RT700/noir/RT700-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RT700/argent/RT700-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "R Series/RT700/argent/RT700-argent-04.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "R Series/RT700/argent/RT700-argent-06.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "R Series/RT700/argent/RT700-argent-01.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RT700/argent/RT700-argent-03.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RT700/argent/RT700-argent-05.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RT700/argent/RT700-argent-07.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RT700/argent/RT700-argent-08.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RT700/argent/RT700-argent-09.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RT700/argent/RT700-argent-10.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RT700/argent/RT700-argent-11.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RT700/argent/RT700-argent-12.webp",
+"color": "argent",
+"grp": "B"
+}
+]
+},
+"2384e89f-363d-462c-8cdd-17f886868315": {
+"name": "Tapis de Course Tactile RT970",
+"key": "R Series/RT970",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "R Series/RT970/noir/RT970-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RT970/noir/RT970-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RT970/noir/RT970-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RT970/noir/RT970-noir-01.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "R Series/RT970/argent/RT970-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "R Series/RT970/argent/RT970-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "R Series/RT970/argent/RT970-argent-04.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "R Series/RT970/argent/RT970-argent-03.webp",
+"color": "argent",
+"grp": "B"
+}
+]
+},
+"0f3a2314-5001-4b46-8ceb-4fc8f17a658e": {
+"name": "Vélo Droit RU500",
+"key": "R Series/RU500",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "R Series/RU500/noir/RU500-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RU500/noir/RU500-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RU500/noir/RU500-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RU500/noir/RU500-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RU500/noir/RU500-noir-05.webp",
+"color": "noir",
+"grp": "B"
+},
+{
+"p": "R Series/RU500/argent/RU500-argent-01.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RU500/argent/RU500-argent-02.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RU500/argent/RU500-argent-03.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RU500/argent/RU500-argent-04.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RU500/argent/RU500-argent-05.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RU500/argent/RU500-argent-06.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RU500/argent/RU500-argent-07.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RU500/argent/RU500-argent-08.webp",
+"color": "argent",
+"grp": "B"
+}
+]
+},
+"9e575232-7374-4215-9a97-d3525825af2a": {
+"name": "Vélo Droit RU700",
+"key": "R Series/RU700",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "R Series/RU700/noir/RU700-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RU700/noir/RU700-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RU700/noir/RU700-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RU700/noir/RU700-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RU700/argent/RU700-argent-01.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RU700/argent/RU700-argent-02.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RU700/argent/RU700-argent-03.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RU700/argent/RU700-argent-04.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RU700/argent/RU700-argent-05.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RU700/argent/RU700-argent-06.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RU700/argent/RU700-argent-07.webp",
+"color": "argent",
+"grp": "B"
+},
+{
+"p": "R Series/RU700/argent/RU700-argent-08.webp",
+"color": "argent",
+"grp": "B"
+}
+]
+},
+"f5374a15-871f-4b78-8946-823cb7d7f2e3": {
+"name": "Vélo Droit Tactile RU970",
+"key": "R Series/RU970",
+"default_color": "noir",
+"colors": [
+"argent",
+"noir"
+],
+"images": [
+{
+"p": "R Series/RU970/noir/RU970-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RU970/noir/RU970-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RU970/noir/RU970-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RU970/noir/RU970-noir-04.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "R Series/RU970/argent/RU970-argent-01.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "R Series/RU970/argent/RU970-argent-02.webp",
+"color": "argent",
+"grp": "A"
+},
+{
+"p": "R Series/RU970/argent/RU970-argent-03.webp",
+"color": "argent",
+"grp": "A"
+}
+]
+},
+"42e16a26-bf9c-49c7-a64a-cc5e96004982": {
+"name": "Abdominal Crunch SL7036",
+"key": "SL Series/SL7036",
+"default_color": "rouge",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7036/rouge/SL7036-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7036/rouge/SL7036-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7036/rouge/SL7036-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7036/noir/SL7036-noir-01.webp",
+"color": "noir",
+"grp": "A"
+}
+]
+},
+"4e4af68a-4c43-45b7-afed-47d77cbd3422": {
+"name": "Assisted Nordic Ham SL7051",
+"key": "SL Series/SL7051",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7051/noir/SL7051-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7051/noir/SL7051-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7051/rouge/SL7051-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7051/rouge/SL7051-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"3422b5f3-4741-4ee6-8730-8b03d7a30dd6": {
+"name": "Banc Abdo Adjustable SL7043",
+"key": "SL Series/SL7043",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7043/noir/SL7043-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7043/noir/SL7043-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7043/noir/SL7043-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7043/rouge/SL7043-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"b8b43acc-098b-4e5f-bb13-23d6f6402aad": {
+"name": "Banc Assis SL7022",
+"key": "SL Series/SL7022",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7022/noir/SL7022-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7022/noir/SL7022-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7022/noir/SL7022-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7022/rouge/SL7022-rouge-01.webp",
+"color": "rouge",
+"grp": "B"
+}
+]
+},
+"0682c0ea-0fbc-4dd6-8529-e1871c623518": {
+"name": "Banc Biceps SL7023",
+"key": "SL Series/SL7023",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7023/noir/SL7023-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7023/noir/SL7023-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7023/noir/SL7023-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7023/rouge/SL7023-rouge-01.webp",
+"color": "rouge",
+"grp": "B"
+}
+]
+},
+"7e56ab14-8b33-4a2b-bdf1-0a77c1f9c5a1": {
+"name": "Banc Lombaires SL7047",
+"key": "SL Series/SL7047",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7047/noir/SL7047-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7047/noir/SL7047-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7047/noir/SL7047-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7047/rouge/SL7047-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7047/rouge/SL7047-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7047/rouge/SL7047-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"4fb3977a-010b-41fc-a9d3-0cbea0a0d15b": {
+"name": "Banc Olympique Adjustable SL7041",
+"key": "SL Series/SL7041",
+"default_color": "rouge",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7041/rouge/SL7041-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7041/rouge/SL7041-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7041/rouge/SL7041-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7041/rouge/SL7041-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7041/rouge/SL7041-rouge-05.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7041/rouge/SL7041-rouge-06.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7041/rouge/SL7041-rouge-07.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7041/rouge/SL7041-rouge-08.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7041/noir/SL7041-noir-01.webp",
+"color": "noir",
+"grp": "A"
+}
+]
+},
+"e74e85af-725e-4527-99ad-871598d6558a": {
+"name": "Banc Olympique Décliné SL7030",
+"key": "SL Series/SL7030",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7030/noir/SL7030-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7030/noir/SL7030-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7030/noir/SL7030-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7030/rouge/SL7030-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7030/rouge/SL7030-rouge-01.webp",
+"color": "rouge",
+"grp": "B"
+}
+]
+},
+"034bf45c-71e3-4eee-903c-560bf00af0d6": {
+"name": "Banc Olympique Epaules SL7031",
+"key": "SL Series/SL7031",
+"default_color": "rouge",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7031/rouge/SL7031-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7031/rouge/SL7031-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7031/rouge/SL7031-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7031/rouge/SL7031-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7031/rouge/SL7031-rouge-05.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7031/rouge/SL7031-rouge-06.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7031/rouge/SL7031-rouge-07.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7031/noir/SL7031-noir-01.webp",
+"color": "noir",
+"grp": "A"
+}
+]
+},
+"3717b6f7-46f2-4e5d-9c93-83821162427c": {
+"name": "Banc Olympique Incliné SL7029",
+"key": "SL Series/SL7029",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7029/noir/SL7029-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7029/noir/SL7029-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7029/noir/SL7029-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7029/rouge/SL7029-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"8025158c-9da7-4e1e-8c56-4cea8f14f947": {
+"name": "Banc Olympique Plat SL7028",
+"key": "SL Series/SL7028",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7028/noir/SL7028-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7028/noir/SL7028-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7028/noir/SL7028-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7028/rouge/SL7028-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"d0355309-e985-4899-b937-8557eaac590f": {
+"name": "Banc Plat SL7035",
+"key": "SL Series/SL7035",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7035/noir/SL7035-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7035/noir/SL7035-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7035/noir/SL7035-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7035/rouge/SL7035-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7035/rouge/SL7035-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"ec33ecdf-d33c-49b6-8f78-b35571c558f6": {
+"name": "Banc à Biceps Debout SL7018",
+"key": "SL Series/SL7018",
+"default_color": "rouge",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7018/rouge/SL7018-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7018/rouge/SL7018-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7018/rouge/SL7018-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7018/rouge/SL7018-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7018/rouge/SL7018-rouge-05.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7018/rouge/SL7018-rouge-06.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7018/rouge/SL7018-rouge-07.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7018/rouge/SL7018-rouge-08.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7018/rouge/SL7018-rouge-09.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7018/noir/SL7018-noir-01.webp",
+"color": "noir",
+"grp": "A"
+}
+]
+},
+"f01b995e-5875-458b-923c-e15fc09a8bae": {
+"name": "Banc à Etirements SL7044",
+"key": "SL Series/SL7044",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7044/noir/SL7044-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7044/noir/SL7044-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7044/noir/SL7044-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7044/rouge/SL7044-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7044/rouge/SL7044-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"a8a39ec7-70db-4d67-b901-1ef228a876f7": {
+"name": "Barbells Rack SL7027",
+"key": "SL Series/SL7027",
+"default_color": "rouge",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7027/rouge/SL7027-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7027/rouge/SL7027-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7027/rouge/SL7027-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7027/rouge/SL7027-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7027/rouge/SL7027-rouge-05.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7027/rouge/SL7027-rouge-06.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7027/rouge/SL7027-rouge-07.webp",
+"color": "rouge",
+"grp": "B"
+},
+{
+"p": "SL Series/SL7027/noir/SL7027-noir-01.webp",
+"color": "noir",
+"grp": "A"
+}
+]
+},
+"0588eb30-3958-478b-8e30-ed7c1cf6f385": {
+"name": "Belt Squat SL7055",
+"key": "SL Series/SL7055",
+"default_color": "rouge",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7055/rouge/SL7055-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7055/rouge/SL7055-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7055/noir/SL7055-noir-01.webp",
+"color": "noir",
+"grp": "A"
+}
+]
+},
+"fa7ea5f3-73d3-41db-8941-a4277bdc2d95": {
+"name": "Chaise Romaine SL7045",
+"key": "SL Series/SL7045",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7045/noir/SL7045-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7045/noir/SL7045-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7045/noir/SL7045-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7045/rouge/SL7045-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"b661747c-c8d8-4bec-b140-49e097cee0c3": {
+"name": "Hack Squat SL7021",
+"key": "SL Series/SL7021",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7021/noir/SL7021-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7021/noir/SL7021-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7021/noir/SL7021-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7021/rouge/SL7021-rouge-01.webp",
+"color": "rouge",
+"grp": "B"
+}
+]
+},
+"5b6dc028-db05-4896-a8c6-e1e5af6928cb": {
+"name": "Lat Pulldown SL7002",
+"key": "SL Series/SL7002",
+"default_color": "rouge",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7002/rouge/SL7002-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7002/rouge/SL7002-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7002/rouge/SL7002-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7002/rouge/SL7002-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7002/rouge/SL7002-rouge-05.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7002/rouge/SL7002-rouge-06.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7002/rouge/SL7002-rouge-07.webp",
+"color": "rouge",
+"grp": "B"
+},
+{
+"p": "SL Series/SL7002/noir/SL7002-noir-01.webp",
+"color": "noir",
+"grp": "A"
+}
+]
+},
+"db6593fa-1495-44d5-8e61-90d4907f7c12": {
+"name": "Leg Extension SL7025",
+"key": "SL Series/SL7025",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7025/noir/SL7025-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7025/noir/SL7025-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7025/noir/SL7025-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7025/rouge/SL7025-rouge-01.webp",
+"color": "rouge",
+"grp": "B"
+}
+]
+},
+"f230b564-5a3c-4768-aee4-4ecbf129eb72": {
+"name": "Low Row Divergent SL7004",
+"key": "SL Series/SL7004",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7004/noir/SL7004-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7004/rouge/SL7004-rouge-01.webp",
+"color": "rouge",
+"grp": "B"
+}
+]
+},
+"c181df4b-c51f-4147-8bc2-66b998fb9452": {
+"name": "Mollets Assis SL7017",
+"key": "SL Series/SL7017",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7017/noir/SL7017-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7017/noir/SL7017-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7017/noir/SL7017-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7017/rouge/SL7017-rouge-01.webp",
+"color": "rouge",
+"grp": "B"
+}
+]
+},
+"0ee36d70-f168-4e04-aafe-d9370f5dda11": {
+"name": "Mollets Debout SL7032",
+"key": "SL Series/SL7032",
+"default_color": "rouge",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7032/rouge/SL7032-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7032/rouge/SL7032-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7032/rouge/SL7032-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7032/rouge/SL7032-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7032/rouge/SL7032-rouge-05.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7032/rouge/SL7032-rouge-06.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7032/rouge/SL7032-rouge-08.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7032/rouge/SL7032-rouge-07.webp",
+"color": "rouge",
+"grp": "B"
+},
+{
+"p": "SL Series/SL7032/noir/SL7032-noir-01.webp",
+"color": "noir",
+"grp": "A"
+}
+]
+},
+"ccaf3e0b-adde-4c0e-aea7-82aeb548a315": {
+"name": "Option range-disques SL7009OPT",
+"key": "SL Series/SL7009OPT",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7009OPT/noir/SL7009OPT-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7009OPT/rouge/SL7009OPT-rouge-01.webp",
+"color": "rouge",
+"grp": "B"
+}
+]
+},
+"c6624edf-a05a-497c-8017-f6b3b94ffdcd": {
+"name": "Power Rack SL7009",
+"key": "SL Series/SL7009",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7009/noir/SL7009-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7009/rouge/SL7009-rouge-01.webp",
+"color": "rouge",
+"grp": "B"
+}
+]
+},
+"aa437b4e-4b1d-43d5-99b3-52cc54378fe1": {
+"name": "Presse à Epaules Convergente SL7003",
+"key": "SL Series/SL7003",
+"default_color": "rouge",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7003/rouge/SL7003-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7003/rouge/SL7003-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7003/rouge/SL7003-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7003/rouge/SL7003-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7003/rouge/SL7003-rouge-05.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7003/rouge/SL7003-rouge-06.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7003/rouge/SL7003-rouge-07.webp",
+"color": "rouge",
+"grp": "B"
+},
+{
+"p": "SL Series/SL7003/noir/SL7003-noir-01.webp",
+"color": "noir",
+"grp": "A"
+}
+]
+},
+"754add5c-4feb-420b-9a75-26d9a2620c8b": {
+"name": "Range Haltères SL7016",
+"key": "SL Series/SL7016",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7016/noir/SL7016-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7016/rouge/SL7016-rouge-01.webp",
+"color": "rouge",
+"grp": "B"
+}
+]
+},
+"dff42026-c043-4433-b1fe-494aa25f56e5": {
+"name": "Range-disques SL7010",
+"key": "SL Series/SL7010",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7010/noir/SL7010-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7010/rouge/SL7010-rouge-01.webp",
+"color": "rouge",
+"grp": "B"
+}
+]
+},
+"cb8966b5-53c6-4bc4-96a2-ac7dcac9df88": {
+"name": "Rowing Divergent SL7007",
+"key": "SL Series/SL7007",
+"default_color": "rouge",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7007/rouge/SL7007-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7007/rouge/SL7007-rouge-02.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7007/rouge/SL7007-rouge-03.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7007/rouge/SL7007-rouge-04.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7007/rouge/SL7007-rouge-05.webp",
+"color": "rouge",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7007/rouge/SL7007-rouge-06.webp",
+"color": "rouge",
+"grp": "B"
+},
+{
+"p": "SL Series/SL7007/noir/SL7007-noir-01.webp",
+"color": "noir",
+"grp": "A"
+}
+]
+},
+"228120cc-433d-498c-9ff8-053b777e02d3": {
+"name": "Squat Lunge SL7024",
+"key": "SL Series/SL7024",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7024/noir/SL7024-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7024/noir/SL7024-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7024/noir/SL7024-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7024/rouge/SL7024-rouge-01.webp",
+"color": "rouge",
+"grp": "B"
+}
+]
+},
+"c4579b6a-d8a2-4923-abf0-c296c8274bef": {
+"name": "Standing Leg Curl SL7026",
+"key": "SL Series/SL7026",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7026/noir/SL7026-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7026/noir/SL7026-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7026/noir/SL7026-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7026/rouge/SL7026-rouge-01.webp",
+"color": "rouge",
+"grp": "B"
+}
+]
+},
+"88848e45-8f38-483b-b04a-abbb3e801505": {
+"name": "Super Squat SL7034",
+"key": "SL Series/SL7034",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7034/noir/SL7034-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7034/rouge/SL7034-rouge-01.webp",
+"color": "rouge",
+"grp": "A"
+}
+]
+},
+"7df4b431-4c06-4e65-93da-8e0a833263a9": {
+"name": "T-Bar Row SL7019",
+"key": "SL Series/SL7019",
+"default_color": "noir",
+"colors": [
+"noir",
+"rouge"
+],
+"images": [
+{
+"p": "SL Series/SL7019/noir/SL7019-noir-01.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7019/noir/SL7019-noir-02.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7019/noir/SL7019-noir-03.webp",
+"color": "noir",
+"grp": "A"
+},
+{
+"p": "SL Series/SL7019/rouge/SL7019-rouge-01.webp",
+"color": "rouge",
+"grp": "B"
+}
+]
+},
+"124202ef-d24e-4dc4-a31e-e663483816e3": {
+"name": "Climber XSC700",
+"key": "XSC Series/XSC700",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "XSC Series/XSC700/XSC700-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "XSC Series/XSC700/XSC700-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "XSC Series/XSC700/XSC700-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "XSC Series/XSC700/XSC700-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "XSC Series/XSC700/XSC700-05.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"91df8f37-b3b1-45ab-a2f3-b41484fd77cd": {
+"name": "Climber XSC750",
+"key": "XSC Series/XSC750",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "XSC Series/XSC750/XSC750-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "XSC Series/XSC750/XSC750-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "XSC Series/XSC750/XSC750-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "XSC Series/XSC750/XSC750-01.webp",
+"color": "",
+"grp": "B"
+},
+{
+"p": "XSC Series/XSC750/XSC750-04.webp",
+"color": "",
+"grp": "B"
+},
+{
+"p": "XSC Series/XSC750/XSC750-06.webp",
+"color": "",
+"grp": "B"
+}
+]
+},
+"bea7bc6c-aebb-4d73-a4d6-467701207c05": {
+"name": "Climbmill XSC500",
+"key": "XSC Series/XSC500",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "XSC Series/XSC500/XSC500-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "XSC Series/XSC500/XSC500-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "XSC Series/XSC500/XSC500-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "XSC Series/XSC500/XSC500-04.webp",
+"color": "",
+"grp": "A"
+}
+]
+},
+"5d59a89d-f9b4-4a8c-96fe-d47263e2534f": {
+"name": "Cage Crosstraining I-Zone IZ-I",
+"key": "I-Zone/IZ-I",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "I-Zone/IZ-I/IZ-I-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-I/IZ-I-03.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-I/IZ-I-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-I/IZ-I-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-I/IZ-I-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-I/IZ-I-06.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-I/IZ-I-07.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-I/IZ-I-08.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-I/IZ-I-09.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-I/IZ-I-10.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-I/IZ-I-11.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-I/IZ-I-12.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-I/IZ-I-13.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-I/IZ-I-17.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-I/IZ-I-18.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-I/IZ-I-19.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-I/IZ-I-20.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-I/IZ-I-15.webp",
+"color": "",
+"grp": "B"
+},
+{
+"p": "I-Zone/IZ-I/IZ-I-16.webp",
+"color": "",
+"grp": "B"
+},
+{
+"p": "I-Zone/IZ-I/IZ-I-14.webp",
+"color": "",
+"grp": "C"
+}
+]
+},
+"77eec68b-e5c7-4c33-a017-42180cbec29a": {
+"name": "Cage Crosstraining I-Zone S IZ-S",
+"key": "I-Zone/IZ-S",
+"default_color": "",
+"colors": [],
+"images": [
+{
+"p": "I-Zone/IZ-S/IZ-S-05.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-07.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-01.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-02.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-04.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-06.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-08.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-09.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-10.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-11.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-12.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-13.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-14.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-15.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-16.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-19.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-20.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-22.webp",
+"color": "",
+"grp": "A"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-03.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-17.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-18.webp",
+"color": "",
+"grp": "C"
+},
+{
+"p": "I-Zone/IZ-S/IZ-S-21.webp",
+"color": "",
+"grp": "C"
+}
+]
+}
+}

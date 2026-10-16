@@ -19,6 +19,8 @@ const categoryTitleMap: Record<string, string> = { cardio: "Cardio", musculation
 
 // catégories dont les sous-catégories affichent d'abord une carte par gamme (IT95, IF93…)
 const RANGE_CARD_CATEGORIES = ["musculation"];
+// sous-catégories hors musculation qui affichent aussi des cartes gamme (notes client : Cages & Rigs = MS, FF, I-Zone)
+const RANGE_CARD_SUBCATEGORIES = ["fonctionnel/cages-rigs"];
 
 const ProfessionnelPage = () => {
   const { category, subcategory, range } = useParams();
@@ -34,7 +36,8 @@ const ProfessionnelPage = () => {
   const rangeCode = range?.toUpperCase();
   const baseTitle = isBase ? undefined : (subcategoryName || (categoryName ? `${categoryName} Professionnel` : undefined));
   const title = rangeCode && baseTitle ? `Gamme ${rangeCode} — ${baseTitle}` : baseTitle;
-  const rangeCards = !!category && RANGE_CARD_CATEGORIES.includes(category.toLowerCase());
+  const rangeCards = !!category && (RANGE_CARD_CATEGORIES.includes(category.toLowerCase())
+    || (!!subcategory && RANGE_CARD_SUBCATEGORIES.includes(`${category.toLowerCase()}/${subcategory.toLowerCase()}`)));
 
   return (
     <div className="imp min-h-screen">

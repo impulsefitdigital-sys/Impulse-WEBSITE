@@ -11,10 +11,22 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuoteCart } from "@/contexts/QuoteCartContext";
 import { track } from "@/lib/analytics";
 
+const COLOR_SWATCH: Record<string, { label: string; bg: string }> = {
+  noir: { label: "Noir", bg: "#141414" },
+  rouge: { label: "Rouge", bg: "#c8102e" },
+  argent: { label: "Argent", bg: "linear-gradient(135deg,#e4e6e8,#9ea3a8)" },
+  "argent-rouge": { label: "Argent / rouge", bg: "linear-gradient(135deg,#c9cdd1 50%,#c8102e 50%)" },
+  "noir-rouge": { label: "Noir / rouge", bg: "linear-gradient(135deg,#141414 50%,#c8102e 50%)" },
+  "blanc-noir": { label: "Blanc / noir", bg: "linear-gradient(135deg,#f4f4f4 50%,#141414 50%)" },
+  "noir-marron": { label: "Noir / marron", bg: "linear-gradient(135deg,#141414 50%,#6b4329 50%)" },
+  jaune: { label: "Jaune", bg: "#f2c200" },
+};
+
 const ProductDetailPage = () => {
   const { id } = useParams();
   const [activeImage, setActiveImage] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"overview" | "specs" | "warranty">("overview");
   const { addItem, items } = useQuoteCart();
 
@@ -23,7 +35,18 @@ const ProductDetailPage = () => {
   const { data: galleryImages } = useQuery({ queryKey: ["product-images", id], queryFn: async () => { const { data, error } = await supabase.from("product_images").select("*").eq("product_id", id!).order("sort_order"); if (error) throw error; return data; }, enabled: !!id });
   const { data: relatedProducts } = useQuery({ queryKey: ["related-products", product?.range_code, product?.subcategory, product?.category, id], queryFn: async () => { let query = supabase.from("products").select("*").eq("is_published", true).neq("id", id!); if (product!.range_code) { query = query.eq("range_code", product!.range_code); } else if (product!.subcategory) { query = query.eq("subcategory", product!.subcategory); } else { query = query.eq("category", product!.category); } const { data, error } = await query.order("sort_order").limit(4); if (error) throw error; return data; }, enabled: !!(product?.category || product?.subcategory || product?.range_code) && !!id });
 
-  const allImages = product ? [...(product.image_url ? [{ url: product.image_url, alt: product.name }] : []), ...(product.hover_image_url ? [{ url: product.hover_image_url, alt: `${product.name} - vue alternative` }] : []), ...(galleryImages?.map((img) => ({ url: img.image_url, alt: img.alt_text || product.name })) || [])] : [];
+  // Photos par couleur : l'image principale et l'image de survol sont dans la couleur par défaut,
+  // la galerie porte une couleur par photo (null = commune à toutes les couleurs).
+  const defaultColor: string | null = (product as any)?.default_color ?? null;
+  const baseImages: { url: string; alt: string; color: string | null }[] = product ? [
+    ...(product.image_url ? [{ url: product.image_url, alt: product.name, color: defaultColor }] : []),
+    ...(product.hover_image_url ? [{ url: product.hover_image_url, alt: `${product.name} - vue alternative`, color: defaultColor }] : []),
+    ...(galleryImages?.map((img) => ({ url: img.image_url, alt: img.alt_text || product.name, color: ((img as any).color as string | null) ?? null })) || []),
+  ] : [];
+  const colors = Array.from(new Set(baseImages.map((i) => i.color).filter((c): c is string => !!c)));
+  const activeColor = selectedColor && colors.includes(selectedColor) ? selectedColor : (defaultColor && colors.includes(defaultColor) ? defaultColor : colors[0] ?? null);
+  const allImages = colors.length > 1 ? baseImages.filter((i) => !i.color || i.color === activeColor) : baseImages;
+  const chooseColor = (c: string) => { setSelectedColor(c); setActiveImage(0); };
   const specs = (product?.specs as { label: string; value: string }[] | null) || [];
   const features = (product?.features as string[] | null) || [];
   const warrantyItems: { component: string; duration: string }[] = (() => { const w = (product as any)?.warranty; if (!w) return []; try { const parsed = JSON.parse(w); if (Array.isArray(parsed)) return parsed; } catch {} return w.split("\n").filter((l: string) => l.trim()).map((line: string) => { const parts = line.split(":"); return { component: parts[0]?.trim() || "Garantie", duration: parts.slice(1).join(":").trim() || line.trim() }; }); })();
@@ -32,6 +55,8 @@ const ProductDetailPage = () => {
   const prevImage = useCallback(() => setActiveImage((p) => (p - 1 + allImages.length) % allImages.length), [allImages.length]);
 
   useEffect(() => { if (!lightboxOpen) return; const handler = (e: KeyboardEvent) => { if (e.key === "Escape") setLightboxOpen(false); if (e.key === "ArrowRight") nextImage(); if (e.key === "ArrowLeft") prevImage(); }; window.addEventListener("keydown", handler); return () => window.removeEventListener("keydown", handler); }, [lightboxOpen, nextImage, prevImage]);
+
+  useEffect(() => { setActiveImage(0); setSelectedColor(null); }, [id]);
 
   const inCart = product ? items.some((i) => i.id === product.id) : false;
 
@@ -95,6 +120,18 @@ const ProductDetailPage = () => {
                 <ul className="pd-features">
                   {features.slice(0, 5).map((f, i) => <li key={i}><Check /> {f}</li>)}
                 </ul>
+              )}
+              {colors.length > 1 && (
+                <div className="pd-colors">
+                  <span className="pd-colors-label">Couleur : <strong>{COLOR_SWATCH[activeColor ?? ""]?.label ?? activeColor}</strong></span>
+                  <div className="pd-swatches">
+                    {colors.map((c) => (
+                      <button key={c} type="button" className={`pd-swatch${c === activeColor ? " active" : ""}`} onClick={() => chooseColor(c)} aria-label={COLOR_SWATCH[c]?.label ?? c} title={COLOR_SWATCH[c]?.label ?? c} aria-pressed={c === activeColor}>
+                        <span style={{ background: COLOR_SWATCH[c]?.bg ?? "#888" }} />
+                      </button>
+                    ))}
+                  </div>
+                </div>
               )}
               <div className="pd-actions">
                 <button className={`pd-add${inCart ? " in" : ""}`} onClick={() => addItem({ id: product.id, name: product.name, category: product.category, image_url: product.image_url })}>

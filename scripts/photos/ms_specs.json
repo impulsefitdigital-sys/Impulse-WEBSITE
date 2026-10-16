@@ -1,0 +1,214 @@
+{
+"MS01": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "1377 × 1261 × 2614 mm"
+},
+{
+"label": "Poids",
+"value": "98,3 kg"
+}
+],
+"MS02": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "1377 × 2306 × 2614 mm"
+},
+{
+"label": "Poids",
+"value": "173 kg"
+}
+],
+"MS11": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "1226 × 2160 × 2596 mm"
+},
+{
+"label": "Poids",
+"value": "101,7 kg"
+}
+],
+"MS13": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "1395 × 875 × 369 mm"
+},
+{
+"label": "Poids",
+"value": "51 kg"
+}
+],
+"MS14": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "1112 × 550 × 677 mm"
+},
+{
+"label": "Poids",
+"value": "21,8 kg"
+}
+],
+"MS15": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "527 × 266 × 537 mm"
+},
+{
+"label": "Poids",
+"value": "32,9 kg"
+}
+],
+"MS00": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "1790 × 609 × 2614 mm"
+},
+{
+"label": "Poids",
+"value": "83,4 kg"
+}
+],
+"MS21": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "385 × 2120 × 286 mm"
+},
+{
+"label": "Poids",
+"value": "20,1 kg"
+}
+],
+"MS24": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "441 × 2120 × 107 mm"
+},
+{
+"label": "Poids",
+"value": "37,5 kg"
+}
+],
+"MS25": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "2120 × 385 × 108 mm"
+},
+{
+"label": "Poids",
+"value": "15 kg"
+}
+],
+"MS26": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "2120 × 385 × 108 mm"
+},
+{
+"label": "Poids",
+"value": "24,9 kg"
+}
+],
+"MS27": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "995 × 416 × 763 mm"
+},
+{
+"label": "Poids",
+"value": "30,8 kg"
+}
+],
+"MS704002": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "2023 × 385 × 347 mm"
+},
+{
+"label": "Poids",
+"value": "20 kg"
+}
+],
+"MS704003": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "2023 × 441 × 108 mm"
+},
+{
+"label": "Poids",
+"value": "36,8 kg"
+}
+],
+"MS704005": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "2023 × 385 × 108 mm"
+},
+{
+"label": "Poids",
+"value": "25 kg"
+}
+],
+"MS41": [
+{
+"label": "Poids",
+"value": "20 kg"
+}
+],
+"MS43": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "590 mm"
+},
+{
+"label": "Poids",
+"value": "6,8 kg"
+}
+],
+"MS44": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "280 × 240 × 180 mm"
+},
+{
+"label": "Poids",
+"value": "6 kg"
+}
+],
+"MS45": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "559 mm"
+},
+{
+"label": "Poids",
+"value": "7,3 kg"
+}
+],
+"MS7041": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "1444 × 169 × 76 mm"
+},
+{
+"label": "Poids",
+"value": "11,2 kg"
+}
+],
+"MS7043": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "908 × 257 × 205 mm"
+}
+],
+"MS7048": [
+{
+"label": "Dimensions (L × l × H)",
+"value": "1040 × 702 × 922 mm"
+},
+{
+"label": "Poids",
+"value": "37,9 kg"
+}
+]
+}

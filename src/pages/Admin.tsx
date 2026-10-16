@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import {
   LogOut, Package, MessageSquare, Settings, ArrowLeft, Image, Briefcase, FolderOpen, LayoutGrid, Info, Layers,
-  Mail, HelpCircle, FileText, Eye, Boxes, LayoutDashboard, BarChart3, Plug, History,
+  Mail, HelpCircle, FileText, Eye, Boxes, Tags, LayoutDashboard, BarChart3, Plug, History,
 } from "lucide-react";
 import AdminProducts from "@/components/admin/AdminProducts";
 import AdminRequests from "@/components/admin/AdminRequests";
@@ -21,6 +21,7 @@ import AdminFaqs from "@/components/admin/AdminFaqs";
 import AdminNewsletter from "@/components/admin/AdminNewsletter";
 import AdminHomeSections from "@/components/admin/AdminHomeSections";
 import AdminRanges from "@/components/admin/AdminRanges";
+import AdminRangeProducts from "@/components/admin/AdminRangeProducts";
 import AdminDashboard from "@/components/admin/AdminDashboard";
 import AdminStats from "@/components/admin/AdminStats";
 import AdminIntegrations from "@/components/admin/AdminIntegrations";
@@ -46,6 +47,7 @@ const groups = [
       { id: "products", label: "Produits", icon: Package },
       { id: "eq-categories", label: "Catégories", icon: Layers },
       { id: "ranges", label: "Gammes", icon: Boxes },
+      { id: "range-products", label: "Gammes : rangement", icon: Tags },
       { id: "consulting", label: "Consulting", icon: Briefcase },
       { id: "realisations", label: "Réalisations", icon: FolderOpen },
       { id: "blogs", label: "Blog", icon: FileText },
@@ -153,6 +155,7 @@ const AdminPage = () => {
         {activeTab === "products" && <AdminProducts />}
         {activeTab === "eq-categories" && <AdminCategories />}
         {activeTab === "ranges" && <AdminRanges />}
+        {activeTab === "range-products" && <AdminRangeProducts />}
         {activeTab === "consulting" && <AdminConsulting />}
         {activeTab === "realisations" && <AdminRealisations />}
         {activeTab === "blogs" && <AdminBlogs />}

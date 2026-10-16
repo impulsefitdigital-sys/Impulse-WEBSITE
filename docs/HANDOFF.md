@@ -127,6 +127,34 @@ depuis Supabase → dépassement du plan gratuit (5 Go/mois). Désormais :
 - Statistiques conservées 13 mois (`purge_analytics_events`).
 - Dépôt GitHub alimenté à la main (envoi web) : paquet prêt dans `Bureau/IMPULSE - MISE EN LIGNE`.
 
+### Photos produits, couleurs et 120 nouvelles fiches (16/10/2026, travail fait dans Cowork)
+Fait sur une copie de la sauvegarde du 24/09, puis **fusionné dans ce dépôt** le 16/10 (branche `fusion-photos`).
+Rien d'autre n'a été modifié : CRM, statistiques, Google Sheets, historique, pages réalisations et `/api/content` sont conservés.
+- **Photos** : 1 750 WebP dans `public/photos/<gamme>/<référence>/[couleur/]…` (servies par Netlify, cache 30 j).
+  - 169 fiches existantes ont de nouvelles photos. L'image principale montre la machine entière, de face ou de trois quarts.
+  - Sources et scripts : `scripts/photos/` (les photos originales restent hors dépôt).
+- **Couleurs** : `products.default_color` + `product_images.color` (migration `20261016120000_couleurs_photos.sql`).
+  - Sélecteur de couleur sur la fiche produit.
+  - Couleur de chaque photo réglable dans le formulaire produit de l'admin.
+- **120 nouvelles fiches** (IF93, IT95, Exoform, IFP, ITF8, ECP, SL, AC/RT, PS, I-Zone, MS, FF), publiées et rangées comme leur gamme.
+  - Noms et caractéristiques tirés du catalogue Impulse (PDF client).
+  - Corrections :
+    - ITF8721/8722, auparavant mal référencées IFP ;
+    - FE9710 noir/argent ;
+    - 5 fiches MS-C qui avaient une catégorie mal écrite.
+  - Le site passe de 199 à 314 produits publiés.
+  - Noms à valider : IFP1607, ITF8803, ITF8901, MS42, MS7040, FF1001, IF9337.
+- **Admin → « Gammes : rangement »** (`AdminRangeProducts.tsx`), en complément de « Gammes », qui gère les cartes :
+  - par gamme : espace Pro/Résidentiel, catégorie et sous-catégorie, visibilité ;
+  - actions groupées sur les produits ;
+  - réglage produit par produit.
+- **Cartes gamme aussi dans Professionnel › Fonctionnel › Cages & Rigs** : MS, FF, ZONE (`RANGE_CARD_SUBCATEGORIES` dans `Professionnel.tsx`).
+- **Base en ligne** : la mise à jour se fait avec `scripts/supabase/sql_maj_produits.py`.
+  - Le script produit 3 fichiers SQL.
+  - Ils ne touchent que `products`, `product_images` et `product_ranges`.
+  - Pour une fiche existante, seuls les champs modifiés sont mis à jour.
+- Fichiers remis (`.gitignore`, `.npmrc`, `.env.example`) : ils manquaient, l'envoi web de GitHub ignore les fichiers commençant par un point.
+
 ## 4. Architecture cible
 
 ```

@@ -44,3 +44,9 @@
   for = "/storage/*"
   [headers.values]
     Cache-Control = "public, max-age=2592000"
+
+# Photos produits (public/photos, refonte du 16/10/2026) : 30 jours dans le navigateur
+[[headers]]
+  for = "/photos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
