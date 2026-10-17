@@ -191,6 +191,12 @@ Retours d'Adil après la mise en ligne, et check-up de l'infrastructure.
   - Domaine : `SITE_URL` = impulsefitness.ma, variable Netlify `SITE_URL_CANONIQUE` pour la changer.
 - SQL à exécuter une fois sur la base : `supabase/mises-a-jour/2026-10-17.sql`.
 
+### Domaine de production : impulsemorocco.com (17/10/2026)
+- Décision d'Adil : le site vit sur **impulsemorocco.com**. impulsefitness.ma reste chez l'ancienne agence.
+- `SITE_URL` (balises canonical, og:url, JSON-LD, sitemap, robots.txt) = `https://impulsemorocco.com`, sans www, comme le domaine principal Netlify.
+- Les adresses e-mail affichées (…@impulsefitness.ma) sont inchangées : elles se modifient dans Admin → Coordonnées.
+- Si impulsefitness.ma est récupéré : redirection 301 vers impulsemorocco.com, puis « Changement d'adresse » dans Google Search Console.
+
 ## 4. Architecture cible
 
 ```
@@ -272,7 +278,7 @@ Livrées dans un zip séparé à extraire dans `backup/` (gitignoré) :
   `public/storage/` (mêmes chemins que les buckets Supabase `product-images` / `blog-images`).
 
 ## 7. Questions ouvertes
-- Chez qui est le domaine `impulsefitness.ma` ? Qui a les accès DNS ?
+- Domaine : impulsemorocco.com, décidé le 17/10. impulsefitness.ma est chez l'ancienne agence : à récupérer pour le rediriger.
 - Le client veut-il gérer l'admin lui-même, ou DMC s'en charge ?
 - Email(s) de notification pour les demandes de contact / devis.
 - Garder un mode démo après la migration (aperçus de PR sans toucher la prod) ?

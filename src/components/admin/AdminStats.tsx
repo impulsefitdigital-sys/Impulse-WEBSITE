@@ -83,7 +83,7 @@ const Table = ({ head, rows, empty }: { head: string[]; rows: React.ReactNode[][
 
 /** Génère un lien de campagne avec paramètres UTM (à mettre dans les publicités). */
 const UtmBuilder = () => {
-  const [page, setPage] = useState("https://impulsefitness.ma/");
+  const [page, setPage] = useState("https://impulsemorocco.com/");
   const [source, setSource] = useState("facebook");
   const [medium, setMedium] = useState("paid_social");
   const [campaign, setCampaign] = useState("");

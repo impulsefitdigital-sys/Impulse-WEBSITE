@@ -184,7 +184,7 @@ const AdminRequests = ({ selectedId, navigate }: { selectedId: string | null; na
             onDelete={() => { if (confirm("Supprimer cette demande du site ? Elle restera dans le Google Sheet.")) remove.mutate(selected.id); }}
             onPdf={() => downloadRequestPdf(selected, {
               phone: company?.phone_1, email: company?.email_1,
-              address: [company?.address_line_1, company?.address_line_2].filter(Boolean).join(", "), website: "impulsefitness.ma",
+              address: [company?.address_line_1, company?.address_line_2].filter(Boolean).join(", "), website: "impulsemorocco.com",
             }, logo).catch(() => toast.error("Génération du PDF impossible"))}
           />
         )}

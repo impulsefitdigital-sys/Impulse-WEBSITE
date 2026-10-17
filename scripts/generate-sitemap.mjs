@@ -19,7 +19,7 @@ function siteUrl() {
     const m = cfg.match(/SITE_URL\s*=\s*"([^"]+)"/);
     if (m) return m[1].replace(/\/$/, "");
   } catch {}
-  return "https://www.impulsefitness.ma";
+  return "https://impulsemorocco.com";
 }
 const BASE = siteUrl();
 

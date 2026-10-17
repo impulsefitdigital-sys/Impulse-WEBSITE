@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://www.impulsefitness.ma/sitemap.xml
+Sitemap: https://impulsemorocco.com/sitemap.xml

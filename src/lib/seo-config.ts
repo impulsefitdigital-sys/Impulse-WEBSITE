@@ -1,7 +1,7 @@
 // Central SEO / business configuration.
 // If the production domain differs, change SITE_URL here (one place).
 
-export const SITE_URL = "https://www.impulsefitness.ma";
+export const SITE_URL = "https://impulsemorocco.com";
 export const SITE_NAME = "Impulse Fitness Maroc";
 export const DEFAULT_TITLE = "Impulse Fitness Maroc — Équipements de fitness professionnels & résidentiels";
 export const DEFAULT_DESCRIPTION =

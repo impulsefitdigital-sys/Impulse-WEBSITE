@@ -6,7 +6,7 @@
  */
 const env = (k) => (typeof Netlify !== "undefined" ? Netlify.env.get(k) : undefined) ?? process.env[k];
 // même valeur que SITE_URL dans src/lib/seo-config.ts (variable Netlify SITE_URL_CANONIQUE pour la changer)
-const SITE = (env("SITE_URL_CANONIQUE") || "https://www.impulsefitness.ma").replace(/\/$/, "");
+const SITE = (env("SITE_URL_CANONIQUE") || "https://impulsemorocco.com").replace(/\/$/, "");
 
 const STATIC = [
   ["/", "1.0", "weekly"], ["/professionnel", "0.9", "weekly"], ["/residentiel", "0.9", "weekly"],
