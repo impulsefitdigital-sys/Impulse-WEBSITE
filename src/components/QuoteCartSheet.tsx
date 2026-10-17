@@ -1,3 +1,4 @@
+import { thumbProps } from "@/lib/images";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useQuoteCart } from "@/contexts/QuoteCartContext";
 import { Minus, Plus, Trash2, FileText } from "lucide-react";
@@ -39,7 +40,7 @@ const QuoteCartSheet = () => {
               <div className="imp-cart-list">
                 {items.map((item) => (
                   <div className="imp-cart-item" key={item.id}>
-                    <div className="thumb">{item.image_url && <img src={item.image_url} alt={item.name} />}</div>
+                    <div className="thumb">{item.image_url && <img {...thumbProps(item.image_url)} alt={item.name} />}</div>
                     <div className="ci-body">
                       <div>
                         <p className="ci-name">{item.name}</p>

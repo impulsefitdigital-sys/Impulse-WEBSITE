@@ -1,3 +1,4 @@
+import { thumbProps } from "@/lib/images";
 import { useParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Seo from "@/components/Seo";
@@ -167,7 +168,7 @@ const ProductDetailPage = () => {
               <div className="related-grid">
                 {relatedProducts.map((rp) => (
                   <a key={rp.id} className="rel-card" href={`/produit/${rp.id}`}>
-                    <div className="rel-shot"><img src={rp.image_url || "/placeholder.svg"} alt={rp.name} loading="lazy" /></div>
+                    <div className="rel-shot"><img {...thumbProps(rp.image_url)} alt={rp.name} loading="lazy" /></div>
                     <div className="rel-body">
                       {rp.category && <span className="rc-cat">{rp.category}</span>}
                       <h3>{rp.name}</h3>

@@ -37,6 +37,8 @@ const HeroCarousel = () => {
         .filter((s) => s.image_url)
         .map((s) => ({
           image: s.image_url as string,
+          mobileImage: ((s as any).mobile_image_url as string | null) || null,
+          showCta: !!(s as any).show_cta && !!s.cta_text?.trim() && !!s.cta_link && s.cta_link !== "#",
           tag: s.tag || "Distributeur officiel Impulse Fitness · Maroc",
           title: isPlaceholder(s.title) ? "" : (s.title as string),
           cta: s.cta_text || "Découvrir les gammes",
@@ -80,7 +82,10 @@ const HeroCarousel = () => {
           {slides.map((s, i) => (
             <div className={`hero-slide${i === current ? " active" : ""}`} key={i}>
               <img className="hero-bg" src={s.image} alt="" aria-hidden="true" draggable={false} />
-              <img className="hero-fg" src={s.image} alt={s.title || "Équipement de fitness Impulse"} loading={i === 0 ? "eager" : "lazy"} draggable={false} />
+              <picture>
+                {s.mobileImage && <source media="(max-width: 680px)" srcSet={s.mobileImage} />}
+                <img className="hero-fg" src={s.image} alt={s.title || "Équipement de fitness Impulse"} loading={i === 0 ? "eager" : "lazy"} {...({ fetchpriority: i === 0 ? "high" : "auto" } as Record<string, string>)} draggable={false} />
+              </picture>
             </div>
           ))}
         </div>
@@ -91,6 +96,12 @@ const HeroCarousel = () => {
             <button className="hero-arrow prev" aria-label="Précédent" onClick={() => go(-1)}><ChevronLeft /></button>
             <button className="hero-arrow next" aria-label="Suivant" onClick={() => go(1)}><ChevronRight /></button>
           </>
+        )}
+
+        {active?.showCta && (
+          <div className="hero-cta" key={current}>
+            <a href={active.link} className="btn btn-red"><span>{active.cta}</span></a>
+          </div>
         )}
 
         {/* Texte du hero retiré à la demande du client — décommenter pour le réafficher

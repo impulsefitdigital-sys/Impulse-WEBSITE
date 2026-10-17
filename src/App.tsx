@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { HelmetProvider, Helmet } from "react-helmet-async";
@@ -10,26 +11,29 @@ import { QuoteCartProvider } from "@/contexts/QuoteCartContext";
 import QuoteCartSheet from "@/components/QuoteCartSheet";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
-import ProfessionnelPage from "./pages/Professionnel";
-import ResidentielPage from "./pages/Residentiel";
-import ConsultingPage from "./pages/Consulting";
-import RealisationsPage from "./pages/Realisations";
-import RealisationDetailPage from "./pages/RealisationDetail";
-import ContactPage from "./pages/Contact";
-import ProductDetailPage from "./pages/ProductDetail";
-import DevisPage from "./pages/Devis";
-import RecherchePage from "./pages/Recherche";
-import LoginPage from "./pages/Login";
-import AdminPage from "./pages/Admin";
-import AProposPage from "./pages/APropos";
-import BlogPage from "./pages/Blog";
-import BlogDetailPage from "./pages/BlogDetail";
-import PolitiqueConfidentialitePage from "./pages/PolitiqueConfidentialite";
 import ScrollToTop from "@/components/ScrollToTop";
+import SpaLinks from "@/components/SpaLinks";
 import DemoBanner from "@/components/DemoBanner";
 import SiteTracking from "@/components/SiteTracking";
 import CookieBanner from "@/components/CookieBanner";
+
+// pages chargées à la demande : le premier affichage ne télécharge que l'accueil
+const NotFound = lazy(() => import("./pages/NotFound"));
+const ProfessionnelPage = lazy(() => import("./pages/Professionnel"));
+const ResidentielPage = lazy(() => import("./pages/Residentiel"));
+const ConsultingPage = lazy(() => import("./pages/Consulting"));
+const RealisationsPage = lazy(() => import("./pages/Realisations"));
+const RealisationDetailPage = lazy(() => import("./pages/RealisationDetail"));
+const ContactPage = lazy(() => import("./pages/Contact"));
+const ProductDetailPage = lazy(() => import("./pages/ProductDetail"));
+const DevisPage = lazy(() => import("./pages/Devis"));
+const RecherchePage = lazy(() => import("./pages/Recherche"));
+const LoginPage = lazy(() => import("./pages/Login"));
+const AdminPage = lazy(() => import("./pages/Admin"));
+const AProposPage = lazy(() => import("./pages/APropos"));
+const BlogPage = lazy(() => import("./pages/Blog"));
+const BlogDetailPage = lazy(() => import("./pages/BlogDetail"));
+const PolitiqueConfidentialitePage = lazy(() => import("./pages/PolitiqueConfidentialite"));
 
 const queryClient = new QueryClient();
 
@@ -53,9 +57,11 @@ const App = () => (
           <WhatsAppButton />
           <BrowserRouter>
             <ScrollToTop />
+            <SpaLinks />
             <DemoBanner />
             <SiteTracking />
             <CookieBanner />
+            <Suspense fallback={<div className="imp min-h-screen" />}>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/professionnel" element={<ProfessionnelPage />} />
@@ -65,6 +71,7 @@ const App = () => (
               <Route path="/residentiel" element={<ResidentielPage />} />
               <Route path="/residentiel/:category" element={<ResidentielPage />} />
               <Route path="/residentiel/:category/:subcategory" element={<ResidentielPage />} />
+              <Route path="/residentiel/:category/:subcategory/:range" element={<ResidentielPage />} />
               <Route path="/consulting" element={<ConsultingPage />} />
               <Route path="/consulting/:service" element={<ConsultingPage />} />
               <Route path="/realisations" element={<RealisationsPage />} />
@@ -81,6 +88,7 @@ const App = () => (
               <Route path="/politique-de-confidentialite" element={<PolitiqueConfidentialitePage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            </Suspense>
           </BrowserRouter>
         </QuoteCartProvider>
       </AuthProvider>

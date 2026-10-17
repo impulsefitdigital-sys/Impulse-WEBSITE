@@ -1,3 +1,4 @@
+import { optimizeImage, uploadOptions, ImageHint } from "@/lib/images";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -45,9 +46,10 @@ const AdminConsulting = () => {
   };
 
   const handleImageUpload = async (index: number, file: File) => {
+    file = await optimizeImage(file, "solution");
     const ext = file.name.split(".").pop();
     const path = `consulting/${Date.now()}-${index}.${ext}`;
-    const { error } = await supabase.storage.from("product-images").upload(path, file);
+    const { error } = await supabase.storage.from("product-images").upload(path, file, uploadOptions(file));
     if (error) { toast.error("Erreur upload image"); return; }
     const { data: urlData } = supabase.storage.from("product-images").getPublicUrl(path);
     updateField(index, "image_url", urlData.publicUrl);
@@ -178,6 +180,7 @@ const AdminConsulting = () => {
             <div className="grid gap-4 md:grid-cols-2">
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-foreground">Image</label>
+                <ImageHint kind="solution" className="mb-2 mt-0" />
                 {item.image_url ? (
                   <div className="relative aspect-video overflow-hidden rounded-sm border border-border">
                     <img src={item.image_url} alt="" className="h-full w-full object-cover" />

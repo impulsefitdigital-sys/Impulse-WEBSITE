@@ -25,6 +25,7 @@ const CACHED_TABLES = new Set([
 ]);
 
 type Rows = Record<string, Record<string, unknown>[]>;
+const BUST_KEY = 'impulse-content-modifie';
 
 const createLiveClient = () => {
   const live = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
@@ -39,7 +40,10 @@ const createLiveClient = () => {
   // fonction en erreur), lecture directe des mêmes tables dans Supabase
   let snapshot: Promise<Rows> | null = null;
   const loadSnapshot = (): Promise<Rows> => {
-    snapshot ??= fetch('/api/content', { headers: { accept: 'application/json' } })
+    // juste après une modification admin, ne pas reprendre la copie gardée par le navigateur
+    let fresh = false;
+    try { fresh = Date.now() - Number(localStorage.getItem(BUST_KEY) || 0) < 10 * 60 * 1000; } catch { /* stockage indisponible */ }
+    snapshot ??= fetch('/api/content', { headers: { accept: 'application/json' }, cache: fresh ? 'reload' : 'default' })
       .then(async (res) => {
         const type = res.headers.get('content-type') || '';
         if (!res.ok || !type.includes('json')) throw new Error(`HTTP ${res.status}`);
@@ -59,13 +63,51 @@ const createLiveClient = () => {
   // l'admin et la page de connexion lisent toujours les données en direct
   const isBackOffice = () => typeof window !== 'undefined' && /^\/(admin|login)/.test(window.location.pathname);
 
+  // Après une modification admin d'une table publique : vider le cache Netlify de /api/content
+  // (fonction /api/purge-content, réservée à l'admin) et oublier la copie de cet onglet.
+  // Regroupé : plusieurs enregistrements rapprochés = un seul vidage.
+  let purgeTimer: ReturnType<typeof setTimeout> | undefined;
+  const schedulePurge = () => {
+    snapshot = null;
+    try { localStorage.setItem(BUST_KEY, String(Date.now())); } catch { /* stockage indisponible */ }
+    clearTimeout(purgeTimer);
+    purgeTimer = setTimeout(async () => {
+      try {
+        const { data } = await live.auth.getSession();
+        const token = data.session?.access_token;
+        if (!token) return;
+        await fetch('/api/purge-content', { method: 'POST', headers: { authorization: `Bearer ${token}` } });
+      } catch { /* sans gravité : le cache expire seul en 5 min */ }
+    }, 1500);
+  };
+  const WRITES = new Set(['insert', 'update', 'upsert', 'delete']);
+  const watchWrites = <T extends object>(builder: T): T =>
+    new Proxy(builder, {
+      get(target, prop, receiver) {
+        const value = Reflect.get(target, prop, receiver);
+        if (typeof prop === 'string' && WRITES.has(prop) && typeof value === 'function') {
+          return (...args: unknown[]) => {
+            const query = (value as (...a: unknown[]) => PromiseLike<{ error: unknown }>).apply(target, args);
+            const then = query.then.bind(query);
+            // le vidage part quand la requête a réussi (les filtres .eq() renvoient le même objet)
+            (query as { then: unknown }).then = (ok?: (v: { error: unknown }) => unknown, ko?: (e: unknown) => unknown) =>
+              then((res) => { if (!res.error) schedulePurge(); return ok ? ok(res) : res; }, ko);
+            return query;
+          };
+        }
+        return value;
+      },
+    });
+
   return new Proxy(live, {
     get(target, prop, receiver) {
       if (prop === 'from') {
         return (table: string) =>
           CACHED_TABLES.has(table) && !isBackOffice()
             ? snapshotQuery(table, loadSnapshot as () => Promise<Record<string, never[]>>)
-            : target.from(table as 'products');
+            : CACHED_TABLES.has(table)
+              ? watchWrites(target.from(table as 'products'))
+              : target.from(table as 'products');
       }
       return Reflect.get(target, prop, receiver);
     },

@@ -1,3 +1,4 @@
+import { thumbProps } from "@/lib/images";
 import { useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Seo from "@/components/Seo";
@@ -56,7 +57,7 @@ const RecherchePage = () => {
             <div className="related-grid" style={{ marginTop: 36 }}>
               {products.map((p) => (
                 <a key={p.id} className="rel-card" href={`/produit/${p.id}`}>
-                  <div className="rel-shot"><img src={p.image_url || "/placeholder.svg"} alt={p.name} loading="lazy" /></div>
+                  <div className="rel-shot"><img {...thumbProps(p.image_url)} alt={p.name} loading="lazy" /></div>
                   <div className="rel-body">
                     {p.category && <span className="rc-cat">{p.category}</span>}
                     <h3>{p.name}</h3>

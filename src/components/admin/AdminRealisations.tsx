@@ -1,3 +1,4 @@
+import { optimizeImage, uploadOptions, ImageHint } from "@/lib/images";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -42,9 +43,9 @@ interface RealisationImage {
 }
 
 const IMAGE_KINDS: { kind: ImageKind; label: string; hint: string }[] = [
-  { kind: "3d", label: "3D de l'installation", hint: "Rendus 3D de l'implantation (format paysage conseillé)" },
-  { kind: "installation", label: "Photos d'installation", hint: "Livraison, montage, réglages" },
-  { kind: "resultat", label: "Photos du résultat", hint: "La salle terminée" },
+  { kind: "3d", label: "3D de l'installation", hint: "Rendus 3D de l'implantation : 1920 × 1080 px (paysage)" },
+  { kind: "installation", label: "Photos d'installation", hint: "Livraison, montage, réglages : 1600 × 1200 px" },
+  { kind: "resultat", label: "Photos du résultat", hint: "La salle terminée : 1600 × 1200 px" },
 ];
 
 const slugify = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
@@ -108,9 +109,10 @@ const AdminRealisations = () => {
   };
 
   const handleImageUpload = async (index: number, file: File) => {
+    file = await optimizeImage(file, "realisation");
     const ext = file.name.split(".").pop();
     const path = `realisations/${Date.now()}-${index}.${ext}`;
-    const { error } = await supabase.storage.from("product-images").upload(path, file);
+    const { error } = await supabase.storage.from("product-images").upload(path, file, uploadOptions(file));
     if (error) { toast.error("Erreur upload image"); return; }
     const { data: urlData } = supabase.storage.from("product-images").getPublicUrl(path);
     updateField(index, "image_url", urlData.publicUrl);
@@ -201,9 +203,10 @@ const AdminRealisations = () => {
   const removeBlock = (realisationId: string, blockId: string) =>
     setBlocks(realisationId, (images[realisationId] || []).filter((b) => b.id !== blockId));
   const uploadBlockImage = async (realisationId: string, blockId: string, file: File) => {
+    file = await optimizeImage(file, "realisationBlock");
     const ext = file.name.split(".").pop();
     const path = `realisations/pages/${Date.now()}.${ext}`;
-    const { error } = await supabase.storage.from("product-images").upload(path, file);
+    const { error } = await supabase.storage.from("product-images").upload(path, file, uploadOptions(file));
     if (error) { toast.error("Erreur upload image"); return; }
     const { data: urlData } = supabase.storage.from("product-images").getPublicUrl(path);
     updateBlock(realisationId, blockId, { image_url: urlData.publicUrl });
@@ -318,6 +321,7 @@ const AdminRealisations = () => {
             <div className="grid gap-4 md:grid-cols-2">
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-foreground">Image</label>
+                <ImageHint kind="realisation" className="mb-2 mt-0" />
                 {item.image_url ? (
                   <div className="relative aspect-video overflow-hidden rounded-sm border border-border">
                     <img src={item.image_url} alt="" className="h-full w-full object-cover" />

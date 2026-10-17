@@ -155,6 +155,42 @@ Rien d'autre n'a été modifié : CRM, statistiques, Google Sheets, historique, 
   - Pour une fiche existante, seuls les champs modifiés sont mis à jour.
 - Fichiers remis (`.gitignore`, `.npmrc`, `.env.example`) : ils manquaient, l'envoi web de GitHub ignore les fichiers commençant par un point.
 
+### Corrections et check-up du 17/10/2026 (Cowork)
+Retours d'Adil après la mise en ligne, et check-up de l'infrastructure.
+- **Menu « Solutions » qui affichait « Consulting »** : le site utilisait des liens `<a href>` classiques.
+  Chaque clic rechargeait donc toute l'application, avec le libellé par défaut avant celui de la base.
+  - `src/components/SpaLinks.tsx` intercepte les liens internes : navigation sans rechargement, beaucoup plus rapide.
+  - Libellé par défaut : « Solutions ».
+- **Cartes gamme partout** (Pro et Résidentiel), dès qu'une sous-catégorie a au moins 2 gammes.
+  - Route `/residentiel/:cat/:sub/:gamme` ajoutée.
+  - Les produits sans carte (sans gamme, ou gamme non rangée là) s'affichent sous les cartes, dans « Autres équipements ».
+  - 5 lignes de gamme manquantes ajoutées (AC4/AC8 rés., IT7 pro guidées, IT95 rés. mono, ITF rés. libres).
+- **Admin → Produits** :
+  - recherche + filtres espace / catégorie / sous-catégorie / gamme / statut ;
+  - regroupement par gamme, repliable ;
+  - compteur « à compléter » : fiche sans sous-catégorie, sans gamme ou sans image.
+- **Images de l'admin** (`src/lib/images.tsx`) :
+  - taille conseillée affichée sur chaque champ image ;
+  - redimensionnement + conversion WebP avant l'envoi (ex. 670 Ko → 117 Ko) ;
+  - cache navigateur d'un an pour les fichiers du Storage.
+- **Carrousel** (migration `20261017100000_carrousel_boutons.sql`) :
+  - un bouton par image (case « Afficher un bouton », texte, destination choisie dans la liste des pages / catégories / gammes : `LinkPicker.tsx`) ;
+  - image « téléphone » facultative ;
+  - enregistrement par mise à jour, au lieu de « tout supprimer puis réinsérer » ;
+  - le choix « mode complet / simple », sans effet sur le site, a été retiré.
+- **Délai de mise à jour du site après une modification admin** (jusqu'à 5 min avant) :
+  - `netlify/functions/purge-content.mjs`, réservé à l'admin (jeton Supabase + `has_role`), vide le cache Netlify (étiquette `impulse-content`) ;
+  - le client Supabase (`src/integrations/supabase/client.ts`) l'appelle après chaque écriture admin réussie sur une table publique ;
+  - le site est à jour en quelques secondes.
+- **Vitesse** :
+  - pages chargées à la demande (`React.lazy`) : script principal 946 Ko → 324 Ko ;
+  - vignettes 640 px des photos produits dans `public/photos-sm/` (16 Ko au lieu de 52 Ko en moyenne, `scripts/photos/vignettes.py`), avec repli automatique sur l'original ;
+  - images de survol en chargement différé.
+- **SEO** : `/sitemap.xml` est généré par `netlify/functions/sitemap.mjs` depuis la base (produits, gammes, articles, réalisations), cache 1 h.
+  - Le sitemap statique devient le repli : `public/sitemap-fallback.xml`, 418 URL.
+  - Domaine : `SITE_URL` = impulsefitness.ma, variable Netlify `SITE_URL_CANONIQUE` pour la changer.
+- SQL à exécuter une fois sur la base : `supabase/mises-a-jour/2026-10-17.sql`.
+
 ## 4. Architecture cible
 
 ```

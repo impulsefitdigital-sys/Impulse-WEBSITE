@@ -1,3 +1,4 @@
+import { thumbProps } from "@/lib/images";
 import Navbar from "@/components/Navbar";
 import Seo from "@/components/Seo";
 import Footer from "@/components/Footer";
@@ -145,7 +146,7 @@ const DevisPage = () => {
               ) : (
                 items.map((item) => (
                   <div className="devis-item" key={item.id}>
-                    <a className="di-thumb" href={`/produit/${item.id}`} aria-label={`Voir ${item.name}`}>{item.image_url && <img src={item.image_url} alt="" />}</a>
+                    <a className="di-thumb" href={`/produit/${item.id}`} aria-label={`Voir ${item.name}`}>{item.image_url && <img {...thumbProps(item.image_url)} alt="" />}</a>
                     <div style={{ minWidth: 0, flex: 1 }}>
                       <a className="di-name" href={`/produit/${item.id}`}>{item.name}</a>
                       <div className="imp-cart-qty di-stepper">

@@ -1,3 +1,4 @@
+import { optimizeImage, uploadOptions, ImageHint } from "@/lib/images";
 import { useState, useRef } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,11 +22,12 @@ const BlogForm = ({ post, onClose }: { post: any | null; onClose: () => void }) 
   const ic = "w-full rounded-sm border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent";
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    let file = e.target.files?.[0];
     if (!file) return;
+    file = await optimizeImage(file, "blog");
     const ext = file.name.split(".").pop();
     const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    const { error } = await supabase.storage.from("blog-images").upload(path, file);
+    const { error } = await supabase.storage.from("blog-images").upload(path, file, uploadOptions(file));
     if (error) { toast.error("Erreur upload"); return; }
     const url = supabase.storage.from("blog-images").getPublicUrl(path).data.publicUrl;
     setCoverImageUrl(url);
@@ -70,6 +72,7 @@ const BlogForm = ({ post, onClose }: { post: any | null; onClose: () => void }) 
         </div>
         <div>
           <label className="mb-1 block text-xs font-medium text-muted-foreground">Image de couverture</label>
+          <ImageHint kind="blog" className="mb-2 mt-0" />
           <input type="file" ref={fileRef} className="hidden" accept="image/*" onChange={handleUpload} />
           {coverImageUrl ? (
             <div className="relative">

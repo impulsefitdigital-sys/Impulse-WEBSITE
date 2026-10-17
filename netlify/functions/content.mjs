@@ -52,9 +52,11 @@ export default async () => {
     return new Response(body, {
       headers: {
         "content-type": "application/json; charset=utf-8",
-        // navigateur : 2 min ; CDN Netlify (partagé entre tous les visiteurs) : 5 min, puis ancienne
+        // navigateur : 1 min ; CDN Netlify (partagé entre tous les visiteurs) : 5 min, puis ancienne
         // copie servie pendant le rafraîchissement en arrière-plan (jamais de visiteur qui attend)
-        "cache-control": "public, max-age=120",
+        "cache-control": "public, max-age=60",
+        // étiquette de cache : /api/purge-content la vide après chaque modification admin
+        "netlify-cache-tag": "impulse-content",
         "netlify-cdn-cache-control": "public, durable, s-maxage=300, stale-while-revalidate=86400",
       },
     });

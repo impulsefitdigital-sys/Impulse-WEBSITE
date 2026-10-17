@@ -1,3 +1,4 @@
+import { thumbProps } from "@/lib/images";
 import { useState, useRef, useEffect } from "react";
 import { X, FileText, ChevronDown, Search, Send } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
@@ -63,7 +64,7 @@ const Navbar = () => {
       return map;
     },
   });
-  const consultingLabel = menuLabels?.menu_label_consulting || "Consulting";
+  const consultingLabel = menuLabels?.menu_label_consulting || "Solutions";
   const realisationsLabel = menuLabels?.menu_label_realisations || "Réalisations";
 
   const { data: suggestions } = useQuery({
@@ -189,7 +190,7 @@ const Navbar = () => {
                 <div className="iso-list">
                   {suggestions!.map((p) => (
                     <button key={p.id} onClick={() => handleSelectSuggestion(p.id)}>
-                      <span className="iso-thumb">{p.image_url && <img src={p.image_url} alt="" />}</span>
+                      <span className="iso-thumb">{p.image_url && <img {...thumbProps(p.image_url)} alt="" />}</span>
                       <span className="iso-name">{p.name}</span>
                     </button>
                   ))}

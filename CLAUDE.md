@@ -41,6 +41,10 @@ npx tsc -p tsconfig.app.json --noEmit
 - `src/integrations/demo/` — client démo (imite l'API Supabase) + `data.json`
 - `src/integrations/supabase/types.ts` — types générés de la base
 - `src/lib/seo-config.ts` — domaine, coordonnées, JSON-LD
+- `src/lib/images.tsx` — tailles d'image conseillées, optimisation avant envoi, vignettes des listes
+- `src/components/SpaLinks.tsx` — navigation sans rechargement pour tous les liens internes
+- `netlify/functions/` — `content` (contenu public en cache), `purge-content` (vidage après modif admin), `sitemap`
+- `public/photos-sm/` — vignettes 640 px des photos produits (listes)
 - `public/storage/` — 1 068 images de l'ancien stockage (décompressées au build depuis `images/*.zip`)
 - `public/photos/` — 1 750 photos produits WebP (refonte du 16/10/2026) ; scripts dans `scripts/photos/`
 - `scripts/supabase/sql_maj_produits.py` — SQL de mise à jour des produits pour la base en ligne

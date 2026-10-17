@@ -1,3 +1,4 @@
+import { optimizeImage, uploadOptions, ImageHint } from "@/lib/images";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -41,9 +42,10 @@ const AdminCategoryCards = () => {
   };
 
   const handleImageUpload = async (i: number, file: File) => {
+    file = await optimizeImage(file, "homeCard");
     const ext = file.name.split(".").pop();
     const path = `category-cards/${Date.now()}-${i}.${ext}`;
-    const { error } = await supabase.storage.from("product-images").upload(path, file);
+    const { error } = await supabase.storage.from("product-images").upload(path, file, uploadOptions(file));
     if (error) { toast.error("Erreur upload"); return; }
     const { data: urlData } = supabase.storage.from("product-images").getPublicUrl(path);
     updateField(i, "image_url", urlData.publicUrl);
@@ -127,6 +129,7 @@ const AdminCategoryCards = () => {
             <div className="grid gap-4 md:grid-cols-2">
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-foreground">Image</label>
+                <ImageHint kind="homeCard" className="mb-2 mt-0" />
                 {card.image_url ? (
                   <div className="relative aspect-video overflow-hidden rounded-sm border border-border">
                     <img src={card.image_url} alt="" className="h-full w-full object-cover" />

@@ -1,3 +1,4 @@
+import { optimizeImage, uploadOptions, ImageHint } from "@/lib/images";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -168,9 +169,10 @@ const ProductForm = ({ product, onClose }: { product: any | null; onClose: () =>
   }, [category, subcategory, usageType]);
 
   const uploadImage = async (file: File, folder: string): Promise<string> => {
+    file = await optimizeImage(file, "product");
     const ext = file.name.split(".").pop();
     const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    const { error } = await supabase.storage.from("product-images").upload(path, file);
+    const { error } = await supabase.storage.from("product-images").upload(path, file, uploadOptions(file));
     if (error) throw error;
     return supabase.storage.from("product-images").getPublicUrl(path).data.publicUrl;
   };
@@ -398,6 +400,7 @@ const ProductForm = ({ product, onClose }: { product: any | null; onClose: () =>
           <div>
             <div className="mb-1 flex items-center justify-between gap-2">
               <label className="block text-xs font-medium text-muted-foreground">Image principale</label>
+              <ImageHint kind="product" className="mt-0" />
               <select value={defaultColor} onChange={(e) => setDefaultColor(e.target.value)} className="rounded-sm border border-border bg-background px-1 py-0.5 text-[11px]" aria-label="Couleur de l'image principale et de survol" title="Couleur de l'image principale et de survol (couleur affichée par défaut)">
                 {PHOTO_COLORS.map((c) => <option key={c.value} value={c.value}>{c.value ? `Couleur : ${c.label}` : "Couleur : —"}</option>)}
               </select>

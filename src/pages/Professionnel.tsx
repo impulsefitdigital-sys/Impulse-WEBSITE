@@ -17,10 +17,8 @@ const subcategoryMap: Record<string, string> = {
 
 const categoryTitleMap: Record<string, string> = { cardio: "Cardio", musculation: "Musculation", fonctionnel: "Fonctionnel" };
 
-// catégories dont les sous-catégories affichent d'abord une carte par gamme (IT95, IF93…)
-const RANGE_CARD_CATEGORIES = ["musculation"];
-// sous-catégories hors musculation qui affichent aussi des cartes gamme (notes client : Cages & Rigs = MS, FF, I-Zone)
-const RANGE_CARD_SUBCATEGORIES = ["fonctionnel/cages-rigs"];
+// Toute sous-catégorie affiche d'abord une carte par gamme (IT95, IF93, MS, FF…),
+// sauf si elle ne contient qu'une seule gamme (règle appliquée dans ProductGrid).
 
 const ProfessionnelPage = () => {
   const { category, subcategory, range } = useParams();
@@ -36,8 +34,7 @@ const ProfessionnelPage = () => {
   const rangeCode = range?.toUpperCase();
   const baseTitle = isBase ? undefined : (subcategoryName || (categoryName ? `${categoryName} Professionnel` : undefined));
   const title = rangeCode && baseTitle ? `Gamme ${rangeCode} — ${baseTitle}` : baseTitle;
-  const rangeCards = !!category && (RANGE_CARD_CATEGORIES.includes(category.toLowerCase())
-    || (!!subcategory && RANGE_CARD_SUBCATEGORIES.includes(`${category.toLowerCase()}/${subcategory.toLowerCase()}`)));
+  const rangeCards = !!category && !!subcategory;
 
   return (
     <div className="imp min-h-screen">

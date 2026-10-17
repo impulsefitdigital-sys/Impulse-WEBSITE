@@ -27,6 +27,18 @@
   to = "/.netlify/functions/content"
   status = 200
 
+[[redirects]]
+  from = "/api/purge-content"
+  to = "/.netlify/functions/purge-content"
+  status = 200
+
+# sitemap toujours à jour (produits, articles, réalisations, gammes) ; remplace le fichier statique
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/.netlify/functions/sitemap"
+  status = 200
+  force = true
+
 # Application React (SPA) : toutes les URL renvoient vers index.html
 [[redirects]]
   from = "/*"
@@ -48,5 +60,11 @@
 # Photos produits (public/photos, refonte du 16/10/2026) : 30 jours dans le navigateur
 [[headers]]
   for = "/photos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+# Vignettes des listes (public/photos-sm)
+[[headers]]
+  for = "/photos-sm/*"
   [headers.values]
     Cache-Control = "public, max-age=2592000"

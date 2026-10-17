@@ -1,3 +1,4 @@
+import { optimizeImage, uploadOptions, ImageHint } from "@/lib/images";
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -99,18 +100,20 @@ const AdminCategories = () => {
   };
 
   const handleCatImageUpload = async (i: number, file: File) => {
+    file = await optimizeImage(file, "category");
     const ext = file.name.split(".").pop();
     const path = `categories/${Date.now()}.${ext}`;
-    const { error } = await supabase.storage.from("product-images").upload(path, file);
+    const { error } = await supabase.storage.from("product-images").upload(path, file, uploadOptions(file));
     if (error) { toast.error("Erreur upload"); return; }
     const { data: urlData } = supabase.storage.from("product-images").getPublicUrl(path);
     updateCatField(i, "image_url", urlData.publicUrl);
   };
 
   const handleSubImageUpload = async (catSlug: string, i: number, file: File) => {
+    file = await optimizeImage(file, "subcategory");
     const ext = file.name.split(".").pop();
     const path = `subcategories/${Date.now()}.${ext}`;
-    const { error } = await supabase.storage.from("product-images").upload(path, file);
+    const { error } = await supabase.storage.from("product-images").upload(path, file, uploadOptions(file));
     if (error) { toast.error("Erreur upload"); return; }
     const { data: urlData } = supabase.storage.from("product-images").getPublicUrl(path);
     updateSubField(catSlug, i, "image_url", urlData.publicUrl);
@@ -273,7 +276,7 @@ const AdminCategories = () => {
                   <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && handleCatImageUpload(ci, e.target.files[0])} />
                 </label>
               )}
-              <span className="text-xs text-muted-foreground">Image hero de la catégorie</span>
+              <div className="max-w-md"><span className="text-xs text-muted-foreground">Image hero de la catégorie</span><ImageHint kind="category" /></div>
             </div>
 
             <button onClick={() => setExpandedCat(expandedCat === cat.slug ? null : cat.slug)} className="flex items-center gap-2 text-sm font-semibold text-accent">
@@ -283,6 +286,7 @@ const AdminCategories = () => {
 
             {expandedCat === cat.slug && (
               <div className="mt-4 space-y-3 pl-4 border-l-2 border-border">
+                <ImageHint kind="subcategory" className="mt-0" />
                 {(subcategories[cat.slug] || []).map((sub, si) => (
                   <div key={sub.id || si} className="flex items-center gap-3 rounded-sm border border-border bg-background p-3">
                     <button onClick={() => updateSubField(cat.slug, si, "is_active", !sub.is_active)} className={sub.is_active ? "text-accent" : "text-muted-foreground"}>

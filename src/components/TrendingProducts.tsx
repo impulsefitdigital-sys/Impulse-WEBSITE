@@ -1,3 +1,4 @@
+import { thumbProps } from "@/lib/images";
 import { useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -45,7 +46,7 @@ const TrendingProducts = () => {
                 <div className="prod-shot">
                   {/* badge "TENDANCE" retiré : l'info est portée par le titre de la section
                   {p.is_trending && <span className="ptag">TENDANCE</span>} */}
-                  <img src={p.image_url || ""} alt={p.name} loading="lazy" />
+                  <img {...thumbProps(p.image_url)} alt={p.name} loading="lazy" />
                 </div>
                 <div className="prod-meta">
                   {p.category && <span className="pcat">{p.category}</span>}

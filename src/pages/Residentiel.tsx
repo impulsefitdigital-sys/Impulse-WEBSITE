@@ -18,7 +18,7 @@ const subcategoryMap: Record<string, string> = {
 const categoryTitleMap: Record<string, string> = { cardio: "Cardio", musculation: "Musculation", fonctionnel: "Fonctionnel" };
 
 const ResidentielPage = () => {
-  const { category, subcategory } = useParams();
+  const { category, subcategory, range } = useParams();
   useScrollReveal();
 
   if (category && !subcategory) {
@@ -28,11 +28,21 @@ const ResidentielPage = () => {
   const isBase = !category && !subcategory;
   const categoryName = category ? categoryTitleMap[category.toLowerCase()] : undefined;
   const subcategoryName = subcategory ? subcategoryMap[subcategory.toLowerCase()] : undefined;
-  const title = isBase ? undefined : (subcategoryName || (categoryName ? `${categoryName} Résidentiel` : undefined));
+  const rangeCode = range?.toUpperCase();
+  const baseTitle = isBase ? undefined : (subcategoryName || (categoryName ? `${categoryName} Résidentiel` : undefined));
+  const title = rangeCode && baseTitle ? `Gamme ${rangeCode} — ${baseTitle}` : baseTitle;
 
   return (
     <div className="imp min-h-screen">
-      <Seo title="Équipements de fitness résidentiels" description="Équipez votre salle de sport à domicile : matériel de musculation et cardio résidentiel de qualité au Maroc." path="/residentiel" />
+      {rangeCode && subcategoryName ? (
+        <Seo
+          title={`Gamme Impulse ${rangeCode} — ${subcategoryName} résidentiel`}
+          description={`${subcategoryName} Impulse gamme ${rangeCode} pour la maison. Demandez votre devis à Impulse Fitness Maroc.`}
+          path={`/residentiel/${category}/${subcategory}/${range}`}
+        />
+      ) : (
+        <Seo title="Équipements de fitness résidentiels" description="Équipez votre salle de sport à domicile : matériel de musculation et cardio résidentiel de qualité au Maroc." path="/residentiel" />
+      )}
       <Navbar />
 
       {isBase && (
@@ -47,7 +57,7 @@ const ResidentielPage = () => {
         </section>
       )}
 
-      <ProductGrid defaultCategory={categoryName} defaultSubcategory={subcategoryName} defaultSubcategorySlug={subcategory} defaultUsageType="residentiel" title={title} subtitle="Usage résidentiel" padTop={!isBase} />
+      <ProductGrid defaultCategory={categoryName} defaultSubcategory={subcategoryName} defaultSubcategorySlug={subcategory} defaultUsageType="residentiel" title={title} subtitle="Usage résidentiel" padTop={!isBase} rangeCards={!!category && !!subcategory} activeRange={range?.toLowerCase()} />
       <Footer />
     </div>
   );

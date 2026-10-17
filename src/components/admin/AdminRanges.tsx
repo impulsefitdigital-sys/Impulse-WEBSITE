@@ -1,3 +1,4 @@
+import { optimizeImage, uploadOptions, ImageHint } from "@/lib/images";
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -113,9 +114,10 @@ const AdminRanges = () => {
   };
 
   const handleImageUpload = async (id: string, file: File) => {
+    file = await optimizeImage(file, "range");
     const ext = file.name.split(".").pop();
     const path = `ranges/${Date.now()}.${ext}`;
-    const { error } = await supabase.storage.from("product-images").upload(path, file);
+    const { error } = await supabase.storage.from("product-images").upload(path, file, uploadOptions(file));
     if (error) { toast.error("Erreur upload"); return; }
     const { data: urlData } = supabase.storage.from("product-images").getPublicUrl(path);
     update(id, "image_url", urlData.publicUrl);
@@ -155,7 +157,7 @@ const AdminRanges = () => {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between gap-4 flex-wrap">
-        <h1 className="text-xl font-bold text-foreground">Gammes</h1>
+        <div><h1 className="text-xl font-bold text-foreground">Gammes</h1><ImageHint kind="range" className="max-w-xl" /></div>
         <div className="flex items-center gap-3 flex-wrap">
           <div className="inline-flex rounded-sm border border-border overflow-hidden">
             {(["professionnel", "residentiel"] as const).map((u) => (

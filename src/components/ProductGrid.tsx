@@ -1,3 +1,4 @@
+import { thumbProps } from "@/lib/images";
 import { useState, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -76,6 +77,9 @@ const ProductGrid = ({ defaultCategory, defaultSubcategory, defaultSubcategorySl
   // gammes qui ont au moins un produit publié : ce sont les cartes affichées
   const rangesWithProducts = (ranges ?? []).filter((r: any) => rangeCounts.counts[r.code]);
   const showRangeCards = !!rangeCards && !activeRange && rangesWithProducts.length >= 2;
+  // produits de la sous-catégorie qui n'appartiennent à aucune carte affichée (sans gamme, gamme non rangée ici)
+  const cardCodes = new Set(rangesWithProducts.map((r: any) => r.code));
+  const outsideCards = showRangeCards ? filtered.filter((p) => !cardCodes.has((p as any).range_code)) : [];
 
   const showCategoryFilter = !defaultCategory && !defaultSubcategory;
   const showRangesSidebar = !!(ranges && ranges.length > 0) && !showRangeCards && !activeRange;
@@ -102,6 +106,37 @@ const ProductGrid = ({ defaultCategory, defaultSubcategory, defaultSubcategorySl
         );
       })}
     </div>
+  );
+
+  const renderProducts = (list: typeof filtered) => (
+  <div className="product-grid">
+    {list.map((p) => {
+      const inCart = items.some((item) => item.id === p.id);
+      return (
+        <div className="product-card" key={p.id}>
+          <a href={`/produit/${p.id}`} className="product-shot">
+            {(p as any).range_code && <span className="product-tag"><span>{(p as any).range_code}</span></span>}
+            <img className="p-main" {...thumbProps(p.image_url)} alt={p.name} loading="lazy" decoding="async" />
+            {p.hover_image_url && <img className="p-hover" {...thumbProps(p.hover_image_url)} alt="" aria-hidden="true" loading="lazy" decoding="async" />}
+          </a>
+          <button
+            className={`p-quote${inCart ? " in" : ""}`}
+            title={inCart ? "Ajouté au devis" : "Ajouter au devis"}
+            aria-label={inCart ? "Ajouté au devis" : "Ajouter au devis"}
+            onClick={() => addItem({ id: p.id, name: p.name, category: p.category, image_url: p.image_url })}
+          >
+            {inCart ? <Check /> : <FileText />}
+          </button>
+          <a href={`/produit/${p.id}`} className="product-body">
+            {p.category && <span className="p-cat">{p.category}</span>}
+            <h3>{p.name}</h3>
+            {p.short_description && <p className="p-desc">{p.short_description}</p>}
+            <span className="product-see">Voir le produit <ArrowRight /></span>
+          </a>
+        </div>
+      );
+    })}
+  </div>
   );
 
   return (
@@ -140,11 +175,12 @@ const ProductGrid = ({ defaultCategory, defaultSubcategory, defaultSubcategorySl
             {isLoading ? (
               <div style={{ display: "flex", justifyContent: "center", padding: "80px 0" }}><div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" /></div>
             ) : showRangeCards ? (
+              <>
               <div className="range-grid">
                 {rangesWithProducts.map((r: any) => (
                   <a className="range-card" key={r.id} href={`${subcategoryHref}/${r.code.toLowerCase()}`}>
                     <span className="rc-shot">
-                      <img src={r.image_url || rangeCounts.covers[r.code] || "/placeholder.svg"} alt={`Gamme ${r.code}`} loading="lazy" />
+                      <img {...thumbProps(r.image_url || rangeCounts.covers[r.code])} alt={`Gamme ${r.code}`} loading="lazy" />
                     </span>
                     <span className="rc-body">
                       <span className="p-cat">Gamme</span>
@@ -155,37 +191,17 @@ const ProductGrid = ({ defaultCategory, defaultSubcategory, defaultSubcategorySl
                   </a>
                 ))}
               </div>
+              {outsideCards.length > 0 && (
+                <div className="outside-cards">
+                  <h3 className="outside-cards-title">Autres équipements</h3>
+                  {renderProducts(outsideCards)}
+                </div>
+              )}
+              </>
             ) : filtered.length === 0 ? (
               <p style={{ padding: "60px 0", textAlign: "center", color: "var(--steel)" }}>Aucun produit ne correspond aux filtres sélectionnés.</p>
             ) : (
-              <div className="product-grid">
-                {filtered.map((p) => {
-                  const inCart = items.some((item) => item.id === p.id);
-                  return (
-                    <div className="product-card" key={p.id}>
-                      <a href={`/produit/${p.id}`} className="product-shot">
-                        {(p as any).range_code && <span className="product-tag"><span>{(p as any).range_code}</span></span>}
-                        <img className="p-main" src={p.image_url || "/placeholder.svg"} alt={p.name} loading="lazy" />
-                        {p.hover_image_url && <img className="p-hover" src={p.hover_image_url} alt="" aria-hidden="true" />}
-                      </a>
-                      <button
-                        className={`p-quote${inCart ? " in" : ""}`}
-                        title={inCart ? "Ajouté au devis" : "Ajouter au devis"}
-                        aria-label={inCart ? "Ajouté au devis" : "Ajouter au devis"}
-                        onClick={() => addItem({ id: p.id, name: p.name, category: p.category, image_url: p.image_url })}
-                      >
-                        {inCart ? <Check /> : <FileText />}
-                      </button>
-                      <a href={`/produit/${p.id}`} className="product-body">
-                        {p.category && <span className="p-cat">{p.category}</span>}
-                        <h3>{p.name}</h3>
-                        {p.short_description && <p className="p-desc">{p.short_description}</p>}
-                        <span className="product-see">Voir le produit <ArrowRight /></span>
-                      </a>
-                    </div>
-                  );
-                })}
-              </div>
+              renderProducts(filtered)
             )}
           </div>
         </div>
