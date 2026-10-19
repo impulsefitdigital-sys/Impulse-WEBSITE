@@ -43,7 +43,7 @@ export const exportRequestsCsv = (rows: ContactRequest[]) => {
     "Équipements", "Message", "Montant (MAD)", "Relance", "Notes", "Source", "Support", "Campagne", "Page d'arrivée"];
   const cell = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""').replace(/\r?\n/g, " ")}"`;
   const lines = rows.map((r) => [
-    r.quote_number, formatDate(r.created_at), r.request_type === "devis" ? "Devis" : "Contact", statusInfo(r.status).label,
+    r.quote_number, formatDate(r.created_at), r.source === "landing" ? "Landing page" : r.request_type === "devis" ? "Devis" : "Contact", statusInfo(r.status).label,
     r.full_name, r.phone, realEmail(r.email), r.company, r.city, r.usage_type,
     requestItems(r).map((i) => `${i.name} x${i.quantity}`).join(" ; "), r.message, r.amount ?? "", r.follow_up_date ?? "",
     r.notes, r.utm_source ?? r.referrer ?? "direct", r.utm_medium, r.utm_campaign, r.landing_page,

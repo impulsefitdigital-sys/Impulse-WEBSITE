@@ -211,6 +211,23 @@ Retours d'Adil après la mise en ligne, et check-up de l'infrastructure.
   - il défait la dernière rafale d'écritures de l'utilisateur à partir de l'historique : recrée, remet les anciennes valeurs, retire ;
   - pour une action plus ancienne : Paramètres → Historique.
 
+### Landing page des campagnes : /lp/musculation (19/10/2026)
+- Page autonome, sans le menu du site et non indexée (`src/pages/LandingMusculation.tsx`, `src/styles/landing.css`).
+  - Images et coordonnées lues dans l'admin : catégorie et sous-catégories Musculation Pro, gammes, Coordonnées, chiffres clés.
+  - La gamme IT7 est exclue (`HIDDEN_RANGES`).
+- Formulaire en 2 étapes (`src/components/landing/LeadForm.tsx`) :
+  - étape 1 : type de projet et surface, à boutons ;
+  - étape 2 : nom, téléphone (obligatoire), email (facultatif) ;
+  - mention légale sous le bouton, sans case à cocher.
+  - Présent en haut de page (ordinateur), dans le pop-up et en bas de page.
+- Pop-up : après 60 s, ou si la souris quitte la page (ordinateur, après 10 s). Une fois par visite, jamais après un envoi.
+- Demandes : `submit_request()` avec `source = 'landing'`, `project_type`, `surface` (migration `20261019120000_landing_page.sql`).
+  - Admin → Demandes : filtre « Landing page », badge, projet et surface sur la fiche.
+  - Google Sheet : type « Landing page ».
+- Suivi : événement `Lead` (Pixel Meta) et `generate_lead` (GA4) à l'envoi, s'ils sont activés et acceptés dans le bandeau cookies.
+  Plus `form_start` / `contact_submit` dans les statistiques internes.
+- Promesses validées par Adil : rappel sous 24 h, livraison partout au Maroc. Ne pas ajouter de plan 3D offert ni de facilités de paiement sans son accord.
+
 ## 4. Architecture cible
 
 ```

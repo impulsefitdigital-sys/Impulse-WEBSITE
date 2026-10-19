@@ -292,6 +292,9 @@ export type Database = {
           utm_campaign: string | null
           utm_medium: string | null
           utm_source: string | null
+          project_type: string | null
+          source: string
+          surface: string | null
         }
         Insert: {
           amount?: number | null
@@ -318,6 +321,9 @@ export type Database = {
           utm_campaign?: string | null
           utm_medium?: string | null
           utm_source?: string | null
+          project_type?: string | null
+          source?: string
+          surface?: string | null
         }
         Update: {
           amount?: number | null
@@ -344,6 +350,9 @@ export type Database = {
           utm_campaign?: string | null
           utm_medium?: string | null
           utm_source?: string | null
+          project_type?: string | null
+          source?: string
+          surface?: string | null
         }
         Relationships: []
       }

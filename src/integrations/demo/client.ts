@@ -442,6 +442,8 @@ const demoSubmitRequest = async (p: Row) => {
     items: Array.isArray(p.items) ? p.items : [], message: p.message || null,
     utm_source: p.utm_source ?? null, utm_medium: p.utm_medium ?? null, utm_campaign: p.utm_campaign ?? null,
     referrer: p.referrer ?? null, landing_page: p.landing_page ?? null, session_id: p.session_id ?? null,
+    source: p.source === "landing" ? "landing" : "site",
+    project_type: p.project_type ? String(p.project_type).slice(0, 60) : null, surface: p.surface ? String(p.surface).slice(0, 40) : null,
   };
   rows.push(row);
   persist("contact_requests", rows);

@@ -10,7 +10,8 @@ import {
 import type { AdminNavigate } from "@/pages/Admin";
 import logo from "@/assets/logo-new.png";
 
-type TypeFilter = "tous" | "devis" | "contact";
+type TypeFilter = "tous" | "devis" | "contact" | "landing";
+const isLanding = (r: ContactRequest) => r.source === "landing";
 
 const today = () => new Date().toISOString().slice(0, 10);
 const due = (r: ContactRequest) => !!r.follow_up_date && r.follow_up_date <= today() && isOpenStatus(r.status);
@@ -46,7 +47,7 @@ const AdminRequests = ({ selectedId, navigate }: { selectedId: string | null; na
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
     return all.filter((r) =>
-      (type === "tous" || r.request_type === type) &&
+      (type === "tous" || (type === "landing" ? isLanding(r) : r.request_type === type && !isLanding(r))) &&
       (status === "tous" || (status === "relance" ? due(r) : r.status === status)) &&
       (!term || [r.full_name, r.phone, r.email, r.company, r.city, r.quote_number, r.notes]
         .some((v) => String(v ?? "").toLowerCase().includes(term))));
@@ -114,9 +115,9 @@ const AdminRequests = ({ selectedId, navigate }: { selectedId: string | null; na
       {/* filtres */}
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <div className="inline-flex overflow-hidden rounded-sm border border-border">
-          {(["tous", "devis", "contact"] as const).map((t) => (
+          {(["tous", "devis", "contact", "landing"] as const).map((t) => (
             <button key={t} onClick={() => setType(t)} className={`px-3 py-1.5 text-xs font-semibold ${type === t ? "bg-accent text-accent-foreground" : "bg-card hover:bg-muted"}`}>
-              {t === "tous" ? "Tous" : t === "devis" ? "Devis" : "Contact"}
+              {t === "tous" ? "Tous" : t === "devis" ? "Devis" : t === "contact" ? "Contact" : `Landing page (${all.filter(isLanding).length})`}
             </button>
           ))}
         </div>
@@ -160,9 +161,11 @@ const AdminRequests = ({ selectedId, navigate }: { selectedId: string | null; na
                         <p className="text-xs text-muted-foreground">{[r.city, r.company].filter(Boolean).join(" · ")}</p>
                       </td>
                       <td className="hidden px-3 py-2.5 align-top md:table-cell">
-                        <p className="text-xs font-semibold">{r.request_type === "devis" ? (r.quote_number || "Devis") : "Contact"}</p>
+                        <p className="text-xs font-semibold">
+                          {isLanding(r) ? <span className="rounded-sm bg-violet-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-violet-800">Landing page</span> : r.request_type === "devis" ? (r.quote_number || "Devis") : "Contact"}
+                        </p>
                         <p className="max-w-[260px] truncate text-xs text-muted-foreground">
-                          {items.length ? items.map((i) => `${i.name} ×${i.quantity}`).join(", ") : r.message}
+                          {isLanding(r) ? [r.project_type, r.surface].filter(Boolean).join(" · ") || r.message : items.length ? items.map((i) => `${i.name} ×${i.quantity}`).join(", ") : r.message}
                         </p>
                       </td>
                       <td className="px-3 py-2.5 align-top"><span className={`whitespace-nowrap rounded-full px-2 py-0.5 text-[11px] font-semibold ${st.className}`}>{st.label}</span></td>
@@ -221,7 +224,7 @@ const RequestDetail = ({ r, onClose, onSave, onDelete, onPdf }: {
     <div className="self-start rounded-sm border border-border bg-card xl:sticky xl:top-6">
       <div className="flex items-start justify-between gap-3 border-b border-border p-5">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-accent">{r.request_type === "devis" ? `Devis ${r.quote_number || ""}` : "Demande de contact"}</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-accent">{r.source === "landing" ? "Landing page (campagne)" : r.request_type === "devis" ? `Devis ${r.quote_number || ""}` : "Demande de contact"}</p>
           <h2 className="mt-1 text-lg font-bold text-foreground">{r.full_name}</h2>
           <p className="text-xs text-muted-foreground">Reçue le {formatDate(r.created_at)}</p>
         </div>
@@ -242,6 +245,10 @@ const RequestDetail = ({ r, onClose, onSave, onDelete, onPdf }: {
           <div><dt className="text-[11px] uppercase text-muted-foreground">Ville</dt><dd>{r.city || "—"}</dd></div>
           <div><dt className="text-[11px] uppercase text-muted-foreground">Usage</dt><dd>{r.usage_type === "professionnel" ? "Professionnel" : r.usage_type === "residentiel" ? "Résidentiel" : "—"}</dd></div>
           <div><dt className="text-[11px] uppercase text-muted-foreground">Provenance</dt><dd className="break-words">{sourceLabel(r)}</dd></div>
+          {r.source === "landing" && <>
+            <div><dt className="text-[11px] uppercase text-muted-foreground">Projet</dt><dd>{r.project_type || "—"}</dd></div>
+            <div><dt className="text-[11px] uppercase text-muted-foreground">Surface</dt><dd>{r.surface || "—"}</dd></div>
+          </>}
         </dl>
 
         {items.length > 0 && (
