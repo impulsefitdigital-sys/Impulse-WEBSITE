@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { thumbProps } from "@/lib/images";
 import LeadForm, { LEAD_SENT_KEY } from "@/components/landing/LeadForm";
 import logoWhite from "@/assets/logo-new.png";
-import { ArrowRight, Check, Clock, MapPin, MessageCircle, Phone, ShieldCheck, Truck, Wrench, X } from "lucide-react";
+import { ArrowRight, Check, ChevronLeft, ChevronRight, Clock, MapPin, MessageCircle, Phone, ShieldCheck, Truck, Wrench, X } from "lucide-react";
 import "@/styles/landing.css";
 
 /**
@@ -35,6 +35,14 @@ const DEFAULT_REASONS = [
   { title: "Large choix", desc: "Équipements professionnels et semi-professionnels disponibles." },
   { title: "Installation et SAV", desc: "Une équipe technique qualifiée pour la livraison, l'installation et le service après-vente, avec un stock permanent de pièces d'origine." },
 ];
+
+// carrousel « Produits phares » : gammes mises en avant (ordre d'alternance), max. de cartes
+const FEATURED_GROUPS: { label: string; match: (code: string) => boolean }[] = [
+  { label: "ECP", match: (c) => c === "ECP" },
+  { label: "IT95", match: (c) => c === "IT95" },
+  { label: "AC", match: (c) => /^AC\d*$/.test(c) },
+];
+const FEATURED_MAX = 18;
 
 const SUB_PITCH: Record<string, string> = {
   "multi-stations": "Plusieurs exercices sur une seule machine : idéal pour optimiser l'espace.",
@@ -88,6 +96,26 @@ const LandingMusculation = () => {
   const heroImg = str(data?.cat?.image_url) || str(subs[0]?.image_url);
 
   // gammes de musculation pro qui ont des produits publiés, la plus fournie d'abord
+  // produits phares : ECP, IT95, AC en alternance (les produits « tendance » de l'admin d'abord)
+  const featured = useMemo(() => {
+    if (!data) return [];
+    const groups = FEATURED_GROUPS.map((g) =>
+      data.products
+        .filter((p) => g.match(str(p.range_code)) && str(p.image_url))
+        .sort((a, b) => Number(!!b.is_trending) - Number(!!a.is_trending)),
+    );
+    const out: Row[] = [];
+    for (let i = 0; out.length < FEATURED_MAX && groups.some((g) => i < g.length); i++) {
+      for (const g of groups) if (g[i] && out.length < FEATURED_MAX) out.push(g[i]);
+    }
+    return out;
+  }, [data]);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const slide = (dir: -1 | 1) => {
+    const el = trackRef.current;
+    if (el) el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: "smooth" });
+  };
+
   const ranges = useMemo(() => {
     if (!data) return [];
     const subTitles = new Set(subs.map((x) => str(x.title)));
@@ -242,6 +270,36 @@ const LandingMusculation = () => {
           </div>
         </div>
       </section>
+
+      {/* 3 bis. produits phares */}
+      {featured.length > 0 && (
+        <section className="lp-sec lp-prods">
+          <div className="lp-wrap">
+            <div className="lp-head">
+              <span className="lp-eyebrow dark">Produits phares</span>
+              <h2>Les machines les plus demandées</h2>
+              <p>Musculation ECP et IT95, tapis de course AC : cliquez sur une machine pour recevoir son offre.</p>
+            </div>
+            <div className="lp-carousel">
+              <button className="lp-nav prev" onClick={() => slide(-1)} aria-label="Produits précédents"><ChevronLeft /></button>
+              <div className="lp-prod-track" ref={trackRef}>
+                {featured.map((p) => (
+                  <button type="button" className="lp-prod" key={str(p.id)} onClick={() => openForm(str(p.name))}>
+                    <span className="lp-prod-shot"><img {...thumbProps(str(p.image_url))} alt={str(p.name)} loading="lazy" decoding="async" /></span>
+                    <span className="lp-prod-meta">
+                      <span className="lp-prod-cat">{str(p.category)}</span>
+                      <span className="lp-prod-name">{str(p.name)}</span>
+                      <span className="lp-prod-code">{str(p.range_code)}</span>
+                      <span className="lp-prod-cta">Recevoir l'offre <ArrowRight /></span>
+                    </span>
+                  </button>
+                ))}
+              </div>
+              <button className="lp-nav next" onClick={() => slide(1)} aria-label="Produits suivants"><ChevronRight /></button>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* 4. gammes */}
       {ranges.length > 0 && (
