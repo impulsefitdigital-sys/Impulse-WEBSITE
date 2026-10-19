@@ -197,6 +197,20 @@ Retours d'Adil après la mise en ligne, et check-up de l'infrastructure.
 - Les adresses e-mail affichées (…@impulsefitness.ma) sont inchangées : elles se modifient dans Admin → Coordonnées.
 - Si impulsefitness.ma est récupéré : redirection 301 vers impulsemorocco.com, puis « Changement d'adresse » dans Google Search Console.
 
+### Sécurité de l'admin (19/10/2026)
+- Incident : les sous-catégories de Musculation (Pro) ont disparu. La sauvegarde de la page Catégories supprimait toutes les sous-catégories puis les réinsérait, sans vérifier les erreurs.
+- Correctif :
+  - la sauvegarde met à jour par identifiant et ne supprime que les lignes retirées à la main ;
+  - une erreur stoppe tout, sans rien supprimer ;
+  - même correction pour les Cartes d'accueil ;
+  - une confirmation est demandée avant de supprimer une sous-catégorie ;
+  - l'icône ✕ retire l'image, la corbeille supprime la ligne.
+- Réparation : `supabase/mises-a-jour/2026-10-19-restaurer-sous-categories.sql`. Il reprend d'abord la dernière version dans l'historique (`audit_log`), sinon les valeurs d'origine.
+- Ordre d'affichage : flèches ↑↓ sur les catégories et les sous-catégories (`sort_order` = position).
+- **Bouton « Annuler la dernière action »** (`AdminUndo.tsx`, en bas de l'admin) :
+  - il défait la dernière rafale d'écritures de l'utilisateur à partir de l'historique : recrée, remet les anciennes valeurs, retire ;
+  - pour une action plus ancienne : Paramètres → Historique.
+
 ## 4. Architecture cible
 
 ```

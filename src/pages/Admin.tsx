@@ -26,6 +26,7 @@ import AdminDashboard from "@/components/admin/AdminDashboard";
 import AdminStats from "@/components/admin/AdminStats";
 import AdminIntegrations from "@/components/admin/AdminIntegrations";
 import AdminHistory from "@/components/admin/AdminHistory";
+import AdminUndo from "@/components/admin/AdminUndo";
 import logo from "@/assets/logo-new.png";
 
 const groups = [
@@ -164,6 +165,7 @@ const AdminPage = () => {
         {activeTab === "settings" && <AdminContactSettings />}
         {activeTab === "integrations" && <AdminIntegrations />}
         {activeTab === "history" && <AdminHistory />}
+        <AdminUndo />
       </main>
     </div>
   );

@@ -70,8 +70,10 @@ const AdminCategoryCards = () => {
 
   const saveMutation = useMutation({
     mutationFn: async () => {
-      await supabase.from("category_cards").delete().neq("id", "00000000-0000-0000-0000-000000000000");
-      const toInsert = current.map((c, i) => ({
+      // mise à jour par identifiant (jamais « tout supprimer puis réinsérer » : une erreur
+      // en cours de route ne doit pas vider l'accueil)
+      const rows = current.map((c, i) => ({
+        id: c.id,
         title: c.title,
         description: c.description,
         cta_text: c.cta_text,
@@ -81,8 +83,16 @@ const AdminCategoryCards = () => {
         sort_order: i,
         is_active: c.is_active,
       }));
-      const { error } = await supabase.from("category_cards").insert(toInsert);
-      if (error) throw error;
+      if (rows.length) {
+        const { error } = await supabase.from("category_cards").upsert(rows);
+        if (error) throw error;
+      }
+      const keep = new Set(rows.map((r) => r.id));
+      const removed = (cards || []).filter((c) => !keep.has(c.id)).map((c) => c.id);
+      if (removed.length) {
+        const { error } = await supabase.from("category_cards").delete().in("id", removed);
+        if (error) throw error;
+      }
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin-category-cards"] });

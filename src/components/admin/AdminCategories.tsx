@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Plus, Save, Trash2, Eye, EyeOff, Upload, ChevronDown, ChevronUp } from "lucide-react";
+import { Plus, Save, Trash2, Eye, EyeOff, Upload, ChevronDown, ChevronUp, ArrowUp, ArrowDown, X } from "lucide-react";
 
 type UsageType = "professionnel" | "residentiel";
 
@@ -138,7 +138,27 @@ const AdminCategories = () => {
     setIsDirty(true);
   };
 
+  const moveCategory = (i: number, dir: -1 | 1) => {
+    const j = i + dir;
+    if (j < 0 || j >= categories.length) return;
+    const list = [...categories];
+    [list[i], list[j]] = [list[j], list[i]];
+    setCategories(list.map((c, k) => ({ ...c, sort_order: k })));
+    setIsDirty(true);
+  };
+
+  const moveSubcategory = (catSlug: string, i: number, dir: -1 | 1) => {
+    const list = [...(subcategories[catSlug] || [])];
+    const j = i + dir;
+    if (j < 0 || j >= list.length) return;
+    [list[i], list[j]] = [list[j], list[i]];
+    setSubcategories({ ...subcategories, [catSlug]: list.map((s, k) => ({ ...s, sort_order: k })) });
+    setIsDirty(true);
+  };
+
   const removeSubcategory = (catSlug: string, i: number) => {
+    const sub = (subcategories[catSlug] || [])[i];
+    if (!confirm(`Supprimer la sous-catégorie « ${sub?.title || "sans titre"} » ?\nElle disparaîtra du site après « Sauvegarder ». En cas d'erreur : bouton « Annuler la dernière action ».`)) return;
     const updated = { ...subcategories };
     updated[catSlug] = (updated[catSlug] || []).filter((_, idx) => idx !== i);
     setSubcategories(updated);
@@ -147,43 +167,34 @@ const AdminCategories = () => {
 
   const saveMutation = useMutation({
     mutationFn: async (targetUsage: UsageType = usageType) => {
-      // Update categories (scoped to current usage_type)
-      for (const cat of categories) {
-        await supabase.from("equipment_categories").upsert({
-          id: cat.id,
-          slug: cat.slug,
-          title: cat.title,
-          description: cat.description,
-          image_url: cat.image_url,
-          sort_order: cat.sort_order,
-          is_active: cat.is_active,
-          usage_type: targetUsage,
-        });
+      // Mise à jour par identifiant : on ne supprime QUE les sous-catégories retirées à la main.
+      // (Avant : tout était supprimé puis réinséré ; une erreur d'insertion vidait la catégorie.)
+      const catRows = categories.map((cat, i) => ({
+        id: cat.id, slug: cat.slug, title: cat.title, description: cat.description,
+        image_url: cat.image_url, sort_order: i, is_active: cat.is_active, usage_type: targetUsage,
+      }));
+      if (catRows.length) {
+        const { error } = await supabase.from("equipment_categories").upsert(catRows);
+        if (error) throw error;
       }
-      // Replace subcategories scoped to (category_slug, usage_type)
-      for (const cat of categories) {
-        await supabase
-          .from("equipment_subcategories")
-          .delete()
-          .eq("category_slug", cat.slug)
-          .eq("usage_type", targetUsage);
-        const subs = subcategories[cat.slug] || [];
-        if (subs.length > 0) {
-          await supabase.from("equipment_subcategories").insert(
-            subs.map((s, i) => ({
-              slug: s.slug,
-              title: s.title,
-              description: s.description,
-              image_url: s.image_url,
-              category_slug: cat.slug,
-              sort_order: i,
-              is_active: s.is_active,
-              usage_type: targetUsage,
-            }))
-          );
-        }
+      const subRows = categories.flatMap((cat) =>
+        (subcategories[cat.slug] || []).map((s, i) => ({
+          id: s.id, slug: s.slug, title: s.title, description: s.description || "", image_url: s.image_url,
+          category_slug: cat.slug, sort_order: i, is_active: s.is_active, usage_type: targetUsage,
+        }))
+      );
+      if (subRows.length) {
+        const { error } = await supabase.from("equipment_subcategories").upsert(subRows);
+        if (error) throw error;
+      }
+      const keep = new Set(subRows.map((r) => r.id));
+      const removed = ((subData || []) as Subcategory[]).filter((s) => s.usage_type === targetUsage && !keep.has(s.id)).map((s) => s.id);
+      if (removed.length) {
+        const { error } = await supabase.from("equipment_subcategories").delete().in("id", removed);
+        if (error) throw error;
       }
     },
+    onError: (e: Error) => toast.error(`Sauvegarde impossible : ${e?.message || "erreur"}. Rien n'a été supprimé.`),
     onSuccess: () => {
       setIsDirty(false);
       toast.success("Catégories sauvegardées");
@@ -192,7 +203,6 @@ const AdminCategories = () => {
       qc.invalidateQueries({ queryKey: ["equipment-category"] });
       qc.invalidateQueries({ queryKey: ["equipment-subcategories"] });
     },
-    onError: () => toast.error("Erreur de sauvegarde"),
   });
 
   const switchUsage = async (next: UsageType) => {
@@ -257,9 +267,13 @@ const AdminCategories = () => {
               <button onClick={() => updateCatField(ci, "is_active", !cat.is_active)} className={cat.is_active ? "text-accent" : "text-muted-foreground"}>
                 {cat.is_active ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
               </button>
+              <div className="flex flex-col">
+                <button onClick={() => moveCategory(ci, -1)} disabled={ci === 0} title="Monter" className="text-muted-foreground hover:text-foreground disabled:opacity-30"><ArrowUp className="h-4 w-4" /></button>
+                <button onClick={() => moveCategory(ci, 1)} disabled={ci === categories.length - 1} title="Descendre" className="text-muted-foreground hover:text-foreground disabled:opacity-30"><ArrowDown className="h-4 w-4" /></button>
+              </div>
               <input value={cat.title} onChange={(e) => updateCatField(ci, "title", e.target.value)} className="flex-1 rounded-sm border border-border bg-background px-3 py-2 text-sm" placeholder="Titre" />
               <input value={cat.slug} onChange={(e) => updateCatField(ci, "slug", e.target.value)} className="w-32 rounded-sm border border-border bg-background px-3 py-2 text-sm" placeholder="Slug" />
-              <input type="number" value={cat.sort_order} onChange={(e) => updateCatField(ci, "sort_order", parseInt(e.target.value))} className="w-16 rounded-sm border border-border bg-background px-3 py-2 text-sm" />
+
             </div>
 
             <textarea value={cat.description} onChange={(e) => updateCatField(ci, "description", e.target.value)} rows={2} className="mb-3 w-full rounded-sm border border-border bg-background px-3 py-2 text-sm" placeholder="Description de la catégorie" />
@@ -268,7 +282,7 @@ const AdminCategories = () => {
               {cat.image_url ? (
                 <div className="relative h-20 w-32 overflow-hidden rounded-sm border border-border">
                   <img src={cat.image_url} alt="" className="h-full w-full object-cover" />
-                  <button onClick={() => updateCatField(ci, "image_url", null)} className="absolute right-1 top-1 rounded bg-background/80 p-0.5"><Trash2 className="h-3 w-3" /></button>
+                  <button onClick={() => updateCatField(ci, "image_url", null)} title="Retirer l'image" className="absolute right-1 top-1 rounded bg-background/80 p-0.5"><X className="h-3 w-3" /></button>
                 </div>
               ) : (
                 <label className="flex h-20 w-32 cursor-pointer items-center justify-center rounded-sm border-2 border-dashed border-border text-muted-foreground hover:border-accent">
@@ -289,13 +303,17 @@ const AdminCategories = () => {
                 <ImageHint kind="subcategory" className="mt-0" />
                 {(subcategories[cat.slug] || []).map((sub, si) => (
                   <div key={sub.id || si} className="flex items-center gap-3 rounded-sm border border-border bg-background p-3">
+                    <div className="flex flex-col">
+                      <button onClick={() => moveSubcategory(cat.slug, si, -1)} disabled={si === 0} title="Monter" className="text-muted-foreground hover:text-foreground disabled:opacity-30"><ArrowUp className="h-3.5 w-3.5" /></button>
+                      <button onClick={() => moveSubcategory(cat.slug, si, 1)} disabled={si === (subcategories[cat.slug] || []).length - 1} title="Descendre" className="text-muted-foreground hover:text-foreground disabled:opacity-30"><ArrowDown className="h-3.5 w-3.5" /></button>
+                    </div>
                     <button onClick={() => updateSubField(cat.slug, si, "is_active", !sub.is_active)} className={sub.is_active ? "text-accent" : "text-muted-foreground"}>
                       {sub.is_active ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
                     </button>
                     {sub.image_url ? (
                       <div className="relative h-12 w-16 overflow-hidden rounded-sm border border-border flex-shrink-0">
                         <img src={sub.image_url} alt="" className="h-full w-full object-cover" />
-                        <button onClick={() => updateSubField(cat.slug, si, "image_url", null)} className="absolute right-0.5 top-0.5 rounded bg-background/80 p-0.5"><Trash2 className="h-2.5 w-2.5" /></button>
+                        <button onClick={() => updateSubField(cat.slug, si, "image_url", null)} title="Retirer l'image" className="absolute right-0.5 top-0.5 rounded bg-background/80 p-0.5"><X className="h-2.5 w-2.5" /></button>
                       </div>
                     ) : (
                       <label className="flex h-12 w-16 flex-shrink-0 cursor-pointer items-center justify-center rounded-sm border-2 border-dashed border-border text-muted-foreground hover:border-accent">
@@ -305,7 +323,7 @@ const AdminCategories = () => {
                     )}
                     <input value={sub.title} onChange={(e) => updateSubField(cat.slug, si, "title", e.target.value)} className="flex-1 rounded-sm border border-border bg-card px-2 py-1.5 text-sm" placeholder="Titre" />
                     <input value={sub.slug} onChange={(e) => updateSubField(cat.slug, si, "slug", e.target.value)} className="w-28 rounded-sm border border-border bg-card px-2 py-1.5 text-sm" placeholder="Slug" />
-                    <button onClick={() => removeSubcategory(cat.slug, si)} className="text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
+                    <button onClick={() => removeSubcategory(cat.slug, si)} title="Supprimer la sous-catégorie" className="text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
                   </div>
                 ))}
                 <button onClick={() => addSubcategory(cat.slug)} className="flex items-center gap-1 text-xs font-semibold text-accent hover:text-accent/80">
