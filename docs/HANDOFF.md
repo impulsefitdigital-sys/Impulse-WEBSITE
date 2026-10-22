@@ -250,6 +250,12 @@ Retours d'Adil après la mise en ligne, et check-up de l'infrastructure.
 - Route : `/lp/musculation/:id?` dans `src/App.tsx`. Aucun changement de base de données.
 - Aucune date de validité ni numéro d'offre affichés (la date du PDF n'est pas à prendre en compte).
 
+### 22/10/2026 (nuit) — Landing page : une page par gamme
+- L'accueil de la landing ne montre plus toutes les machines : haut de page, machines les plus demandées, cartes « Nos gammes », showroom, formulaire, FAQ (page beaucoup plus courte).
+- Clic sur une gamme → page de la gamme `/lp/musculation/gamme/<code>` (ex. `/gamme/ecp`) : ses machines, onglets pour passer d'une gamme à l'autre, « Toutes les gammes » pour revenir.
+- La fiche produit revient sur la page de sa gamme (« Retour à la gamme ECP »), à la hauteur de la machine.
+- Plus de mention « en stock » à côté des nombres de machines ni sur les cartes (« 8 machines » seulement) ; FAQ et textes ajustés.
+
 ## 4. Architecture cible
 
 ```

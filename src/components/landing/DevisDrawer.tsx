@@ -86,14 +86,14 @@ const DevisDrawer = ({ lines, setQty, onClose, onSent, onBrowse }: Props) => {
             <span className="lf-done-icon"><Check /></span>
             <h3>Merci {contact.name.trim().split(" ")[0]} !</h3>
             <p>Votre demande de devis {quote.number && <strong>{quote.number}</strong>} est bien reçue : {quote.count} machine{quote.count > 1 ? "s" : ""}, {formatMad(quote.total)} HT.</p>
-            <p>Un conseiller Impulse vous rappelle <strong>sous 24 h ouvrées</strong> pour confirmer le stock, la livraison et l'installation.</p>
+            <p>Un conseiller Impulse vous rappelle <strong>sous 24 h ouvrées</strong> pour confirmer la disponibilité, la livraison et l'installation.</p>
             <button className="lp-btn lp-btn-dark" onClick={onClose}>Fermer</button>
           </div>
         ) : !lines.length ? (
           <div className="lp-drawer-body lp-drawer-empty">
             <p>Votre devis est vide.</p>
             <p>Ajoutez des machines avec le bouton <strong>« Ajouter au devis »</strong> sous chaque produit.</p>
-            <button className="lp-btn lp-btn-red" onClick={onBrowse}>Voir les machines en stock <ArrowRight /></button>
+            <button className="lp-btn lp-btn-red" onClick={onBrowse}>Voir les machines <ArrowRight /></button>
           </div>
         ) : step === "panier" ? (
           <>
@@ -116,7 +116,7 @@ const DevisDrawer = ({ lines, setQty, onClose, onSent, onBrowse }: Props) => {
             </ul>
             <footer className="lp-drawer-foot">
               <p className="lp-total"><span>Total HT ({count} machine{count > 1 ? "s" : ""})</span><strong>{formatMad(total)}</strong></p>
-              <p className="lp-total-note">Prix du stock disponible. Livraison et installation confirmées par votre conseiller.</p>
+              <p className="lp-total-note">Prix unitaires HT. Livraison et installation confirmées par votre conseiller.</p>
               <button className="lp-btn lp-btn-red lf-next" onClick={() => setStep("coordonnees")}>
                 {filled ? "Vérifier et envoyer" : "Continuer"} <ArrowRight />
               </button>

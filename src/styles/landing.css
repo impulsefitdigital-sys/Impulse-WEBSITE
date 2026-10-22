@@ -104,17 +104,28 @@
 .lp .lp-imp{background:transparent;color:inherit;font-size:15px;overflow:visible}
 .lp .lp-imp .wrap{max-width:var(--lp-maxw);padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
 .lp-ranges{margin-bottom:8px}
-.lp-gamme{padding-top:56px;scroll-margin-top:80px}
+/* page d'une gamme (/lp/musculation/gamme/…) */
+.lp-gamme-page{padding-top:28px}
+.lp-back{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--lp-steel);margin-bottom:24px;transition:color .2s}
+.lp-back:hover{color:var(--lp-red)}
+.lp-gamme-desc{max-width:72ch;color:var(--lp-steel);margin:-6px 0 20px}
+.lp-gtabs{display:flex;gap:8px;overflow-x:auto;margin:0 0 24px;padding-bottom:2px;scrollbar-width:none}
+.lp-gtabs::-webkit-scrollbar{display:none}
+.lp-gtabs a{flex:none;display:inline-flex;align-items:center;gap:6px;border:1.5px solid #d9d9de;background:#fff;border-radius:999px;padding:8px 15px;font-size:13px;font-weight:800;white-space:nowrap;transition:border-color .2s,background .2s}
+.lp-gtabs a span{font-weight:600;font-size:11.5px;opacity:.6}
+.lp-gtabs a:hover{border-color:var(--lp-text)}
+.lp-gtabs a.on{background:var(--lp-ink);border-color:var(--lp-ink);color:#fff}
+.lp-gtabs a:focus-visible{outline:3px solid #ffb703;outline-offset:2px}
+.lp .product-card[id]{scroll-margin-top:80px}
 .lp-gamme-head{display:flex;align-items:center;gap:16px;margin-bottom:22px;padding-bottom:14px;border-bottom:2px solid var(--lp-text)}
 .lp .lp-gamme-head .pd-tag{margin:0;font-size:13px;padding:7px 15px;flex:none}
-.lp-gamme-head h3{font-size:clamp(1.3rem,2.2vw,1.7rem);text-transform:uppercase}
-.lp-gamme-head h3 small{font-size:.6em;font-weight:700;color:var(--lp-steel);text-transform:none}
+.lp-gamme-head h1{font-size:clamp(1.6rem,3vw,2.4rem);text-transform:uppercase}
+.lp-gamme-head h1 small{font-size:.6em;font-weight:700;color:var(--lp-steel);text-transform:none}
 .lp-gamme-head p{margin:6px 0 0;color:var(--lp-steel);font-size:14px}
 .lp .product-card{scroll-snap-align:start}
 .lp .lp-pcard .product-body{padding-bottom:12px}
 .lp .lp-pcard .lp-price{margin-top:12px}
 .lp .lp-pcard .product-see{padding-top:10px}
-.lp .lp-instock{font-weight:700;color:#1d7a46}
 .lp-pcard-foot{padding:0 18px 18px}
 
 /* fiche produit dans la landing (/lp/musculation/:id) */
@@ -271,9 +282,7 @@
   .lp .lp-pcard .product-body{padding:12px 10px 6px}
   .lp .lp-pcard .product-body h3{font-size:.84rem}
   .lp .lp-pcard .product-see{display:none}
-  .lp .lp-pcat-sub{display:none}
   .lp-pcard-foot{padding:0 10px 12px}
-  .lp-gamme{padding-top:40px}
   .lp-gamme-head{gap:12px}
   .lp-pd-price .lp-price-now{font-size:24px}
   .lp-final-form{padding:20px}

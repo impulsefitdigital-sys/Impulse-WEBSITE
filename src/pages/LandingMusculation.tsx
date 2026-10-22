@@ -11,7 +11,7 @@ import { formatMad } from "@/components/landing/contact";
 import ProductDetailView from "@/components/ProductDetailView";
 import { CROSSED_PRICE_RATIO, STOCK_ITEMS } from "@/data/stock-landing";
 import logoWhite from "@/assets/logo-new.png";
-import { ArrowRight, Check, ChevronLeft, ChevronRight, Clock, FileText, MapPin, Minus, Phone, Plus, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, ChevronLeft, ChevronRight, Clock, FileText, MapPin, Minus, Phone, Plus, X } from "lucide-react";
 import "@/styles/landing.css";
 
 /**
@@ -35,8 +35,8 @@ const CART_KEY = "impulse-lp-devis";
 const FEATURED_MAX = 12;
 /** ordre des gammes sur la page (les gammes absentes de cette liste passent à la fin) */
 const GAMME_ORDER = ["IT95", "ECP", "SL", "IFP", "ITF"];
-/** nombre de machines montrées par gamme avant « Voir les autres » */
-const SECTION_PREVIEW = 6;
+
+const gammeHref = (code: string) => `${BASE}/gamme/${code.toLowerCase()}`;
 
 const read = (k: string, store: "local" | "session" = "local") => {
   try { return (store === "local" ? localStorage : sessionStorage).getItem(k); } catch { return null; }
@@ -71,7 +71,7 @@ const useLandingData = () =>
   });
 
 const LandingMusculation = () => {
-  const { id } = useParams();
+  const { id, gamme: gammeParam } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const { data, isLoading } = useLandingData();
@@ -81,8 +81,8 @@ const LandingMusculation = () => {
     try { return JSON.parse(read(CART_KEY) || "{}") as Record<string, number>; } catch { return {}; }
   });
   const [flash, setFlash] = useState("");
-  const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
-  const engaged = useRef(false);
+  // un devis déjà commencé compte comme un engagement : pas de pop-up automatique
+  const engaged = useRef(Object.keys(cart).length > 0);
   const sent = useRef(!!read(LEAD_SENT_KEY));
   const trackRef = useRef<HTMLDivElement>(null);
 
@@ -172,21 +172,18 @@ const LandingMusculation = () => {
   const goToMachines = () => {
     setDrawer(false);
     setModal({ open: false });
-    if (id) { navigate(`${BASE}#machines`); return; }
+    if (id || gammeParam) { navigate(`${BASE}#machines`); return; }
     document.getElementById("machines")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
-  const scrollToGamme = (code: string) => document.getElementById(`gamme-${code.toLowerCase()}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
 
-  // retour d'une fiche produit (#machine-REF) ou lien direct (#machines, #gamme-…) : on se replace au bon endroit
+  // retour d'une fiche produit (#machine-REF sur la page de la gamme) ou lien direct (#machines) : on se replace au bon endroit
   useEffect(() => {
     if (id || !stock.length) return;
     const h = decodeURIComponent(location.hash.slice(1));
     if (!h) return;
-    const machine = h.startsWith("machine-") ? stock.find((p) => p.ref === h.slice(8)) : undefined;
-    if (machine) setOpenSections((o) => ({ ...o, [machine.gamme]: true }));
-    const t = window.setTimeout(() => document.getElementById(h)?.scrollIntoView({ block: machine ? "center" : "start" }), 80);
+    const t = window.setTimeout(() => document.getElementById(h)?.scrollIntoView({ block: h.startsWith("machine-") ? "center" : "start" }), 80);
     return () => window.clearTimeout(t);
-  }, [id, location.key, location.hash, stock]);
+  }, [id, gammeParam, location.key, location.hash, stock]);
 
   // classe sur <body> : le bandeau cookies se place au-dessus de la barre fixe du téléphone
   useEffect(() => {
@@ -261,7 +258,7 @@ const LandingMusculation = () => {
           {inCart ? <Check /> : <FileText />}
         </button>
         <a href={href} className="product-body">
-          <span className="p-cat"><span className="lp-pcat-sub">{p.subTitle || p.category} · </span><b className="lp-instock">En stock</b></span>
+          <span className="p-cat">{p.subTitle || p.category}</span>
           <h3>{p.name}</h3>
           {renderPrice(p)}
           <span className="product-see">Voir la fiche <ArrowRight /></span>
@@ -290,7 +287,7 @@ const LandingMusculation = () => {
       <div className="lp-wrap lp-final-grid">
         <div className="lp-final-copy">
           <span className="lp-eyebrow dark">Parlons de votre salle</span>
-          <h2>Profitez du stock disponible, contactez-nous aujourd'hui</h2>
+          <h2>Équipez votre salle, contactez-nous aujourd'hui</h2>
           <p>Laissez vos coordonnées : un conseiller Impulse vous rappelle sous 24 h ouvrées. Vous préférez un devis chiffré ? Composez-le vous-même en quelques clics.</p>
           <div className="lp-final-alt">
             <button className="lp-btn lp-btn-dark" onClick={cartCount ? openDevis : goToMachines}><FileText /> {cartCount ? `Voir mon devis (${cartCount})` : "Préparer mon devis"}</button>
@@ -303,14 +300,16 @@ const LandingMusculation = () => {
   );
 
   const current = id ? byId.get(id) : undefined;
+  const activeGamme = gammeParam ? gammes.find((g) => g.code.toLowerCase() === gammeParam.toLowerCase()) : undefined;
 
   return (
     <div className="lp">
       <Helmet>
-        <title>Machines de musculation en stock | Impulse Fitness Maroc</title>
-        <meta name="description" content="Machines de musculation professionnelles Impulse disponibles en stock au Maroc, avec prix. Composez votre devis en ligne. Livraison et installation partout au Maroc." />
+        <title>Machines de musculation professionnelles | Impulse Fitness Maroc</title>
+        <meta name="description" content="Machines de musculation professionnelles Impulse disponibles au Maroc, avec prix. Composez votre devis en ligne. Livraison et installation partout au Maroc." />
         <meta name="robots" content="noindex, follow" />
-        {!id && heroImg && <link rel="preload" as="image" href={heroImg} />}
+        {activeGamme && <title>{`Gamme ${activeGamme.code} | Impulse Fitness Maroc`}</title>}
+        {!id && !gammeParam && heroImg && <link rel="preload" as="image" href={heroImg} />}
       </Helmet>
 
       {header}
@@ -320,17 +319,17 @@ const LandingMusculation = () => {
         <div className="imp lp-imp lp-pd">
           <ProductDetailView
             id={id}
-            backLabel="Retour au stock"
-            onBack={() => navigate(current ? `${BASE}#machine-${current.ref}` : `${BASE}#machines`)}
+            backLabel={current ? `Retour à la gamme ${current.gamme}` : "Retour aux gammes"}
+            onBack={() => navigate(current ? `${gammeHref(current.gamme)}#machine-${current.ref}` : `${BASE}#machines`)}
             relatedIds={stockIds.length ? stockIds : undefined}
             relatedHref={(rid) => `${BASE}/${rid}`}
-            relatedTitle="Autres machines en stock de la gamme"
-            renderHead={(product) => <Helmet><title>{`${product.name} en stock | Impulse Fitness Maroc`}</title></Helmet>}
+            relatedTitle="Autres machines de la gamme"
+            renderHead={(product) => <Helmet><title>{`${product.name} | Impulse Fitness Maroc`}</title></Helmet>}
             renderBelowTitle={() => current && (
               <div className="lp-pd-price">
-                <span className="lp-pd-stock"><Check /> En stock au Maroc</span>
+                <span className="lp-pd-stock"><Check /> Disponible au Maroc</span>
                 {renderPrice(current)}
-                <span className="lp-pd-note">Prix unitaire HT · stock disponible au Maroc</span>
+                <span className="lp-pd-note">Prix unitaire HT</span>
               </div>
             )}
             renderActions={(product) => {
@@ -339,7 +338,7 @@ const LandingMusculation = () => {
                 return (
                   <div className="pd-actions">
                     <button className="pd-add" onClick={() => openForm(product.name)}><span><Phone /> Être rappelé</span></button>
-                    <a className="btn btn-ghost" href={`${BASE}#machines`}><span>Voir les machines en stock</span></a>
+                    <a className="btn btn-ghost" href={`${BASE}#machines`}><span>Voir les machines</span></a>
                   </div>
                 );
               }
@@ -365,11 +364,47 @@ const LandingMusculation = () => {
             notFound={
               <div className="lp-pd-missing">
                 <p>Cette machine n'est plus affichée.</p>
-                <a className="lp-btn lp-btn-red" href={`${BASE}#machines`}>Voir les machines en stock <ArrowRight /></a>
+                <a className="lp-btn lp-btn-red" href={`${BASE}#machines`}>Voir les machines <ArrowRight /></a>
               </div>
             }
           />
         </div>
+      ) : gammeParam ? (
+        /* ------------------------------------------------ page d'une gamme : ses machines en stock */
+        <section className="lp-sec lp-catalog lp-gamme-page">
+          <div className="lp-wrap imp lp-imp">
+            <a className="lp-back" href={`${BASE}#machines`}><ArrowLeft /> Toutes les gammes</a>
+            {isLoading ? (
+              <p className="lp-loading">Chargement des machines…</p>
+            ) : !activeGamme ? (
+              <div className="lp-pd-missing">
+                <p>Cette gamme n'est pas présentée ici.</p>
+                <a className="lp-btn lp-btn-red" href={`${BASE}#machines`}>Voir les gammes <ArrowRight /></a>
+              </div>
+            ) : (
+              <>
+                <div className="lp-gamme-head">
+                  <span className="pd-tag"><span>{activeGamme.code}</span></span>
+                  <div>
+                    <h1>Gamme {activeGamme.code}{activeGamme.label && <small> · {activeGamme.label}</small>}</h1>
+                    <p>{activeGamme.items.length} machine{activeGamme.items.length > 1 ? "s" : ""}{activeGamme.subTitles.length ? ` · ${activeGamme.subTitles.join(", ")}` : ""} · prix unitaires HT</p>
+                  </div>
+                </div>
+                {activeGamme.description && <p className="lp-gamme-desc">{activeGamme.description}</p>}
+                {gammes.length > 1 && (
+                  <nav className="lp-gtabs" aria-label="Autres gammes">
+                    {gammes.map((g) => (
+                      <a key={g.code} href={gammeHref(g.code)} className={g.code === activeGamme.code ? "on" : ""} aria-current={g.code === activeGamme.code ? "page" : undefined}>
+                        {g.code}<span>{g.items.length}</span>
+                      </a>
+                    ))}
+                  </nav>
+                )}
+                <div className="product-grid">{activeGamme.items.map((p) => renderCard(p, true))}</div>
+              </>
+            )}
+          </div>
+        </section>
       ) : (
         <>
           {/* 1. haut de page */}
@@ -380,7 +415,7 @@ const LandingMusculation = () => {
               <div className="lp-hero-copy">
                 <span className="lp-eyebrow">Distributeur officiel Impulse au Maroc</span>
                 <h1>Machines de musculation <em>en stock au Maroc</em></h1>
-                <p className="lp-lead">{stock.length || STOCK_ITEMS.length} machines professionnelles Impulse <strong>disponibles immédiatement, prix affichés</strong>. Composez votre devis en ligne en quelques clics, un conseiller vous rappelle sous 24 h.</p>
+                <p className="lp-lead">Machines professionnelles Impulse <strong>disponibles immédiatement, prix affichés</strong>. Composez votre devis en ligne en quelques clics, un conseiller vous rappelle sous 24 h.</p>
                 <ul className="lp-ticks">
                   <li><Check /> Stock disponible au Maroc</li>
                   <li><Check /> Prix affichés, devis en ligne</li>
@@ -406,7 +441,7 @@ const LandingMusculation = () => {
                 <div className="lp-head">
                   <span className="lp-eyebrow dark">Produits phares</span>
                   <h2>Les machines les plus demandées</h2>
-                  <p>En stock au Maroc. Cliquez sur une machine pour voir sa fiche, ajoutez-la à votre devis, ajustez les quantités et envoyez : c'est gratuit et sans engagement.</p>
+                  <p>Cliquez sur une machine pour voir sa fiche, ajoutez-la à votre devis, ajustez les quantités et envoyez : c'est gratuit et sans engagement.</p>
                 </div>
                 <div className="lp-carousel imp lp-imp">
                   <button className="lp-nav prev" onClick={() => slide(-1)} aria-label="Produits précédents"><ChevronLeft /></button>
@@ -419,57 +454,34 @@ const LandingMusculation = () => {
             </section>
           )}
 
-          {/* 3. le stock, par gamme (cartes gamme du site, puis les machines de chaque gamme) */}
+          {/* 3. le stock : une carte par gamme (affiche du site) ; clic = page de la gamme */}
           <section className="lp-sec lp-catalog" id="machines">
             <div className="lp-wrap">
               <div className="lp-head">
-                <span className="lp-eyebrow dark">Tout le stock</span>
+                <span className="lp-eyebrow dark">Nos gammes</span>
                 <h2>Choisissez votre gamme</h2>
-                <p>Prix unitaires HT du stock disponible. Cliquez sur une gamme pour voir ses machines.</p>
+                <p>Prix unitaires HT. Cliquez sur une gamme pour voir ses machines.</p>
               </div>
 
-              {isLoading && <p className="lp-loading">Chargement du stock…</p>}
+              {isLoading && <p className="lp-loading">Chargement des machines…</p>}
 
               <div className="imp lp-imp">
-                {gammes.length > 1 && (
-                  <nav className="range-grid lp-ranges" aria-label="Gammes en stock">
+                {gammes.length > 0 && (
+                  <nav className="range-grid lp-ranges" aria-label="Gammes">
                     {gammes.map((g) => (
-                      <a className="range-card" key={g.code} href={`#gamme-${g.code.toLowerCase()}`} onClick={(e) => { e.preventDefault(); scrollToGamme(g.code); }}>
+                      <a className="range-card" key={g.code} href={gammeHref(g.code)}>
                         <span className="rc-shot">{g.poster && <img {...thumbProps(g.poster)} alt={`Gamme ${g.code}`} loading="lazy" decoding="async" />}</span>
                         <span className="rc-body">
                           <span className="p-cat">Gamme</span>
                           <h3>{g.code}{g.label && <small>{g.label}</small>}</h3>
                           {g.description ? <p className="p-desc">{g.description}</p> : g.subTitles.length > 0 && <p className="p-desc">{g.subTitles.join(" · ")}</p>}
-                          <span className="product-see">{g.items.length} machine{g.items.length > 1 ? "s" : ""} en stock <ArrowRight /></span>
+                          <span className="product-see">{g.items.length} machine{g.items.length > 1 ? "s" : ""} <ArrowRight /></span>
                         </span>
                       </a>
                     ))}
                   </nav>
                 )}
 
-                {gammes.map((g) => {
-                  const open = openSections[g.code] || g.items.length <= SECTION_PREVIEW + 2;
-                  const shown = open ? g.items : g.items.slice(0, SECTION_PREVIEW);
-                  return (
-                    <div className="lp-gamme" id={`gamme-${g.code.toLowerCase()}`} key={g.code}>
-                      <div className="lp-gamme-head">
-                        <span className="pd-tag"><span>{g.code}</span></span>
-                        <div>
-                          <h3>Gamme {g.code}{g.label && <small> · {g.label}</small>}</h3>
-                          <p>{g.items.length} machine{g.items.length > 1 ? "s" : ""} en stock{g.subTitles.length ? ` · ${g.subTitles.join(", ")}` : ""}</p>
-                        </div>
-                      </div>
-                      <div className="product-grid">{shown.map((p) => renderCard(p, true))}</div>
-                      {!open && (
-                        <div className="lp-center">
-                          <button className="lp-btn lp-btn-outline-dark" onClick={() => setOpenSections((o) => ({ ...o, [g.code]: true }))}>
-                            Voir les {g.items.length - SECTION_PREVIEW} autres machines {g.code}
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
               </div>
             </div>
           </section>
@@ -496,12 +508,12 @@ const LandingMusculation = () => {
       {finalForm}
 
       {/* FAQ */}
-      {!id && (
+      {!id && !gammeParam && (
         <section className="lp-sec lp-faq">
           <div className="lp-wrap lp-faq-in">
             <h2>Questions fréquentes</h2>
-            <details><summary>Les prix affichés sont-ils HT ou TTC ?</summary><p>Les prix sont des prix unitaires hors taxes (HT), pour les machines du stock disponible. Votre conseiller vous confirme le devis final, avec la livraison et l'installation.</p></details>
-            <details><summary>Les machines sont-elles vraiment disponibles ?</summary><p>Oui, toutes les machines de cette page sont en stock au Maroc. Les quantités étant limitées, votre conseiller confirme la disponibilité de chaque machine à la réception de votre devis.</p></details>
+            <details><summary>Les prix affichés sont-ils HT ou TTC ?</summary><p>Les prix sont des prix unitaires hors taxes (HT). Votre conseiller vous confirme le devis final, avec la livraison et l'installation.</p></details>
+            <details><summary>Les machines sont-elles disponibles rapidement ?</summary><p>Oui, les machines présentées ici sont disponibles au Maroc. Votre conseiller vous confirme le délai de livraison à la réception de votre devis.</p></details>
             <details><summary>Livrez-vous et installez-vous dans tout le Maroc ?</summary><p>Oui. Notre équipe technique assure la livraison et l'installation partout au Maroc, ainsi que le service après-vente avec un stock de pièces d'origine.</p></details>
             <details><summary>Puis-je voir les machines avant de commander ?</summary><p>Oui, au showroom de Bouskoura{s.hours_line_1 ? ` (${[s.hours_line_1, s.hours_line_2].filter(Boolean).join(", ")})` : ""}. Demandez une visite : un conseiller vous accueille.</p></details>
           </div>
@@ -530,7 +542,7 @@ const LandingMusculation = () => {
         ) : (
           <button className="lp-btn lp-btn-red" onClick={goToMachines}>Préparer mon devis</button>
         )}
-        <button className="lp-btn lp-btn-ghost" onClick={() => openForm(current?.name)}>Être rappelé</button>
+        <button className="lp-btn lp-btn-ghost" onClick={() => openForm(current?.name ?? (activeGamme ? `Gamme ${activeGamme.code}` : undefined))}>Être rappelé</button>
       </div>
 
       {/* fenêtre formulaire simple */}
