@@ -248,6 +248,7 @@ Retours d'Adil après la mise en ligne, et check-up de l'infrastructure.
 - Clic sur une machine → **fiche produit complète** sur `/lp/musculation/:id` (même affichage que le site : galerie, couleurs, description, caractéristiques, garantie, autres machines en stock de la gamme), avec le prix du stock, « Ajouter au devis » / quantité et « Être rappelé ». « Retour au stock » revient sur la machine dans la liste.
 - La fiche produit est maintenant un composant partagé : `src/components/ProductDetailView.tsx`, utilisé par `/produit/:id` (site, inchangé à l'écran) et par la landing.
 - Route : `/lp/musculation/:id?` dans `src/App.tsx`. Aucun changement de base de données.
+- Aucune date de validité ni numéro d'offre affichés (la date du PDF n'est pas à prendre en compte).
 
 ## 4. Architecture cible
 

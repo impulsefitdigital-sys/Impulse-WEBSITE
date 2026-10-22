@@ -1,6 +1,6 @@
 /**
  * Stock disponible à la vente sur la landing page /lp/musculation.
- * Source : « Stock liste de prix revendeur » — offre n° 26-259 du 29/09/2026, valable jusqu'au 29/10/2026.
+ * Source : « Stock liste de prix revendeur » (PDF du 29/09/2026). Aucune date de validité affichée sur la page.
  *
  * pu = prix unitaire HT en dirhams (colonne « PU » de l'offre), affiché comme prix de vente.
  * Le prix barré affiché = pu × 1,20 (demande d'Adil du 22/10/2026).
@@ -10,7 +10,6 @@
  */
 export interface StockItem { ref: string; pu: number; designation: string }
 
-export const STOCK_OFFER = { numero: "26-259", date: "29/09/2026", validite: "29/10/2026" };
 export const CROSSED_PRICE_RATIO = 1.2;
 
 export const STOCK_ITEMS: StockItem[] = [

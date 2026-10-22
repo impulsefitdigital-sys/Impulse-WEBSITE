@@ -9,7 +9,7 @@ import LeadForm, { LEAD_SENT_KEY } from "@/components/landing/LeadForm";
 import DevisDrawer, { type DevisLine } from "@/components/landing/DevisDrawer";
 import { formatMad } from "@/components/landing/contact";
 import ProductDetailView from "@/components/ProductDetailView";
-import { CROSSED_PRICE_RATIO, STOCK_ITEMS, STOCK_OFFER } from "@/data/stock-landing";
+import { CROSSED_PRICE_RATIO, STOCK_ITEMS } from "@/data/stock-landing";
 import logoWhite from "@/assets/logo-new.png";
 import { ArrowRight, Check, ChevronLeft, ChevronRight, Clock, FileText, MapPin, Minus, Phone, Plus, X } from "lucide-react";
 import "@/styles/landing.css";
@@ -330,7 +330,7 @@ const LandingMusculation = () => {
               <div className="lp-pd-price">
                 <span className="lp-pd-stock"><Check /> En stock au Maroc</span>
                 {renderPrice(current)}
-                <span className="lp-pd-note">Prix unitaire HT · offre n° {STOCK_OFFER.numero} valable jusqu'au {STOCK_OFFER.validite}</span>
+                <span className="lp-pd-note">Prix unitaire HT · stock disponible au Maroc</span>
               </div>
             )}
             renderActions={(product) => {
@@ -425,7 +425,7 @@ const LandingMusculation = () => {
               <div className="lp-head">
                 <span className="lp-eyebrow dark">Tout le stock</span>
                 <h2>Choisissez votre gamme</h2>
-                <p>Prix unitaires HT du stock disponible. Offre n° {STOCK_OFFER.numero}, valable jusqu'au {STOCK_OFFER.validite}.</p>
+                <p>Prix unitaires HT du stock disponible. Cliquez sur une gamme pour voir ses machines.</p>
               </div>
 
               {isLoading && <p className="lp-loading">Chargement du stock…</p>}
