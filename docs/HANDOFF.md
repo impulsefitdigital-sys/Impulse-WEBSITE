@@ -228,6 +228,21 @@ Retours d'Adil après la mise en ligne, et check-up de l'infrastructure.
   Plus `form_start` / `contact_submit` dans les statistiques internes.
 - Promesses validées par Adil : rappel sous 24 h, livraison partout au Maroc. Ne pas ajouter de plan 3D offert ni de facilités de paiement sans son accord.
 
+### Landing page « stock avec prix » (22/10/2026)
+- La page ne montre plus que les **49 machines du stock**, tirées de l'offre revendeur n° 26-259 (validité 29/10/2026) : `src/data/stock-landing.ts`.
+  - Prix affiché = PU HT de l'offre ; prix barré = PU × 1,20 (demande d'Adil).
+  - Photo et nom viennent de la fiche du site retrouvée par la référence.
+- Rangement par sous-catégorie du site ; une sous-catégorie sans machine en stock est masquée.
+  - Résultat : Multi-stations 1, Mono-stations 4, Charges libres 8 (bancs), Charges guidées 36 (machines à disques, Smith).
+  - Filtre par gamme et « voir plus » au-delà de 8 machines.
+- Sections retirées : bandeau rouge, chiffres, 3 étapes, « Pourquoi Impulse » et références, carrousel des gammes. Tous les boutons WhatsApp sont retirés.
+- Deux parcours :
+  1. **Formulaire simple** (`LeadForm`) : nom et prénom, téléphone, email facultatif. Présent en haut de page, en pop-up et en bas de page.
+  2. **Devis** (`DevisDrawer`) : ajout de machines, quantités, total HT, puis coordonnées → `submit_request` type `devis` (n° DEV-…), avec les lignes et prix dans le message.
+  - Coordonnées partagées entre les deux (`src/components/landing/contact.ts`, localStorage) : le devis est pré-rempli.
+  - Panier gardé dans le navigateur (`impulse-lp-devis`).
+- Le pop-up ne s'ouvre pas si le visiteur a commencé un devis ou un formulaire.
+
 ## 4. Architecture cible
 
 ```

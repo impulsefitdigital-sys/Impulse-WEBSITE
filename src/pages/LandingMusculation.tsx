@@ -3,25 +3,35 @@ import { useQuery } from "@tanstack/react-query";
 import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
 import { thumbProps } from "@/lib/images";
+import { track } from "@/lib/analytics";
 import LeadForm, { LEAD_SENT_KEY } from "@/components/landing/LeadForm";
+import DevisDrawer, { type DevisLine } from "@/components/landing/DevisDrawer";
+import { formatMad } from "@/components/landing/contact";
+import { CROSSED_PRICE_RATIO, STOCK_ITEMS, STOCK_OFFER } from "@/data/stock-landing";
 import logoWhite from "@/assets/logo-new.png";
-import { ArrowRight, Check, ChevronLeft, ChevronRight, Clock, MapPin, MessageCircle, Phone, ShieldCheck, Truck, Wrench, X } from "lucide-react";
+import { ArrowRight, Check, ChevronLeft, ChevronRight, Clock, FileText, MapPin, Minus, Phone, Plus, X } from "lucide-react";
 import "@/styles/landing.css";
 
 /**
  * Landing page des campagnes : Musculation professionnelle (/lp/musculation).
  * Page autonome (sans menu du site), non indexée par Google.
- * Toutes les images et coordonnées viennent de l'admin (Catégories, Gammes, Coordonnées…),
- * donc une photo changée dans l'admin change aussi ici.
- * Formulaire : haut de page (ordinateur), pop-up (60 s ou intention de quitter), bas de page.
+ * On n'y montre QUE les machines du stock (src/data/stock-landing.ts), avec leur prix :
+ *   prix affiché = prix unitaire HT de l'offre ; prix barré = +20 %.
+ * Deux façons de nous contacter :
+ *   1. le formulaire simple (nom, téléphone, email) : haut de page, pop-up, bas de page ;
+ *   2. le devis : le visiteur ajoute des machines, choisit les quantités et envoie (n° DEV-…).
+ * Les coordonnées saisies dans l'un pré-remplissent l'autre.
  */
 
 type Row = Record<string, unknown>;
 const str = (v: unknown) => (typeof v === "string" ? v : "");
 const POPUP_KEY = "impulse-lp-popup-vu";
 const POPUP_DELAY_MS = 60_000;
-// gammes à ne pas mettre en avant dans les campagnes (IT7 : gamme à retirer, notes d'Adil)
-const HIDDEN_RANGES = new Set(["IT7"]);
+const CART_KEY = "impulse-lp-devis";
+const FEATURED_MAX = 12;
+const FEATURED_ORDER = ["ECP", "IT95", "SL", "IFP", "ITF"];
+const SECTION_PREVIEW = 8;
+
 const read = (k: string, store: "local" | "session" = "local") => {
   try { return (store === "local" ? localStorage : sessionStorage).getItem(k); } catch { return null; }
 };
@@ -29,123 +39,135 @@ const write = (k: string, v: string, store: "local" | "session" = "local") => {
   try { (store === "local" ? localStorage : sessionStorage).setItem(k, v); } catch { /* stockage indisponible */ }
 };
 
-// mêmes textes que la page À propos (Admin → À propos, « Pourquoi le Maroc »), utilisés si la section est masquée
-const DEFAULT_REASONS = [
-  { title: "Conseil personnalisé", desc: "Un accompagnement adapté à votre projet, avec un showroom dédié à Bouskoura." },
-  { title: "Large choix", desc: "Équipements professionnels et semi-professionnels disponibles." },
-  { title: "Installation et SAV", desc: "Une équipe technique qualifiée pour la livraison, l'installation et le service après-vente, avec un stock permanent de pièces d'origine." },
-];
-
-// carrousel « Produits phares » : gammes mises en avant (ordre d'alternance), max. de cartes
-const FEATURED_GROUPS: { label: string; match: (code: string) => boolean }[] = [
-  { label: "ECP", match: (c) => c === "ECP" },
-  { label: "IT95", match: (c) => c === "IT95" },
-  { label: "AC", match: (c) => /^AC\d*$/.test(c) },
-];
-const FEATURED_MAX = 18;
-
 const SUB_PITCH: Record<string, string> = {
-  "multi-stations": "Plusieurs exercices sur une seule machine : idéal pour optimiser l'espace.",
-  "mono-stations": "Une machine par groupe musculaire, guidage précis et confort de club.",
-  "charges-libres": "Racks, bancs, cages et accessoires pour l'entraînement libre.",
-  "charges-guidees": "Smith machines et appareils à charge guidée, sûrs et polyvalents.",
+  "multi-stations": "Plusieurs exercices sur une seule machine, pour optimiser l'espace.",
+  "mono-stations": "Une machine par mouvement, guidage précis et confort de club.",
+  "charges-libres": "Bancs et accessoires pour l'entraînement aux charges libres.",
+  "charges-guidees": "Machines à disques et Smith machines, sûres et polyvalentes.",
 };
+
+interface StockProduct extends DevisLine { gamme: string; subSlug: string; subTitle: string; crossed: number; trending: boolean }
 
 const useLandingData = () =>
   useQuery({
-    queryKey: ["lp-musculation"],
+    queryKey: ["lp-musculation-stock"],
     queryFn: async () => {
-      const [cats, subs, ranges, products, settings, about, reals] = await Promise.all([
+      const [cats, subs, products, settings] = await Promise.all([
         supabase.from("equipment_categories").select("*").eq("slug", "musculation").eq("usage_type", "professionnel"),
         supabase.from("equipment_subcategories").select("*").eq("category_slug", "musculation").eq("usage_type", "professionnel").eq("is_active", true).order("sort_order"),
-        supabase.from("product_ranges").select("*").eq("category", "musculation").eq("usage_type", "professionnel").eq("is_active", true).order("sort_order"),
         supabase.from("products").select("*").eq("is_published", true).order("sort_order"),
         supabase.from("contact_settings").select("*"),
-        supabase.from("about_sections").select("*"),
-        supabase.from("realisations").select("*").eq("is_active", true).order("sort_order"),
       ]);
       const s: Record<string, string> = {};
       ((settings.data || []) as Row[]).forEach((r) => { s[str(r.key)] = str(r.value); });
-      const aboutMap: Record<string, string> = {};
-      ((about.data || []) as Row[]).forEach((r) => { aboutMap[str(r.key)] = str(r.content); });
       return {
         cat: ((cats.data || []) as Row[])[0],
         subs: (subs.data || []) as Row[],
-        ranges: (ranges.data || []) as Row[],
         products: (products.data || []) as Row[],
         settings: s,
-        about: aboutMap,
-        reals: (reals.data || []) as Row[],
       };
     },
     staleTime: 5 * 60 * 1000,
   });
 
 const LandingMusculation = () => {
-  const { data } = useLandingData();
+  const { data, isLoading } = useLandingData();
   const [modal, setModal] = useState<{ open: boolean; interest?: string; auto?: boolean }>({ open: false });
-  const formStarted = useRef(false);
+  const [drawer, setDrawer] = useState(false);
+  const [cart, setCart] = useState<Record<string, number>>(() => {
+    try { return JSON.parse(read(CART_KEY) || "{}") as Record<string, number>; } catch { return {}; }
+  });
+  const [flash, setFlash] = useState("");
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
+  const [gammeFilter, setGammeFilter] = useState<Record<string, string>>({});
+  const engaged = useRef(false);
   const sent = useRef(!!read(LEAD_SENT_KEY));
+  const trackRef = useRef<HTMLDivElement>(null);
 
   const s = data?.settings || {};
-  const wa = (s.whatsapp_number || "").replace(/\D/g, "");
   const phone = s.phone_1 || "";
-  const waLink = wa ? `https://wa.me/${wa}?text=${encodeURIComponent("Bonjour, je souhaite une offre pour équiper ma salle de musculation.")}` : "";
-
-  const subs = data?.subs || [];
+  const subs = useMemo(() => data?.subs || [], [data]);
   const heroImg = str(data?.cat?.image_url) || str(subs[0]?.image_url);
 
-  // gammes de musculation pro qui ont des produits publiés, la plus fournie d'abord
-  // produits phares : ECP, IT95, AC en alternance (les produits « tendance » de l'admin d'abord)
-  const featured = useMemo(() => {
+  // machines du stock retrouvées sur le site (photo, nom, sous-catégorie)
+  const stock = useMemo<StockProduct[]>(() => {
     if (!data) return [];
-    const groups = FEATURED_GROUPS.map((g) =>
-      data.products
-        .filter((p) => g.match(str(p.range_code)) && str(p.image_url))
-        .sort((a, b) => Number(!!b.is_trending) - Number(!!a.is_trending)),
-    );
-    const out: Row[] = [];
+    const subByTitle = new Map(subs.map((x) => [str(x.title), x]));
+    const out: StockProduct[] = [];
+    for (const it of STOCK_ITEMS) {
+      const re = new RegExp(`\\b${it.ref}\\b`);
+      const p = data.products
+        .filter((x) => re.test(str(x.name)))
+        .sort((a, b) => Number(!b.image_url) - Number(!a.image_url))[0];
+      if (!p) continue;
+      const sub = subByTitle.get(str(p.subcategory));
+      out.push({
+        ref: it.ref, productId: str(p.id), name: str(p.name).replace(/\s+/g, " ").trim(), image: str(p.image_url),
+        category: str(p.category) || "Musculation", pu: it.pu, qty: 0, gamme: str(p.range_code) || it.ref.replace(/\d.*/, ""),
+        subSlug: sub ? str(sub.slug) : "autres", subTitle: sub ? str(sub.title) : "Autres machines",
+        crossed: Math.round(it.pu * CROSSED_PRICE_RATIO), trending: !!p.is_trending,
+      });
+    }
+    return out;
+  }, [data, subs]);
+
+  // sections = sous-catégories qui ont au moins une machine en stock (les autres sont masquées)
+  const sections = useMemo(() => {
+    const order = subs.map((x) => str(x.slug));
+    const map = new Map<string, { slug: string; title: string; image: string; items: StockProduct[] }>();
+    for (const p of stock) {
+      if (!map.has(p.subSlug)) {
+        const sub = subs.find((x) => str(x.slug) === p.subSlug);
+        map.set(p.subSlug, { slug: p.subSlug, title: p.subTitle, image: str(sub?.image_url), items: [] });
+      }
+      map.get(p.subSlug)!.items.push(p);
+    }
+    return [...map.values()].sort((a, b) => (order.indexOf(a.slug) + 1 || 99) - (order.indexOf(b.slug) + 1 || 99));
+  }, [stock, subs]);
+
+  // produits phares : machines « tendance » de l'admin d'abord, puis une par gamme à tour de rôle
+  const featured = useMemo(() => {
+    const groups = FEATURED_ORDER.map((g) => stock.filter((p) => p.gamme === g).sort((a, b) => Number(b.trending) - Number(a.trending) || b.pu - a.pu));
+    const out: StockProduct[] = [];
     for (let i = 0; out.length < FEATURED_MAX && groups.some((g) => i < g.length); i++) {
       for (const g of groups) if (g[i] && out.length < FEATURED_MAX) out.push(g[i]);
     }
     return out;
-  }, [data]);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const slide = (dir: -1 | 1) => {
-    const el = trackRef.current;
-    if (el) el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: "smooth" });
+  }, [stock]);
+
+  const lines = useMemo<DevisLine[]>(() => stock.filter((p) => cart[p.ref] > 0).map((p) => ({ ...p, qty: cart[p.ref] })), [stock, cart]);
+  const cartCount = lines.reduce((n, l) => n + l.qty, 0);
+  const cartTotal = lines.reduce((n, l) => n + l.qty * l.pu, 0);
+
+  useEffect(() => { write(CART_KEY, JSON.stringify(cart)); }, [cart]);
+
+  const setQty = useCallback((ref: string, qty: number) => {
+    setCart((c) => {
+      const next = { ...c };
+      if (qty <= 0) delete next[ref]; else next[ref] = Math.min(qty, 99);
+      return next;
+    });
+  }, []);
+  const add = (p: StockProduct) => {
+    engaged.current = true;
+    setQty(p.ref, (cart[p.ref] || 0) + 1);
+    if (!cart[p.ref]) track("quote_add", { label: p.ref, product_id: p.productId });
+    setFlash(p.name);
+    window.setTimeout(() => setFlash((f) => (f === p.name ? "" : f)), 2600);
   };
 
-  const ranges = useMemo(() => {
-    if (!data) return [];
-    const subTitles = new Set(subs.map((x) => str(x.title)));
-    const seen = new Map<string, { code: string; label: string; image: string; count: number; desc: string }>();
-    for (const r of data.ranges) {
-      const code = str(r.code);
-      if (seen.has(code) || HIDDEN_RANGES.has(code)) continue;
-      const prods = data.products.filter((p) => p.range_code === code && p.category === "Musculation" && (p.usage_type === "professionnel" || p.usage_type === "both") && subTitles.has(str(p.subcategory)));
-      if (!prods.length) continue;
-      seen.set(code, { code, label: str(r.label), desc: str(r.description), image: str(r.image_url) || str(prods[0].image_url), count: prods.length });
-    }
-    return [...seen.values()].sort((a, b) => b.count - a.count).slice(0, 10);
-  }, [data, subs]);
-
-  const stats = useMemo(() => (data?.about.chiffres_cles || "").split("\n").map((l) => l.split("|")).filter((p) => p.length === 3).slice(0, 4), [data]);
-  const reasons = useMemo(() => {
-    try {
-      const fromAdmin = (JSON.parse(data?.about.why_maroc_cards || "[]") as { title: string; desc: string }[]).slice(0, 3);
-      if (fromAdmin.length) return fromAdmin;
-    } catch { /* texte de l'admin illisible : textes par défaut */ }
-    return DEFAULT_REASONS;
-  }, [data]);
-  const clients = (data?.reals || []).map((r) => ({ name: str(r.title).trim(), city: str(r.location || r.city).trim() })).filter((c) => c.name);
-
   const openForm = useCallback((interest?: string, auto = false) => {
-    if (auto && (sent.current || formStarted.current)) return;
+    if (auto && (sent.current || engaged.current)) return;
     if (auto) write(POPUP_KEY, "1", "session");
     setModal({ open: true, interest, auto });
   }, []);
-  const close = () => setModal({ open: false });
+  const closeModal = () => setModal({ open: false });
+  const openDevis = () => { engaged.current = true; setModal({ open: false }); setDrawer(true); track("quote_open", { label: "landing" }); };
+  const goToMachines = () => {
+    setDrawer(false);
+    setModal({ open: false });
+    document.getElementById("machines")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   // classe sur <body> : le bandeau cookies se place au-dessus de la barre fixe du téléphone
   useEffect(() => {
@@ -153,7 +175,8 @@ const LandingMusculation = () => {
     return () => document.body.classList.remove("is-lp");
   }, []);
 
-  // pop-up automatique : après 60 s, ou si la souris quitte la page (ordinateur) après 10 s
+  // pop-up automatique : après 60 s, ou si la souris quitte la page (ordinateur) après 10 s ;
+  // jamais si la personne a déjà envoyé une demande ou commencé un devis / un formulaire
   useEffect(() => {
     if (sent.current || read(POPUP_KEY, "session")) return;
     const t0 = Date.now();
@@ -166,25 +189,56 @@ const LandingMusculation = () => {
     return () => { window.clearTimeout(timer); document.removeEventListener("mouseout", onLeave); };
   }, [openForm]);
 
-  // fenêtre : Échap pour fermer, pas de défilement derrière
+  // fenêtres : Échap pour fermer, pas de défilement derrière
+  const anyOverlay = modal.open || drawer;
   useEffect(() => {
-    if (!modal.open) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
+    if (!anyOverlay) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") { setModal({ open: false }); setDrawer(false); } };
     document.addEventListener("keydown", onKey);
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = prev; };
-  }, [modal.open]);
+  }, [anyOverlay]);
 
-  const markStarted = () => { formStarted.current = true; };
-  const markSent = () => { sent.current = true; };
-  const formProps = { whatsappNumber: wa, onStarted: markStarted, onDone: markSent };
+  const formProps = { onStarted: () => { engaged.current = true; }, onDone: () => { sent.current = true; }, onOpenDevis: openDevis };
+  const slide = (dir: -1 | 1) => { const el = trackRef.current; if (el) el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: "smooth" }); };
+
+  const renderPrice = (p: StockProduct) => (
+    <span className="lp-price">
+      <span className="lp-price-now">{formatMad(p.pu)}<small> HT</small></span>
+      <s className="lp-price-old" aria-label={`Au lieu de ${formatMad(p.crossed)}`}>{formatMad(p.crossed)}</s>
+    </span>
+  );
+  const renderAdd = (p: StockProduct) =>
+    cart[p.ref] ? (
+      <span className="lp-incart">
+        <span className="lp-qty sm" role="group" aria-label={`Quantité ${p.name}`}>
+          <button onClick={() => setQty(p.ref, cart[p.ref] - 1)} aria-label="Retirer une unité"><Minus /></button>
+          <span>{cart[p.ref]}</span>
+          <button onClick={() => setQty(p.ref, cart[p.ref] + 1)} aria-label="Ajouter une unité"><Plus /></button>
+        </span>
+        <button className="lp-incart-see" onClick={openDevis}><Check /> Dans le devis</button>
+      </span>
+    ) : (
+      <button className="lp-btn lp-btn-dark lp-add" onClick={() => add(p)}><Plus /> Ajouter au devis</button>
+    );
+  const renderCard = (p: StockProduct) => (
+    <article className="lp-card" key={p.ref}>
+      <div className="lp-card-shot"><img {...thumbProps(p.image)} alt={p.name} loading="lazy" decoding="async" /></div>
+      <div className="lp-card-body">
+        <span className="lp-card-gamme">{p.gamme} · En stock</span>
+        <h3 className="lp-card-name">{p.name}</h3>
+        {renderPrice(p)}
+        {renderAdd(p)}
+      </div>
+    </article>
+  );
 
   return (
     <div className="lp">
       <Helmet>
-        <title>Équipez votre salle de musculation | Impulse Fitness Maroc</title>
-        <meta name="description" content="Machines de musculation professionnelles Impulse disponibles en stock au Maroc. Livraison et installation partout au Maroc, rappel sous 24 h. Showroom à Bouskoura." />
+        <title>Machines de musculation en stock | Impulse Fitness Maroc</title>
+        <meta name="description" content="Machines de musculation professionnelles Impulse disponibles en stock au Maroc, avec prix. Composez votre devis en ligne. Livraison et installation partout au Maroc." />
         <meta name="robots" content="noindex, follow" />
         {heroImg && <link rel="preload" as="image" href={heroImg} />}
       </Helmet>
@@ -195,7 +249,9 @@ const LandingMusculation = () => {
           <a href="/" className="lp-logo" aria-label="Impulse Fitness Maroc — site complet"><img src={logoWhite} alt="Impulse Fitness Maroc" width={150} height={34} /></a>
           <div className="lp-top-actions">
             {phone && <a className="lp-top-phone" href={`tel:${phone.replace(/\s/g, "")}`}><Phone /> <span>{phone}</span></a>}
-            <button className="lp-btn lp-btn-red lp-btn-sm" onClick={() => openForm()}>Être rappelé</button>
+            <button className={`lp-btn lp-btn-sm ${cartCount ? "lp-btn-red" : "lp-btn-outline"}`} onClick={openDevis}>
+              <FileText /> Mon devis{cartCount ? ` (${cartCount})` : ""}
+            </button>
           </div>
         </div>
       </header>
@@ -207,93 +263,39 @@ const LandingMusculation = () => {
         <div className="lp-wrap lp-hero-grid">
           <div className="lp-hero-copy">
             <span className="lp-eyebrow">Distributeur officiel Impulse au Maroc</span>
-            <h1>Équipez votre salle de musculation <em>avec Impulse</em></h1>
-            <p className="lp-lead">Machines professionnelles <strong>disponibles en stock au Maroc</strong>. Un conseiller vous rappelle sous 24 h avec une offre adaptée à votre espace.</p>
+            <h1>Machines de musculation <em>en stock au Maroc</em></h1>
+            <p className="lp-lead">{stock.length || STOCK_ITEMS.length} machines professionnelles Impulse <strong>disponibles immédiatement, prix affichés</strong>. Composez votre devis en ligne en quelques clics, un conseiller vous rappelle sous 24 h.</p>
             <ul className="lp-ticks">
               <li><Check /> Stock disponible au Maroc</li>
+              <li><Check /> Prix affichés, devis en ligne</li>
               <li><Check /> Livraison et installation partout au Maroc</li>
               <li><Check /> Showroom à Bouskoura</li>
-              <li><Check /> SAV et pièces d'origine</li>
             </ul>
             <div className="lp-hero-ctas">
-              <button className="lp-btn lp-btn-red lp-btn-lg" onClick={() => openForm()}>Recevoir mon offre <ArrowRight /></button>
-              {waLink && <a className="lp-btn lp-btn-wa lp-btn-lg" href={waLink} target="_blank" rel="noopener noreferrer"><MessageCircle /> WhatsApp</a>}
+              <button className="lp-btn lp-btn-red lp-btn-lg" onClick={goToMachines}>Préparer mon devis <ArrowRight /></button>
+              <button className="lp-btn lp-btn-ghost lp-btn-lg" onClick={() => openForm()}>Être rappelé</button>
             </div>
           </div>
-          <div className="lp-hero-form" id="offre-haut">
-            <p className="lp-form-title">Recevez votre offre <span>en 30 secondes</span></p>
-            <LeadForm idPrefix="haut" {...formProps} compact />
+          <div className="lp-hero-form">
+            <p className="lp-form-title">Être rappelé <span>sous 24 h ouvrées</span></p>
+            <LeadForm idPrefix="haut" {...formProps} />
           </div>
         </div>
       </section>
 
-      {/* bande de promesses */}
-      <div className="lp-band">
-        <div className="lp-wrap lp-band-in">
-          <span><Clock /> Rappel sous 24 h</span>
-          <span><Truck /> Livraison partout au Maroc</span>
-          <span><Wrench /> Installation par nos techniciens</span>
-          <span><ShieldCheck /> Distributeur officiel</span>
-        </div>
-      </div>
-
-      {/* 2. chiffres */}
-      {stats.length > 0 && (
-        <section className="lp-stats">
-          <div className="lp-wrap lp-stats-in">
-            {stats.map(([pre, num, lbl]) => (
-              <div key={lbl} className="lp-stat"><strong>{pre}{num}</strong><span>{lbl}</span></div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* 3. univers */}
-      <section className="lp-sec">
-        <div className="lp-wrap">
-          <div className="lp-head">
-            <span className="lp-eyebrow dark">Musculation professionnelle</span>
-            <h2>Tout pour équiper votre salle</h2>
-            <p>De la petite salle d'hôtel au grand club, choisissez votre univers : on vous conseille le bon mix de machines.</p>
-          </div>
-          <div className="lp-univers">
-            {(subs.length ? subs : Array.from({ length: 4 }, () => ({} as Row))).map((sub, i) => (
-              <article className="lp-uni" key={str(sub.id) || i}>
-                <div className="lp-uni-img">{str(sub.image_url) && <img src={str(sub.image_url)} alt={str(sub.title)} loading="lazy" decoding="async" />}</div>
-                <div className="lp-uni-body">
-                  <h3>{str(sub.title) || " "}</h3>
-                  <p>{SUB_PITCH[str(sub.slug)] || ""}</p>
-                  <button className="lp-link" onClick={() => openForm(str(sub.title))}>Demander un devis <ArrowRight /></button>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 3 bis. produits phares */}
+      {/* 2. produits phares (machines du stock) */}
       {featured.length > 0 && (
         <section className="lp-sec lp-prods">
           <div className="lp-wrap">
             <div className="lp-head">
               <span className="lp-eyebrow dark">Produits phares</span>
               <h2>Les machines les plus demandées</h2>
-              <p>Musculation ECP et IT95, tapis de course AC : cliquez sur une machine pour recevoir son offre.</p>
+              <p>En stock au Maroc. Ajoutez-les à votre devis, ajustez les quantités et envoyez : c'est gratuit et sans engagement.</p>
             </div>
             <div className="lp-carousel">
               <button className="lp-nav prev" onClick={() => slide(-1)} aria-label="Produits précédents"><ChevronLeft /></button>
               <div className="lp-prod-track" ref={trackRef}>
-                {featured.map((p) => (
-                  <button type="button" className="lp-prod" key={str(p.id)} onClick={() => openForm(str(p.name))}>
-                    <span className="lp-prod-shot"><img {...thumbProps(str(p.image_url))} alt={str(p.name)} loading="lazy" decoding="async" /></span>
-                    <span className="lp-prod-meta">
-                      <span className="lp-prod-cat">{str(p.category)}</span>
-                      <span className="lp-prod-name">{str(p.name)}</span>
-                      <span className="lp-prod-code">{str(p.range_code)}</span>
-                      <span className="lp-prod-cta">Recevoir l'offre <ArrowRight /></span>
-                    </span>
-                  </button>
-                ))}
+                {featured.map(renderCard)}
               </div>
               <button className="lp-nav next" onClick={() => slide(1)} aria-label="Produits suivants"><ChevronRight /></button>
             </div>
@@ -301,73 +303,68 @@ const LandingMusculation = () => {
         </section>
       )}
 
-      {/* 4. gammes */}
-      {ranges.length > 0 && (
-        <section className="lp-sec lp-sec-alt">
-          <div className="lp-wrap">
-            <div className="lp-head">
-              <span className="lp-eyebrow dark">Les gammes Impulse</span>
-              <h2>{ranges.length} gammes, plus de {Math.floor(ranges.reduce((n, r) => n + r.count, 0) / 10) * 10} machines</h2>
-              <p>Faites défiler et demandez l'offre de la gamme qui vous intéresse.</p>
-            </div>
-          </div>
-          <div className="lp-ranges" role="list">
-            {ranges.map((r) => (
-              <div className="lp-range" role="listitem" key={r.code}>
-                <div className="lp-range-img"><img {...thumbProps(r.image)} alt={`Gamme ${r.code}`} loading="lazy" decoding="async" /></div>
-                <div className="lp-range-body">
-                  <h3>{r.code}</h3>
-                  <p>{r.label || r.desc || `${r.count} machine${r.count > 1 ? "s" : ""}`}</p>
-                  <button className="lp-link" onClick={() => openForm(`Gamme ${r.code}`)}>Offre gamme {r.code} <ArrowRight /></button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* 5. étapes */}
-      <section className="lp-sec">
+      {/* 3. le stock, par univers */}
+      <section className="lp-sec lp-catalog" id="machines">
         <div className="lp-wrap">
           <div className="lp-head">
-            <span className="lp-eyebrow dark">Comment ça marche</span>
-            <h2>Votre salle équipée en 3 étapes</h2>
+            <span className="lp-eyebrow dark">Tout le stock</span>
+            <h2>Choisissez vos machines</h2>
+            <p>Prix unitaires HT du stock disponible. Offre n° {STOCK_OFFER.numero}, valable jusqu'au {STOCK_OFFER.validite}.</p>
           </div>
-          <ol className="lp-steps">
-            <li><span className="lp-step-n">1</span><h3>Décrivez votre projet</h3><p>Type d'espace et surface en 2 clics, puis vos coordonnées. 30 secondes suffisent.</p></li>
-            <li><span className="lp-step-n">2</span><h3>Un conseiller vous rappelle</h3><p>Sous 24 h ouvrées, avec une sélection de machines adaptée à votre espace et à votre budget.</p></li>
-            <li><span className="lp-step-n">3</span><h3>Livraison et installation</h3><p>Partout au Maroc, par notre équipe technique. SAV et pièces d'origine sur place.</p></li>
-          </ol>
-          <div className="lp-center"><button className="lp-btn lp-btn-red lp-btn-lg" onClick={() => openForm()}>Je décris mon projet <ArrowRight /></button></div>
+
+          {isLoading && <p className="lp-loading">Chargement du stock…</p>}
+
+          {sections.length > 1 && (
+            <nav className="lp-univers" aria-label="Univers">
+              {sections.map((sec) => (
+                <a className="lp-uni" key={sec.slug} href={`#univers-${sec.slug}`} onClick={(e) => { e.preventDefault(); document.getElementById(`univers-${sec.slug}`)?.scrollIntoView({ behavior: "smooth" }); }}>
+                  <span className="lp-uni-img">{sec.image && <img src={sec.image} alt="" loading="lazy" decoding="async" />}</span>
+                  <span className="lp-uni-body">
+                    <h3>{sec.title}</h3>
+                    <span className="lp-uni-count">{sec.items.length} machine{sec.items.length > 1 ? "s" : ""} en stock</span>
+                  </span>
+                </a>
+              ))}
+            </nav>
+          )}
+
+          {sections.map((sec) => {
+            const gammes = [...new Set(sec.items.map((p) => p.gamme))];
+            const g = gammeFilter[sec.slug] || "";
+            const list = g ? sec.items.filter((p) => p.gamme === g) : sec.items;
+            const open = openSections[sec.slug] || list.length <= SECTION_PREVIEW + 2;
+            const shown = open ? list : list.slice(0, SECTION_PREVIEW);
+            return (
+              <div className="lp-section" id={`univers-${sec.slug}`} key={sec.slug}>
+                <div className="lp-section-head">
+                  <div>
+                    <h3>{sec.title}</h3>
+                    {SUB_PITCH[sec.slug] && <p>{SUB_PITCH[sec.slug]}</p>}
+                  </div>
+                  {gammes.length > 1 && sec.items.length > SECTION_PREVIEW && (
+                    <div className="lp-filter" role="group" aria-label={`Gammes ${sec.title}`}>
+                      <button className={!g ? "on" : ""} aria-pressed={!g} onClick={() => setGammeFilter((f) => ({ ...f, [sec.slug]: "" }))}>Toutes ({sec.items.length})</button>
+                      {gammes.map((x) => (
+                        <button key={x} className={g === x ? "on" : ""} aria-pressed={g === x} onClick={() => setGammeFilter((f) => ({ ...f, [sec.slug]: x }))}>{x}</button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <div className="lp-grid">{shown.map(renderCard)}</div>
+                {!open && (
+                  <div className="lp-center">
+                    <button className="lp-btn lp-btn-outline-dark" onClick={() => setOpenSections((o) => ({ ...o, [sec.slug]: true }))}>
+                      Voir les {list.length - SECTION_PREVIEW} autres machines
+                    </button>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </section>
 
-      {/* 6. pourquoi + références */}
-      {(reasons.length > 0 || clients.length > 0) && (
-        <section className="lp-sec lp-sec-alt">
-          <div className="lp-wrap">
-            {reasons.length > 0 && (
-              <>
-                <div className="lp-head">
-                  <span className="lp-eyebrow dark">Pourquoi Impulse Fitness Maroc</span>
-                  <h2>Un interlocuteur au Maroc, de l'offre au SAV</h2>
-                </div>
-                <div className="lp-reasons">
-                  {reasons.map((r) => <div className="lp-reason" key={r.title}><h3>{r.title}</h3><p>{r.desc}</p></div>)}
-                </div>
-              </>
-            )}
-            {clients.length > 0 && (
-              <div className="lp-clients">
-                <p>Ils ont équipé leur salle avec Impulse</p>
-                <ul>{clients.map((c) => <li key={c.name}><strong>{c.name}</strong>{c.city && <span>{c.city}</span>}</li>)}</ul>
-              </div>
-            )}
-          </div>
-        </section>
-      )}
-
-      {/* 7. showroom */}
+      {/* 4. showroom */}
       <section className="lp-showroom">
         <div className="lp-wrap lp-showroom-in">
           <div>
@@ -383,16 +380,16 @@ const LandingMusculation = () => {
         </div>
       </section>
 
-      {/* 8. formulaire de bas de page */}
+      {/* 5. formulaire de bas de page */}
       <section className="lp-sec lp-final" id="offre">
         <div className="lp-wrap lp-final-grid">
           <div className="lp-final-copy">
-            <span className="lp-eyebrow dark">Votre offre personnalisée</span>
-            <h2>Profitez du stock disponible, demandez votre offre aujourd'hui</h2>
-            <p>Dites-nous en 2 clics quel espace vous équipez. Un conseiller Impulse vous rappelle sous 24 h ouvrées avec une proposition adaptée.</p>
+            <span className="lp-eyebrow dark">Parlons de votre salle</span>
+            <h2>Profitez du stock disponible, contactez-nous aujourd'hui</h2>
+            <p>Laissez vos coordonnées : un conseiller Impulse vous rappelle sous 24 h ouvrées. Vous préférez un devis chiffré ? Composez-le vous-même en quelques clics.</p>
             <div className="lp-final-alt">
+              <button className="lp-btn lp-btn-dark" onClick={cartCount ? openDevis : goToMachines}><FileText /> {cartCount ? `Voir mon devis (${cartCount})` : "Préparer mon devis"}</button>
               {phone && <a href={`tel:${phone.replace(/\s/g, "")}`}><Phone /> {phone}</a>}
-              {waLink && <a href={waLink} target="_blank" rel="noopener noreferrer"><MessageCircle /> WhatsApp</a>}
             </div>
           </div>
           <div className="lp-final-form"><LeadForm idPrefix="bas" {...formProps} /></div>
@@ -403,10 +400,10 @@ const LandingMusculation = () => {
       <section className="lp-sec lp-faq">
         <div className="lp-wrap lp-faq-in">
           <h2>Questions fréquentes</h2>
-          <details><summary>Les machines sont-elles disponibles rapidement ?</summary><p>La gamme de musculation professionnelle est disponible en stock au Maroc. Votre conseiller vous confirme la disponibilité de chaque machine lors de son appel.</p></details>
+          <details><summary>Les prix affichés sont-ils HT ou TTC ?</summary><p>Les prix sont des prix unitaires hors taxes (HT), pour les machines du stock disponible. Votre conseiller vous confirme le devis final, avec la livraison et l'installation.</p></details>
+          <details><summary>Les machines sont-elles vraiment disponibles ?</summary><p>Oui, toutes les machines de cette page sont en stock au Maroc. Les quantités étant limitées, votre conseiller confirme la disponibilité de chaque machine à la réception de votre devis.</p></details>
           <details><summary>Livrez-vous et installez-vous dans tout le Maroc ?</summary><p>Oui. Notre équipe technique assure la livraison et l'installation partout au Maroc, ainsi que le service après-vente avec un stock de pièces d'origine.</p></details>
           <details><summary>Puis-je voir les machines avant de commander ?</summary><p>Oui, au showroom de Bouskoura{s.hours_line_1 ? ` (${[s.hours_line_1, s.hours_line_2].filter(Boolean).join(", ")})` : ""}. Demandez une visite : un conseiller vous accueille.</p></details>
-          <details><summary>Je ne connais pas encore la surface exacte, est-ce un problème ?</summary><p>Pas du tout : choisissez « Je ne sais pas encore ». Le conseiller vous aide à définir l'implantation lors de l'appel.</p></details>
         </div>
       </section>
 
@@ -417,24 +414,38 @@ const LandingMusculation = () => {
         </div>
       </footer>
 
+      {/* confirmation d'ajout */}
+      {flash && !drawer && (
+        <div className="lp-flash" role="status">
+          <Check /> <span><strong>{flash}</strong> ajouté au devis</span>
+          <button onClick={openDevis}>Voir le devis</button>
+        </div>
+      )}
+
       {/* barre fixe téléphone */}
-      <div className="lp-sticky" aria-hidden={modal.open}>
-        <button className="lp-btn lp-btn-red" onClick={() => openForm()}>Recevoir mon offre</button>
-        {waLink && <a className="lp-btn lp-btn-wa" href={waLink} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><MessageCircle /></a>}
+      <div className="lp-sticky" aria-hidden={anyOverlay}>
+        {cartCount ? (
+          <button className="lp-btn lp-btn-red" onClick={openDevis}><FileText /> Mon devis ({cartCount}) · {formatMad(cartTotal)}</button>
+        ) : (
+          <button className="lp-btn lp-btn-red" onClick={goToMachines}>Préparer mon devis</button>
+        )}
+        <button className="lp-btn lp-btn-ghost" onClick={() => openForm()}>Être rappelé</button>
       </div>
 
-      {/* fenêtre formulaire */}
+      {/* fenêtre formulaire simple */}
       {modal.open && (
-        <div className="lp-modal" role="dialog" aria-modal="true" aria-labelledby="lp-modal-title" onClick={close}>
+        <div className="lp-modal" role="dialog" aria-modal="true" aria-labelledby="lp-modal-title" onClick={closeModal}>
           <div className="lp-modal-box" onClick={(e) => e.stopPropagation()}>
-            <button className="lp-modal-x" onClick={close} aria-label="Fermer"><X /></button>
-            <p className="lp-modal-kicker">{modal.auto ? "Avant de partir…" : modal.interest || "Offre personnalisée"}</p>
-            <h2 id="lp-modal-title">{modal.auto ? "Recevez votre offre Impulse en 30 secondes" : "Recevez votre offre en 30 secondes"}</h2>
-            <p className="lp-modal-sub">Un conseiller vous rappelle sous 24 h ouvrées. Livraison et installation partout au Maroc.</p>
+            <button className="lp-modal-x" onClick={closeModal} aria-label="Fermer"><X /></button>
+            <p className="lp-modal-kicker">{modal.auto ? "Avant de partir…" : modal.interest || "Être rappelé"}</p>
+            <h2 id="lp-modal-title">Un conseiller vous rappelle sous 24 h</h2>
+            <p className="lp-modal-sub">Laissez vos coordonnées. Vous pourrez aussi composer votre devis : elles y seront déjà remplies.</p>
             <LeadForm idPrefix="popup" interest={modal.interest} {...formProps} />
           </div>
         </div>
       )}
+
+      {drawer && <DevisDrawer lines={lines} setQty={setQty} onClose={() => setDrawer(false)} onSent={() => { sent.current = true; setCart({}); }} onBrowse={goToMachines} />}
     </div>
   );
 };
