@@ -243,6 +243,12 @@ Retours d'Adil après la mise en ligne, et check-up de l'infrastructure.
   - Panier gardé dans le navigateur (`impulse-lp-devis`).
 - Le pop-up ne s'ouvre pas si le visiteur a commencé un devis ou un formulaire.
 
+### 22/10/2026 (soir) — Landing page : stock par gamme + fiches produit
+- Le stock est rangé **par gamme** (IT95, ECP, SL, IFP, ITF) : cartes gamme du site (affiche = image de la gamme dans Admin → Gammes, sinon photo d'une machine), puis une section par gamme avec les **cartes produit du site** (photo au survol, bouton devis rond) + prix HT et prix barré +20 %.
+- Clic sur une machine → **fiche produit complète** sur `/lp/musculation/:id` (même affichage que le site : galerie, couleurs, description, caractéristiques, garantie, autres machines en stock de la gamme), avec le prix du stock, « Ajouter au devis » / quantité et « Être rappelé ». « Retour au stock » revient sur la machine dans la liste.
+- La fiche produit est maintenant un composant partagé : `src/components/ProductDetailView.tsx`, utilisé par `/produit/:id` (site, inchangé à l'écran) et par la landing.
+- Route : `/lp/musculation/:id?` dans `src/App.tsx`. Aucun changement de base de données.
+
 ## 4. Architecture cible
 
 ```
