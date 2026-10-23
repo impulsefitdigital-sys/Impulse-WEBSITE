@@ -256,6 +256,13 @@ Retours d'Adil après la mise en ligne, et check-up de l'infrastructure.
 - La fiche produit revient sur la page de sa gamme (« Retour à la gamme ECP »), à la hauteur de la machine.
 - Plus de mention « en stock » à côté des nombres de machines ni sur les cartes (« 8 machines » seulement) ; FAQ et textes ajustés.
 
+### 23/10/2026 — Landing page refaite d'après la maquette du client (« Offre de lancement »)
+- Bandeau rouge « Offre de lancement », en-tête blanc (logo → site, « Mon devis (n) », WhatsApp), visuel `public/lp/hero-lancement.webp` (+ version 1000 px pour téléphone).
+- Accueil : 3 catégories (Multistation = gamme IT95 ; Musculation libre = sous-catégorie Charges libres ; Musculation guidée = le reste), 2 machines par catégorie, bandeau « Voir mon devis », showroom (carte Google Maps de l'admin, Itinéraire, WhatsApp), bandeau « Projet sur mesure » (formulaire simple), pied de page.
+- Page d'une catégorie : `/lp/musculation/machines/<multistation|musculation-guidee|musculation-libre>`, filtre par gamme `?gamme=ecp`. Les anciennes adresses `/lp/musculation/gamme/<code>` redirigent vers la bonne catégorie.
+- Cartes produit : « Impulse REF », type, prix HT en rouge, prix barré (+20 %), « Garantie 12 mois » et « Livraison sous 72 h » (textes de la maquette, constantes en haut de `LandingMusculation.tsx`), « Ajouter au devis ».
+- Plus aucun lien vers le site sauf le logo (en-tête et pied de page). FAQ et formulaires intégrés à la page retirés ; le formulaire simple reste dans la fenêtre (pop-up 60 s, « Demander un devis personnalisé »).
+
 ## 4. Architecture cible
 
 ```
