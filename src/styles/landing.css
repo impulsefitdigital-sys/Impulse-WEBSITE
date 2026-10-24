@@ -48,19 +48,13 @@
 .lp-top-devis{display:inline-flex;align-items:center;gap:9px;background:none;border:0;padding:8px 4px;font:600 14px var(--lp-font);color:var(--lp-text);cursor:pointer;font-variant-numeric:tabular-nums}
 .lp-top-devis svg{width:20px;height:20px}
 .lp-top-devis.on{color:var(--lp-red);font-weight:800}
-.lp-top-sep{width:1px;height:28px;background:var(--lp-line)}
-.lp-wa-round{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:var(--lp-wa);color:#fff;transition:background .2s,transform .2s}
-.lp-wa-round:hover{background:var(--lp-wa-deep);transform:scale(1.06)}
-.lp-wa-round .lp-wa-ico{width:22px!important;height:22px!important}
 
-/* ---------------------------------------------------------------- visuel + boutons */
+/* ---------------------------------------------------------------- visuel */
 .lp-hero{background:#0b0b0c;line-height:0}
 .lp-hero img{display:block;width:100%;height:auto;max-height:78vh;object-fit:cover;object-position:center}
-.lp-hero-ctas{display:flex;justify-content:center;flex-wrap:wrap;gap:16px;padding-top:22px;padding-bottom:22px}
-.lp-hero-ctas .lp-btn{min-width:min(320px,100%)}
 
 /* ---------------------------------------------------------------- 3 catégories */
-.lp-cats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;scroll-margin-top:110px}
+.lp-cats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:22px;scroll-margin-top:110px}
 .lp-cat{display:flex;flex-direction:column;align-items:center;gap:14px;padding:18px 18px 22px;background:linear-gradient(180deg,#fafafa 0%,#ececec 100%);border-radius:4px;text-align:center;transition:box-shadow .25s,transform .25s}
 .lp-cat:hover{box-shadow:0 18px 40px -18px rgba(12,12,18,.35);transform:translateY(-3px)}
 .lp-cat-img{display:block;width:100%;aspect-ratio:4/3;overflow:hidden}
@@ -150,6 +144,9 @@
 .lp-foot-logo img{height:28px;width:auto;display:block}
 .lp-foot-sep{width:1px;height:30px;background:rgba(255,255,255,.4)}
 .lp-foot p{margin:0;font-size:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.lp-foot-legal{display:flex;justify-content:center;align-items:center;gap:10px;padding-bottom:18px;color:#8a8a92;font-size:12px}
+.lp-foot-legal button{background:none;border:0;padding:4px;color:#b5b5bd;font:500 12px var(--lp-font);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.lp-foot-legal button:hover{color:#fff}
 
 /* ---------------------------------------------------------------- page d'une catégorie */
 .lp-catpage{padding-top:26px}
@@ -229,6 +226,9 @@
 .lf-done p{margin:0;color:var(--lp-steel)}
 .lf-done-icon{display:inline-flex;width:52px;height:52px;border-radius:50%;background:#1d9a4b;color:#fff;align-items:center;justify-content:center}
 .lf-done-icon svg{width:28px;height:28px}
+.lf-done-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;width:100%}
+.lp-drawer-body.lf-done{display:flex;flex-direction:column;gap:12px;padding:24px 20px}
+.lf-done-actions .lp-btn{flex:1 1 200px}
 
 /* ---------------------------------------------------------------- fenêtre (pop-up) */
 .lp-modal{position:fixed;inset:0;z-index:100;background:rgba(8,8,10,.66);display:flex;align-items:center;justify-content:center;padding:20px;animation:lp-fade .25s ease-out both}
@@ -237,13 +237,20 @@
 .lp-modal-kicker{margin:0;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--lp-red)}
 .lp-modal h2{font-size:clamp(1.4rem,3.4vw,1.8rem);text-transform:uppercase;margin:8px 40px 8px 0}
 .lp-modal-sub{margin:0 0 6px;color:var(--lp-steel);font-size:14px}
+.lp-modal-top{z-index:120}
+.lp-privacy{width:min(720px,100%)}
+.lp-privacy-body{margin-top:8px;font-size:14px;line-height:1.6;color:var(--lp-text)}
+.lp-privacy-body h2{font-size:16px;margin:18px 0 6px;text-transform:none}
+.lp-privacy-body p{margin:0 0 8px;color:var(--lp-steel)}
+.lp-privacy-body ul{margin:0 0 8px;padding-left:20px;color:var(--lp-steel)}
+.lp-privacy-body li{margin-bottom:4px}
 @keyframes lp-fade{from{opacity:0}to{opacity:1}}
 @keyframes lp-rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 
 /* ---------------------------------------------------------------- barre fixe (téléphone) */
 .lp-sticky{position:fixed;left:0;right:0;bottom:0;z-index:50;display:none;gap:10px;padding:10px max(14px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-top:1px solid var(--lp-line);box-shadow:0 -8px 24px rgba(12,12,18,.08)}
 .lp-sticky .lp-btn-red{flex:1;padding:15px 10px;font-size:13px}
-.lp-sticky .lp-btn-wa{flex:none;width:54px;padding:0}
+.lp-sticky .lp-btn-outline-dark{flex:none;padding:15px 14px;font-size:12.5px}
 
 /* bandeau cookies (composant du site) : au-dessus de la barre fixe, plus compact */
 @media (max-width:1023px){
@@ -268,12 +275,8 @@
   .lp-announce{font-size:11px;letter-spacing:.04em}
   .lp-top-in{height:56px}
   .lp-logo img{height:24px}
-  .lp-top-actions{gap:12px}
   .lp-top-devis span{display:none}
-  .lp-wa-round{width:36px;height:36px}
-  .lp-hero-ctas{gap:10px;padding-top:16px;padding-bottom:16px}
-  .lp-hero-ctas .lp-btn{flex:1;min-width:0;padding:15px 10px;font-size:12.5px;white-space:normal}
-  .lp-cats{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .lp-cats{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
   .lp-cat{padding:8px 6px 12px;gap:8px}
   .lp-cat-img{aspect-ratio:1/1}
   .lp-cat h2{font-size:11.5px;min-height:2.3em;display:flex;align-items:center}
@@ -298,7 +301,7 @@
   .lp-devis-band .lp-band-ico{display:none}
   .lp-devis-band .lp-btn,.lp-project .lp-btn{width:100%;white-space:normal}
   .lp-showroom{padding:16px}
-  .lp-show-ctas .lp-btn{flex:1;min-width:0}
+  .lp-show-ctas .lp-btn{flex:1 1 100%;min-width:0;white-space:normal}
   .lp-project{padding:20px 18px;gap:14px}
   .lp-project .lp-band-ico{width:36px!important;height:36px!important}
   .lp-foot-in{flex-direction:column;gap:10px;text-align:center}

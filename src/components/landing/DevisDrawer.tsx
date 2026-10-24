@@ -4,7 +4,8 @@ import { getAttribution, track } from "@/lib/analytics";
 import { thumbProps } from "@/lib/images";
 import { ArrowLeft, ArrowRight, Check, Minus, Plus, Trash2, X } from "lucide-react";
 import ContactFields, { LegalLine } from "./ContactFields";
-import { checkContact, formatMad, loadContact, markLeadSent, onContactChange, reportLead, saveContact, type LpContact } from "./contact";
+import { checkContact, formatMad, loadContact, markLeadSent, onContactChange, reportLead, saveContact, whatsappLink, type LpContact } from "./contact";
+import WhatsAppIcon from "./WhatsAppIcon";
 
 export interface DevisLine {
   ref: string;
@@ -22,13 +23,15 @@ interface Props {
   onClose: () => void;
   onSent: () => void;
   onBrowse: () => void;
+  /** numéro WhatsApp (Admin → Coordonnées) : bouton affiché seulement après l'envoi */
+  whatsappNumber?: string;
 }
 
 /**
  * Panneau « Mon devis » : machines choisies, quantités, total HT, puis coordonnées.
  * Envoi = une demande de devis (numéro DEV-…) dans Admin → Demandes, filtre « Landing page ».
  */
-const DevisDrawer = ({ lines, setQty, onClose, onSent, onBrowse }: Props) => {
+const DevisDrawer = ({ lines, setQty, onClose, onSent, onBrowse, whatsappNumber }: Props) => {
   const [step, setStep] = useState<"panier" | "coordonnees" | "envoye">("panier");
   const [contact, setContact] = useState<LpContact>(loadContact);
   const [error, setError] = useState("");
@@ -77,7 +80,7 @@ const DevisDrawer = ({ lines, setQty, onClose, onSent, onBrowse }: Props) => {
     <div className="lp-drawer" role="dialog" aria-modal="true" aria-labelledby="lp-devis-title" onClick={onClose}>
       <aside className="lp-drawer-panel" onClick={(e) => e.stopPropagation()}>
         <header className="lp-drawer-head">
-          <h2 id="lp-devis-title">{step === "envoye" ? "Devis envoyé" : "Mon devis"}</h2>
+          <h2 id="lp-devis-title">{step === "envoye" ? "Commande envoyée" : "Mon devis"}</h2>
           <button className="lp-modal-x" onClick={onClose} aria-label="Fermer"><X /></button>
         </header>
 
@@ -85,9 +88,14 @@ const DevisDrawer = ({ lines, setQty, onClose, onSent, onBrowse }: Props) => {
           <div className="lp-drawer-body lf-done" role="status">
             <span className="lf-done-icon"><Check /></span>
             <h3>Merci {contact.name.trim().split(" ")[0]} !</h3>
-            <p>Votre demande de devis {quote.number && <strong>{quote.number}</strong>} est bien reçue : {quote.count} machine{quote.count > 1 ? "s" : ""}, {formatMad(quote.total)} HT.</p>
+            <p>Votre demande {quote.number && <strong>{quote.number}</strong>} est bien reçue : {quote.count} machine{quote.count > 1 ? "s" : ""}, {formatMad(quote.total)} HT.</p>
             <p>Un conseiller Impulse vous rappelle <strong>sous 24 h ouvrées</strong> pour confirmer la disponibilité, la livraison et l'installation.</p>
-            <button className="lp-btn lp-btn-dark" onClick={onClose}>Fermer</button>
+            <div className="lf-done-actions">
+              {whatsappNumber && (
+                <a className="lp-btn lp-btn-wa" href={whatsappLink(whatsappNumber, `Bonjour, je suis ${contact.name.trim()}. Je viens d'envoyer ma demande${quote.number ? ` ${quote.number}` : ""} sur votre page Offre de lancement (${quote.count} machine${quote.count > 1 ? "s" : ""}, ${formatMad(quote.total)} HT).`)} target="_blank" rel="noopener noreferrer"><WhatsAppIcon /> Écrire sur WhatsApp</a>
+              )}
+              <button className="lp-btn lp-btn-dark" onClick={onClose}>Fermer</button>
+            </div>
           </div>
         ) : !lines.length ? (
           <div className="lp-drawer-body lp-drawer-empty">
@@ -118,9 +126,9 @@ const DevisDrawer = ({ lines, setQty, onClose, onSent, onBrowse }: Props) => {
               <p className="lp-total"><span>Total HT ({count} machine{count > 1 ? "s" : ""})</span><strong>{formatMad(total)}</strong></p>
               <p className="lp-total-note">Prix unitaires HT. Livraison et installation confirmées par votre conseiller.</p>
               <button className="lp-btn lp-btn-red lf-next" onClick={() => setStep("coordonnees")}>
-                {filled ? "Vérifier et envoyer" : "Continuer"} <ArrowRight />
+                Envoyer la commande <ArrowRight />
               </button>
-              <button className="lp-drawer-more" onClick={onBrowse}>Ajouter d'autres machines</button>
+              <button className="lp-drawer-more" onClick={onBrowse}>Continuer la sélection</button>
             </footer>
           </>
         ) : (
@@ -130,7 +138,7 @@ const DevisDrawer = ({ lines, setQty, onClose, onSent, onBrowse }: Props) => {
             <ContactFields idPrefix="devis" value={contact} onChange={change} autoFocus={!filled} />
             {error && <p className="lf-error" role="alert">{error}</p>}
             <button type="submit" className="lp-btn lp-btn-red lf-next" disabled={sending}>
-              {sending ? "Envoi…" : <>Envoyer ma demande de devis <ArrowRight /></>}
+              {sending ? "Envoi…" : <>Envoyer la commande <ArrowRight /></>}
             </button>
             <LegalLine />
           </form>

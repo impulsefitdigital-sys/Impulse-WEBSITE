@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import type { LpContact } from "./contact";
+import { openLpPrivacy, type LpContact } from "./contact";
 
 /** Les 3 champs communs (formulaire simple et formulaire du devis). */
 const ContactFields = ({ idPrefix, value, onChange, autoFocus }: { idPrefix: string; value: LpContact; onChange: (c: LpContact) => void; autoFocus?: boolean }) => {
@@ -24,7 +24,7 @@ const ContactFields = ({ idPrefix, value, onChange, autoFocus }: { idPrefix: str
 export const LegalLine = () => (
   <p className="lf-legal">
     En envoyant ce formulaire, vous acceptez d'être recontacté par Impulse Fitness Maroc au sujet de votre projet.
-    Vos données ne sont jamais revendues. <a href="/politique-de-confidentialite" target="_blank" rel="noopener">Politique de confidentialité</a>.
+    Vos données ne sont jamais revendues. <a href="#confidentialite" onClick={(e) => { e.preventDefault(); openLpPrivacy(); }}>Politique de confidentialité</a>.
   </p>
 );
 

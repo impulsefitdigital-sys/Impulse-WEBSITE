@@ -3,7 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { getAttribution, track } from "@/lib/analytics";
 import { ArrowRight, Check } from "lucide-react";
 import ContactFields, { LegalLine } from "./ContactFields";
-import { checkContact, loadContact, markLeadSent, onContactChange, reportLead, saveContact, type LpContact } from "./contact";
+import { checkContact, loadContact, markLeadSent, onContactChange, reportLead, saveContact, whatsappLink, type LpContact } from "./contact";
+import WhatsAppIcon from "./WhatsAppIcon";
 
 export { LEAD_SENT_KEY } from "./contact";
 
@@ -11,6 +12,7 @@ export { LEAD_SENT_KEY } from "./contact";
  * Formulaire simple de la landing page : nom et prénom, téléphone, email (facultatif).
  * Les coordonnées saisies sont gardées : le formulaire du devis est ensuite déjà rempli.
  * La demande arrive dans Admin → Demandes, filtre « Landing page ».
+ * Le bouton WhatsApp n'est proposé qu'une fois la demande envoyée (contact déjà qualifié).
  */
 interface Props {
   idPrefix: string;
@@ -21,9 +23,11 @@ interface Props {
   /** après l'envoi : bouton pour passer au devis */
   onOpenDevis?: () => void;
   submitLabel?: string;
+  /** numéro WhatsApp (Admin → Coordonnées) : bouton affiché après l'envoi */
+  whatsappNumber?: string;
 }
 
-const LeadForm = ({ idPrefix, interest, onStarted, onDone, onOpenDevis, submitLabel = "Être rappelé" }: Props) => {
+const LeadForm = ({ idPrefix, interest, onStarted, onDone, onOpenDevis, submitLabel = "Être rappelé", whatsappNumber }: Props) => {
   const [contact, setContact] = useState<LpContact>(loadContact);
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
@@ -72,9 +76,14 @@ const LeadForm = ({ idPrefix, interest, onStarted, onDone, onOpenDevis, submitLa
         <span className="lf-done-icon"><Check /></span>
         <h3>Merci {contact.name.trim().split(" ")[0]} !</h3>
         <p>Votre demande est bien reçue. Un conseiller Impulse vous rappelle <strong>sous 24 h ouvrées</strong> au <strong>{contact.phone}</strong>.</p>
-        {onOpenDevis && (
-          <button type="button" className="lp-btn lp-btn-dark" onClick={onOpenDevis}>Préparer mon devis <ArrowRight /></button>
-        )}
+        <div className="lf-done-actions">
+          {whatsappNumber && (
+            <a className="lp-btn lp-btn-wa" href={whatsappLink(whatsappNumber, `Bonjour, je suis ${contact.name.trim()}. Je viens de laisser mes coordonnées sur votre page Offre de lancement${interest ? ` (${interest})` : ""}.`)} target="_blank" rel="noopener noreferrer"><WhatsAppIcon /> Écrire sur WhatsApp</a>
+          )}
+          {onOpenDevis && (
+            <button type="button" className="lp-btn lp-btn-dark" onClick={onOpenDevis}>Préparer mon devis <ArrowRight /></button>
+          )}
+        </div>
       </div>
     );
   }

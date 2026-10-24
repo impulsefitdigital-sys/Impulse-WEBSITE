@@ -32,7 +32,9 @@ const CookieBanner = () => {
       <p className="ck-title">Votre vie privée</p>
       <p className="ck-text">
         Nous mesurons l'audience du site pour l'améliorer et, avec votre accord, pour suivre nos campagnes publicitaires.
-        Aucune donnée n'est vendue. <a href="/politique-de-confidentialite">En savoir plus</a>
+        Aucune donnée n'est vendue. {pathname.startsWith("/lp/")
+          ? <a href="#confidentialite" onClick={(e) => { e.preventDefault(); window.dispatchEvent(new CustomEvent("impulse-lp-confidentialite")); }}>En savoir plus</a>
+          : <a href="/politique-de-confidentialite">En savoir plus</a>}
       </p>
 
       {custom && (

@@ -263,6 +263,13 @@ Retours d'Adil après la mise en ligne, et check-up de l'infrastructure.
 - Cartes produit : « Impulse REF », type, prix HT en rouge, prix barré (+20 %), « Garantie 12 mois » et « Livraison sous 72 h » (textes de la maquette, constantes en haut de `LandingMusculation.tsx`), « Ajouter au devis ».
 - Plus aucun lien vers le site sauf le logo (en-tête et pied de page). FAQ et formulaires intégrés à la page retirés ; le formulaire simple reste dans la fenêtre (pop-up 60 s, « Demander un devis personnalisé »).
 
+### 24/10/2026 — Landing page : retours du client
+- La landing est un univers à part : plus AUCUN lien vers le site. Le logo ramène à l'accueil de la landing ; la politique de confidentialité s'ouvre dans une fenêtre (texte partagé : `src/components/PrivacyPolicyContent.tsx`, aussi utilisé par la page du site) ; le bandeau cookies fait de même sur `/lp/…` ; pied de page : « Confidentialité » et « Gérer les cookies ».
+- WhatsApp retiré partout ; il n'apparaît qu'après l'envoi du formulaire ou du devis (« Écrire sur WhatsApp », message prérempli avec le nom et le n° DEV).
+- Retirés : boutons « Découvrir les machines » / « Visiter le showroom » sous le visuel, nombre de machines dans les descriptifs (« Voir toutes les machines »).
+- Showroom : bouton rouge « Visiter notre showroom » (ouvre le formulaire, intérêt « Visite du showroom ») à côté d'« Itinéraire ».
+- Devis : « Envoyer la commande » (panier et coordonnées), « Continuer la sélection », titre « Commande envoyée ».
+
 ## 4. Architecture cible
 
 ```

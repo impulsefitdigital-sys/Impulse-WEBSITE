@@ -49,4 +49,11 @@ export const reportLead = (kind: "rappel" | "devis", value?: number) => {
   try { w.gtag?.("event", "generate_lead", { form: kind === "devis" ? "landing_devis" : "landing_rappel", ...extra }); } catch { /* GA4 absent */ }
 };
 
+/** La landing ne renvoie jamais vers le site : les liens « confidentialité » ouvrent une fenêtre dans la page. */
+export const PRIVACY_EVENT = "impulse-lp-confidentialite";
+export const openLpPrivacy = () => window.dispatchEvent(new CustomEvent(PRIVACY_EVENT));
+
+/** Lien WhatsApp avec message prérempli (proposé seulement après l'envoi d'un formulaire ou d'un devis). */
+export const whatsappLink = (number: string, text: string) => `https://wa.me/${number.replace(/\D/g, "")}?text=${encodeURIComponent(text)}`;
+
 export const formatMad = (n: number) => `${Math.round(n).toLocaleString("fr-FR").replace(/[\s\u202f]/g, "\u00a0")}\u00a0DH`;

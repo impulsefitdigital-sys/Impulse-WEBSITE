@@ -7,7 +7,9 @@ import { thumbProps } from "@/lib/images";
 import { track } from "@/lib/analytics";
 import LeadForm, { LEAD_SENT_KEY } from "@/components/landing/LeadForm";
 import DevisDrawer, { type DevisLine } from "@/components/landing/DevisDrawer";
-import { formatMad } from "@/components/landing/contact";
+import { formatMad, PRIVACY_EVENT } from "@/components/landing/contact";
+import PrivacyPolicyContent from "@/components/PrivacyPolicyContent";
+import { openConsentSettings } from "@/lib/consent";
 import ProductDetailView from "@/components/ProductDetailView";
 import { CROSSED_PRICE_RATIO, STOCK_ITEMS } from "@/data/stock-landing";
 import logo from "@/assets/logo.png";
@@ -17,12 +19,13 @@ import "@/styles/landing.css";
 
 /**
  * Landing page des campagnes « Offre de lancement » : Musculation professionnelle (/lp/musculation).
- * Maquette du client du 23/10/2026. Aucun lien vers le site, sauf le logo.
+ * Maquette du client du 23/10/2026. La landing est un univers à part : AUCUN lien vers le site (le logo ramène à l'accueil de la landing).
+ * WhatsApp n'est proposé qu'après l'envoi d'un formulaire ou d'un devis (contact qualifié).
  *   /lp/musculation                     accueil : visuel, 3 catégories, 2 machines par catégorie, devis, showroom
  *   /lp/musculation/machines/:cat       toutes les machines d'une catégorie (filtre par gamme : ?gamme=ecp)
  *   /lp/musculation/:id                 fiche produit (même affichage que le site) + prix + devis
  * Machines et prix : src/data/stock-landing.ts (prix affiché = PU HT, prix barré = PU × CROSSED_PRICE_RATIO).
- * Contacts : devis en ligne (n° DEV-…), formulaire simple (pop-up, « Demander un devis personnalisé »), WhatsApp.
+ * Contacts : devis en ligne (n° DEV-…), formulaire simple (pop-up, « Demander un devis personnalisé », « Visiter notre showroom »).
  */
 
 type Row = Record<string, unknown>;
@@ -39,7 +42,6 @@ const HERO_ALT = "Impulse Fitness débarque au Maroc : découvrez nos offres de 
 const ANNOUNCE = "Offre de lancement · Impulse Fitness Maroc";
 const PERK_WARRANTY = { title: "Garantie 12 mois", sub: "pièces et main-d'œuvre" };
 const PERK_DELIVERY = "Livraison sous 72 h";
-const WA_TEXT = "Bonjour, je souhaite des informations sur les machines Impulse de l'offre de lancement.";
 
 interface StockProduct extends DevisLine { gamme: string; hover: string; subTitle: string; type: string; crossed: number; trending: boolean; order: number }
 
@@ -58,10 +60,6 @@ const read = (k: string, store: "local" | "session" = "local") => {
 const write = (k: string, v: string, store: "local" | "session" = "local") => {
   try { (store === "local" ? localStorage : sessionStorage).setItem(k, v); } catch { /* stockage indisponible */ }
 };
-
-const WhatsAppIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" className="lp-wa-ico"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
-);
 
 const useLandingData = () =>
   useQuery({
@@ -90,12 +88,13 @@ const LandingMusculation = () => {
     try { return JSON.parse(read(CART_KEY) || "{}") as Record<string, number>; } catch { return {}; }
   });
   const [flash, setFlash] = useState("");
+  const [privacy, setPrivacy] = useState(false);
   // un devis déjà commencé compte comme un engagement : pas de pop-up automatique
   const engaged = useRef(Object.keys(cart).length > 0);
   const sent = useRef(!!read(LEAD_SENT_KEY));
 
   const s = data?.settings || {};
-  const waHref = `https://wa.me/${(s.whatsapp_number || "").replace(/\D/g, "")}?text=${encodeURIComponent(WA_TEXT)}`;
+  const waNumber = s.whatsapp_number || "";
   const mapsEmbed = s.maps_embed_url || "";
 
   // machines de l'offre retrouvées sur le site (photos, nom, gamme), dans l'ordre du catalogue
@@ -166,7 +165,7 @@ const LandingMusculation = () => {
   }, []);
   const closeModal = () => setModal({ open: false });
   const openDevis = () => { engaged.current = true; setModal({ open: false }); setDrawer(true); track("quote_open", { label: "landing" }); };
-  const goTo = (anchor: "machines" | "showroom") => {
+  const goTo = (anchor: "machines") => {
     setDrawer(false);
     setModal({ open: false });
     if (id || catParam) { navigate(`${BASE}#${anchor}`); return; }
@@ -181,6 +180,13 @@ const LandingMusculation = () => {
     const t = window.setTimeout(() => document.getElementById(h)?.scrollIntoView({ block: h.startsWith("machine-") ? "center" : "start" }), 80);
     return () => window.clearTimeout(t);
   }, [id, catParam, location.key, location.hash, stock]);
+
+  // liens « Politique de confidentialité » (formulaires, bandeau cookies) : fenêtre dans la page
+  useEffect(() => {
+    const open = () => setPrivacy(true);
+    window.addEventListener(PRIVACY_EVENT, open);
+    return () => window.removeEventListener(PRIVACY_EVENT, open);
+  }, []);
 
   // classe sur <body> : le bandeau cookies se place au-dessus de la barre fixe du téléphone
   useEffect(() => {
@@ -203,17 +209,17 @@ const LandingMusculation = () => {
   }, [openForm]);
 
   // fenêtres : Échap pour fermer, pas de défilement derrière
-  const anyOverlay = modal.open || drawer;
+  const anyOverlay = modal.open || drawer || privacy;
   useEffect(() => {
     if (!anyOverlay) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") { setModal({ open: false }); setDrawer(false); } };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") { setModal({ open: false }); setDrawer(false); setPrivacy(false); } };
     document.addEventListener("keydown", onKey);
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = prev; };
   }, [anyOverlay]);
 
-  const formProps = { onStarted: () => { engaged.current = true; }, onDone: () => { sent.current = true; }, onOpenDevis: openDevis };
+  const formProps = { onStarted: () => { engaged.current = true; }, onDone: () => { sent.current = true; }, onOpenDevis: openDevis, whatsappNumber: waNumber };
 
   // ancienne adresse d'une gamme (/lp/musculation/gamme/ecp) → catégorie correspondante, filtrée sur la gamme
   if (legacyGamme) {
@@ -274,13 +280,11 @@ const LandingMusculation = () => {
       <div className="lp-announce">{ANNOUNCE}</div>
       <header className="lp-top">
         <div className="lp-wrap lp-top-in">
-          <a href="/" className="lp-logo" aria-label="Impulse Fitness Maroc — site complet"><img src={logo} alt="Impulse Fitness Maroc" width={160} height={32} /></a>
+          <a href={BASE} className="lp-logo" aria-label="Impulse Fitness Maroc — accueil de l'offre de lancement"><img src={logo} alt="Impulse Fitness Maroc" width={160} height={32} /></a>
           <div className="lp-top-actions">
             <button className={`lp-top-devis${cartCount ? " on" : ""}`} onClick={openDevis}>
               <FileText /> <span>Mon devis</span> ({cartCount})
             </button>
-            <span className="lp-top-sep" aria-hidden="true" />
-            <a className="lp-wa-round" href={waHref} target="_blank" rel="noopener noreferrer" aria-label="Nous écrire sur WhatsApp"><WhatsAppIcon /></a>
           </div>
         </div>
       </header>
@@ -324,7 +328,7 @@ const LandingMusculation = () => {
           {(s.hours_line_1 || s.hours_line_2) && <p className="lp-show-info lp-show-hours">{[s.hours_line_1, s.hours_line_2].filter(Boolean).join(" · ")}</p>}
           <div className="lp-show-ctas">
             <a className="lp-btn lp-btn-red" href="https://www.google.com/maps/search/?api=1&query=IMPULSE+MAROC+Bouskoura" target="_blank" rel="noopener noreferrer"><MapPin /> Itinéraire</a>
-            <a className="lp-btn lp-btn-wa" href={waHref} target="_blank" rel="noopener noreferrer"><WhatsAppIcon /> Nous contacter</a>
+            <button className="lp-btn lp-btn-red" onClick={() => openForm("Visite du showroom")}>Visiter notre showroom</button>
           </div>
         </div>
         <div className="lp-map">
@@ -374,7 +378,7 @@ const LandingMusculation = () => {
                 ) : (
                   <button className="lp-btn lp-btn-red" onClick={() => add(current)}><ShoppingCart /> Ajouter au devis</button>
                 )}
-                <a className="lp-btn lp-btn-wa" href={waHref} target="_blank" rel="noopener noreferrer"><WhatsAppIcon /> WhatsApp</a>
+                <button className="lp-btn lp-btn-outline-dark" onClick={() => openForm(current.name)}><Phone /> Être rappelé</button>
               </div>
             );
           }}
@@ -403,7 +407,7 @@ const LandingMusculation = () => {
           <>
             <div className="lp-catpage-head">
               <h1 className="lp-h-bar">{activeCat.title}</h1>
-              <p>{activeCat.items.length} machines · {activeCat.pitch}</p>
+              <p>{activeCat.pitch}</p>
             </div>
             <nav className="lp-tabs" aria-label="Catégories">
               {categories.map((c) => (
@@ -433,10 +437,6 @@ const LandingMusculation = () => {
             <img src="/lp/hero-lancement.webp" alt={HERO_ALT} width={1942} height={809} {...({ fetchpriority: "high" } as Record<string, string>)} />
           </picture>
         </section>
-        <div className="lp-wrap lp-hero-ctas">
-          <button className="lp-btn lp-btn-red lp-btn-lg" onClick={() => goTo("machines")}>Découvrir les machines</button>
-          <button className="lp-btn lp-btn-outline-dark lp-btn-lg" onClick={() => goTo("showroom")}>Visiter le showroom</button>
-        </div>
 
         <section className="lp-wrap lp-cats" id="machines" aria-label="Catégories de machines">
           {isLoading && <p className="lp-loading">Chargement des machines…</p>}
@@ -455,7 +455,7 @@ const LandingMusculation = () => {
               <div className="lp-pick" key={c.slug}>
                 <h2 className="lp-h-bar"><a href={catHref(c.slug)}>{c.title}</a></h2>
                 <div className="lp-pick-grid">{c.picks.map(renderCard)}</div>
-                <a className="lp-pick-more" href={catHref(c.slug)}>Voir les {c.items.length} machines <ArrowRight /></a>
+                <a className="lp-pick-more" href={catHref(c.slug)}>Voir toutes les machines <ArrowRight /></a>
               </div>
             ))}
           </section>
@@ -485,9 +485,14 @@ const LandingMusculation = () => {
 
       <footer className="lp-foot">
         <div className="lp-wrap lp-foot-in">
-          <a href="/" className="lp-foot-logo" aria-label="Impulse Fitness Maroc — site complet"><img src={logoWhite} alt="Impulse Fitness Maroc" width={130} height={26} /></a>
+          <a href={BASE} className="lp-foot-logo" aria-label="Impulse Fitness Maroc — accueil de l'offre de lancement"><img src={logoWhite} alt="Impulse Fitness Maroc" width={130} height={26} /></a>
           <span className="lp-foot-sep" aria-hidden="true" />
           <p>Équipez votre projet sportif avec Impulse Fitness Morocco</p>
+        </div>
+        <div className="lp-wrap lp-foot-legal">
+          <button onClick={() => setPrivacy(true)}>Confidentialité</button>
+          <span aria-hidden="true">·</span>
+          <button onClick={openConsentSettings}>Gérer les cookies</button>
         </div>
       </footer>
 
@@ -506,7 +511,7 @@ const LandingMusculation = () => {
         ) : (
           <button className="lp-btn lp-btn-red" onClick={() => goTo("machines")}>Découvrir les machines</button>
         )}
-        <a className="lp-btn lp-btn-wa" href={waHref} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><WhatsAppIcon /></a>
+        <button className="lp-btn lp-btn-outline-dark" onClick={() => openForm(current?.name)}>Être rappelé</button>
       </div>
 
       {/* fenêtre formulaire simple */}
@@ -522,7 +527,19 @@ const LandingMusculation = () => {
         </div>
       )}
 
-      {drawer && <DevisDrawer lines={lines} setQty={setQty} onClose={() => setDrawer(false)} onSent={() => { sent.current = true; setCart({}); }} onBrowse={() => goTo("machines")} />}
+      {/* politique de confidentialité, sans quitter la landing */}
+      {privacy && (
+        <div className="lp-modal lp-modal-top" role="dialog" aria-modal="true" aria-labelledby="lp-privacy-title" onClick={() => setPrivacy(false)}>
+          <div className="lp-modal-box lp-privacy" onClick={(e) => e.stopPropagation()}>
+            <button className="lp-modal-x" onClick={() => setPrivacy(false)} aria-label="Fermer"><X /></button>
+            <p className="lp-modal-kicker">Mentions légales</p>
+            <h2 id="lp-privacy-title">Politique de confidentialité</h2>
+            <div className="lp-privacy-body"><PrivacyPolicyContent /></div>
+          </div>
+        </div>
+      )}
+
+      {drawer && <DevisDrawer lines={lines} setQty={setQty} onClose={() => setDrawer(false)} onSent={() => { sent.current = true; setCart({}); }} onBrowse={() => goTo("machines")} whatsappNumber={waNumber} />}
     </div>
   );
 };
