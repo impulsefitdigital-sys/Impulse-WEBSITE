@@ -270,6 +270,11 @@ Retours d'Adil après la mise en ligne, et check-up de l'infrastructure.
 - Showroom : bouton rouge « Visiter notre showroom » (ouvre le formulaire, intérêt « Visite du showroom ») à côté d'« Itinéraire ».
 - Devis : « Envoyer la commande » (panier et coordonnées), « Continuer la sélection », titre « Commande envoyée ».
 
+### 26/10/2026 — Landing page : catégories alignées sur le site + retours client
+- Les 3 catégories suivent le rangement du site (identifiant de la sous-catégorie du produit) : « Musculation guidée » = mono-stations + multi-stations (IT95) ; « Musculation libre » = charges-guidees (ECP, SL, IFP, Smith ITF) ; « Bancs & Racks » = charges-libres (bancs ITF, SL7028/7029). Vérifié sur les données en ligne. Ancienne adresse `/machines/multistation` redirigée.
+- Page catégorie : les 3 cartes catégorie restent en haut, la catégorie ouverte est encadrée en rouge ; filtres de gamme inchangés.
+- Carte produit : « Voir le devis » remplacé par une simple coche verte. Showroom : titre en rouge, bouton « Prendre rendez-vous ». « Être rappelé » → « Nous contacter ».
+
 ## 4. Architecture cible
 
 ```

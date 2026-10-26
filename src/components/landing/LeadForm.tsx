@@ -27,7 +27,7 @@ interface Props {
   whatsappNumber?: string;
 }
 
-const LeadForm = ({ idPrefix, interest, onStarted, onDone, onOpenDevis, submitLabel = "Être rappelé", whatsappNumber }: Props) => {
+const LeadForm = ({ idPrefix, interest, onStarted, onDone, onOpenDevis, submitLabel = "Envoyer", whatsappNumber }: Props) => {
   const [contact, setContact] = useState<LpContact>(loadContact);
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);

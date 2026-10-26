@@ -25,7 +25,7 @@ import "@/styles/landing.css";
  *   /lp/musculation/machines/:cat       toutes les machines d'une catégorie (filtre par gamme : ?gamme=ecp)
  *   /lp/musculation/:id                 fiche produit (même affichage que le site) + prix + devis
  * Machines et prix : src/data/stock-landing.ts (prix affiché = PU HT, prix barré = PU × CROSSED_PRICE_RATIO).
- * Contacts : devis en ligne (n° DEV-…), formulaire simple (pop-up, « Demander un devis personnalisé », « Visiter notre showroom »).
+ * Contacts : devis en ligne (n° DEV-…), formulaire simple (pop-up, « Nous contacter », « Demander un devis personnalisé », « Prendre rendez-vous »).
  */
 
 type Row = Record<string, unknown>;
@@ -46,13 +46,23 @@ const PERK_DELIVERY = "Livraison sous 72 h";
 interface StockProduct extends DevisLine { gamme: string; hover: string; subTitle: string; type: string; crossed: number; trending: boolean; order: number }
 
 /** Les 3 catégories de la maquette. Une machine va dans la première catégorie qui la reconnaît. */
-interface Category { slug: string; title: string; pitch: string; cover: string; match: (p: StockProduct) => boolean }
+/**
+ * Les 3 catégories de la landing reprennent le rangement du site (Musculation professionnelle).
+ * Une machine est rangée d'après sa sous-catégorie sur le site (identifiant de la sous-catégorie) :
+ *   mono-stations + multi-stations  → « Musculation guidée »  (pile de poids : IT95)
+ *   charges-guidees                 → « Musculation libre »   (machines à disques ECP, SL, IFP + Smith machines ITF)
+ *   charges-libres                  → « Bancs & Racks »       (bancs ITF, bancs olympiques SL)
+ * (Sur le site, les sous-catégories ont été renommées dans l'admin ; leurs identifiants n'ont pas changé.)
+ */
+interface Category { slug: string; title: string; pitch: string; cover: string; siteSlugs: string[] }
 const CATEGORIES: Category[] = [
-  { slug: "multistation", title: "Multistation", pitch: "Machines à pile de poids, plusieurs exercices par poste.", cover: "IT9530", match: (p) => p.gamme === "IT95" },
-  { slug: "musculation-libre", title: "Musculation libre", pitch: "Bancs olympiques, bancs réglables et postes de charges libres.", cover: "ITF8202", match: (p) => /libre/i.test(p.subTitle) },
-  { slug: "musculation-guidee", title: "Musculation guidée", pitch: "Machines à disques et Smith machines, guidage sûr et précis.", cover: "ECP617", match: () => true },
+  { slug: "musculation-guidee", title: "Musculation guidée", pitch: "Machines à pile de poids : mono-stations et multi-stations.", cover: "IT9530", siteSlugs: ["mono-stations", "multi-stations"] },
+  { slug: "musculation-libre", title: "Musculation libre", pitch: "Machines à disques et Smith machines.", cover: "ECP617", siteSlugs: ["charges-guidees"] },
+  { slug: "bancs-racks", title: "Bancs & Racks", pitch: "Bancs plats, inclinés, réglables et bancs olympiques.", cover: "ITF8202", siteSlugs: ["charges-libres"] },
 ];
-const DISPLAY_ORDER = ["multistation", "musculation-guidee", "musculation-libre"];
+/** anciennes adresses de catégorie → nouvelles */
+const OLD_CAT_SLUGS: Record<string, string> = { multistation: "musculation-guidee" };
+const slugify = (v: string) => v.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/&/g, " ").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
 const read = (k: string, store: "local" | "session" = "local") => {
   try { return (store === "local" ? localStorage : sessionStorage).getItem(k); } catch { return null; }
@@ -124,10 +134,14 @@ const LandingMusculation = () => {
   // machines rangées dans les 3 catégories
   const categories = useMemo(() => {
     const buckets = new Map<string, StockProduct[]>(CATEGORIES.map((c) => [c.slug, []]));
-    for (const p of stock) buckets.get((CATEGORIES.find((c) => c.match(p)) || CATEGORIES[CATEGORIES.length - 1]).slug)!.push(p);
-    return DISPLAY_ORDER.map((slug) => {
-      const c = CATEGORIES.find((x) => x.slug === slug)!;
-      const items = buckets.get(slug) || [];
+    for (const p of stock) {
+      const siteSlug = slugify(p.subTitle);
+      // sous-catégorie inconnue : rangée d'après la gamme (IT95 = pile de poids), sinon avec les machines à disques
+      const c = CATEGORIES.find((x) => x.siteSlugs.includes(siteSlug)) || (p.gamme === "IT95" ? CATEGORIES[0] : CATEGORIES[1]);
+      buckets.get(c.slug)!.push(p);
+    }
+    return CATEGORIES.map((c) => {
+      const items = buckets.get(c.slug) || [];
       const cover = items.find((p) => p.ref === c.cover && p.image) || items.find((p) => p.image);
       const picks = [...items].sort((a, b) => Number(b.trending) - Number(a.trending) || b.pu - a.pu).slice(0, PICKS_PER_CATEGORY);
       const gammes = [...new Set(items.map((p) => p.gamme))].sort((a, b) => ((GAMME_ORDER.indexOf(a) + 1) || 99) - ((GAMME_ORDER.indexOf(b) + 1) || 99));
@@ -222,6 +236,7 @@ const LandingMusculation = () => {
   const formProps = { onStarted: () => { engaged.current = true; }, onDone: () => { sent.current = true; }, onOpenDevis: openDevis, whatsappNumber: waNumber };
 
   // ancienne adresse d'une gamme (/lp/musculation/gamme/ecp) → catégorie correspondante, filtrée sur la gamme
+  if (catParam && OLD_CAT_SLUGS[catParam]) return <Navigate to={`${catHref(OLD_CAT_SLUGS[catParam])}${location.search}`} replace />;
   if (legacyGamme) {
     if (!stock.length) return isLoading ? <div className="lp" /> : <Navigate to={BASE} replace />;
     const p = stock.find((x) => x.gamme.toLowerCase() === legacyGamme.toLowerCase());
@@ -266,7 +281,7 @@ const LandingMusculation = () => {
         {cart[p.ref] ? (
           <span className="lp-incart">
             {renderQty(p)}
-            <button className="lp-incart-see" onClick={openDevis}><Check /> Voir le devis</button>
+            <span className="lp-incart-ok" title="Dans votre devis" aria-label="Dans votre devis"><Check /></span>
           </span>
         ) : (
           <button className="lp-btn lp-btn-red lp-add" onClick={() => add(p)}><ShoppingCart /> Ajouter au devis</button>
@@ -274,6 +289,15 @@ const LandingMusculation = () => {
       </article>
     );
   };
+
+  // cartes des 3 catégories (accueil, et en haut de chaque page catégorie pour passer de l'une à l'autre)
+  const renderCats = (active?: string) => categories.map((c) => (
+    <a className={`lp-cat${c.slug === active ? " on" : ""}`} key={c.slug} href={catHref(c.slug)} aria-current={c.slug === active ? "page" : undefined}>
+      <span className="lp-cat-img">{c.coverImage && <img src={c.coverImage} alt="" loading="lazy" decoding="async" />}</span>
+      <h2>{c.title}</h2>
+      <span className="lp-btn lp-btn-red lp-btn-sm">{c.slug === active ? "Catégorie affichée" : "Voir les machines"}</span>
+    </a>
+  ));
 
   const header = (
     <>
@@ -328,7 +352,7 @@ const LandingMusculation = () => {
           {(s.hours_line_1 || s.hours_line_2) && <p className="lp-show-info lp-show-hours">{[s.hours_line_1, s.hours_line_2].filter(Boolean).join(" · ")}</p>}
           <div className="lp-show-ctas">
             <a className="lp-btn lp-btn-red" href="https://www.google.com/maps/search/?api=1&query=IMPULSE+MAROC+Bouskoura" target="_blank" rel="noopener noreferrer"><MapPin /> Itinéraire</a>
-            <button className="lp-btn lp-btn-red" onClick={() => openForm("Visite du showroom")}>Visiter notre showroom</button>
+            <button className="lp-btn lp-btn-red" onClick={() => openForm("Rendez-vous au showroom")}>Prendre rendez-vous</button>
           </div>
         </div>
         <div className="lp-map">
@@ -363,7 +387,7 @@ const LandingMusculation = () => {
             if (!current) {
               return (
                 <div className="pd-actions lp-pd-actions">
-                  <button className="lp-btn lp-btn-red" onClick={() => openForm(product.name)}><Phone /> Être rappelé</button>
+                  <button className="lp-btn lp-btn-red" onClick={() => openForm(product.name)}><Phone /> Nous contacter</button>
                   <a className="lp-btn lp-btn-outline-dark" href={`${BASE}#machines`}>Voir les machines</a>
                 </div>
               );
@@ -378,7 +402,7 @@ const LandingMusculation = () => {
                 ) : (
                   <button className="lp-btn lp-btn-red" onClick={() => add(current)}><ShoppingCart /> Ajouter au devis</button>
                 )}
-                <button className="lp-btn lp-btn-outline-dark" onClick={() => openForm(current.name)}><Phone /> Être rappelé</button>
+                <button className="lp-btn lp-btn-outline-dark" onClick={() => openForm(current.name)}><Phone /> Nous contacter</button>
               </div>
             );
           }}
@@ -395,7 +419,7 @@ const LandingMusculation = () => {
     /* ------------------------------------------------ toutes les machines d'une catégorie */
     main = (
       <section className="lp-wrap lp-catpage">
-        <a className="lp-back" href={`${BASE}#machines`}><ArrowLeft /> Toutes les catégories</a>
+        <a className="lp-back" href={`${BASE}#machines`}><ArrowLeft /> Retour à l'accueil</a>
         {isLoading ? (
           <p className="lp-loading">Chargement des machines…</p>
         ) : !activeCat ? (
@@ -405,15 +429,12 @@ const LandingMusculation = () => {
           </div>
         ) : (
           <>
+            {/* les 3 catégories restent affichées : la catégorie ouverte est encadrée en rouge */}
+            <nav className="lp-cats lp-cats-nav" aria-label="Catégories">{renderCats(activeCat.slug)}</nav>
             <div className="lp-catpage-head">
               <h1 className="lp-h-bar">{activeCat.title}</h1>
               <p>{activeCat.pitch}</p>
             </div>
-            <nav className="lp-tabs" aria-label="Catégories">
-              {categories.map((c) => (
-                <a key={c.slug} href={catHref(c.slug)} className={c.slug === activeCat.slug ? "on" : ""} aria-current={c.slug === activeCat.slug ? "page" : undefined}>{c.title}</a>
-              ))}
-            </nav>
             {activeCat.gammes.length > 1 && (
               <nav className="lp-chips" aria-label="Filtrer par gamme">
                 <a href={catHref(activeCat.slug)} className={!gammeFilter ? "on" : ""}>Toutes</a>
@@ -440,13 +461,7 @@ const LandingMusculation = () => {
 
         <section className="lp-wrap lp-cats" id="machines" aria-label="Catégories de machines">
           {isLoading && <p className="lp-loading">Chargement des machines…</p>}
-          {categories.map((c) => (
-            <a className="lp-cat" key={c.slug} href={catHref(c.slug)}>
-              <span className="lp-cat-img">{c.coverImage && <img src={c.coverImage} alt="" loading="lazy" decoding="async" />}</span>
-              <h2>{c.title}</h2>
-              <span className="lp-btn lp-btn-red lp-btn-sm">Voir les machines</span>
-            </a>
-          ))}
+          {renderCats()}
         </section>
 
         {categories.length > 0 && (
@@ -511,7 +526,7 @@ const LandingMusculation = () => {
         ) : (
           <button className="lp-btn lp-btn-red" onClick={() => goTo("machines")}>Découvrir les machines</button>
         )}
-        <button className="lp-btn lp-btn-outline-dark" onClick={() => openForm(current?.name)}>Être rappelé</button>
+        <button className="lp-btn lp-btn-outline-dark" onClick={() => openForm(current?.name)}>Nous contacter</button>
       </div>
 
       {/* fenêtre formulaire simple */}
@@ -519,10 +534,10 @@ const LandingMusculation = () => {
         <div className="lp-modal" role="dialog" aria-modal="true" aria-labelledby="lp-modal-title" onClick={closeModal}>
           <div className="lp-modal-box" onClick={(e) => e.stopPropagation()}>
             <button className="lp-modal-x" onClick={closeModal} aria-label="Fermer"><X /></button>
-            <p className="lp-modal-kicker">{modal.auto ? "Offre de lancement" : modal.interest || "Être rappelé"}</p>
-            <h2 id="lp-modal-title">{modal.interest === "Projet sur mesure" ? "Parlons de votre projet" : "Un conseiller vous rappelle sous 24 h"}</h2>
+            <p className="lp-modal-kicker">{modal.auto ? "Offre de lancement" : modal.interest || "Nous contacter"}</p>
+            <h2 id="lp-modal-title">{modal.interest === "Projet sur mesure" ? "Parlons de votre projet" : modal.interest === "Rendez-vous au showroom" ? "Prenez rendez-vous au showroom" : "Un conseiller vous rappelle sous 24 h"}</h2>
             <p className="lp-modal-sub">Laissez vos coordonnées, un conseiller Impulse vous rappelle sous 24 h ouvrées. Vous pourrez aussi composer votre devis : elles y seront déjà remplies.</p>
-            <LeadForm idPrefix="popup" interest={modal.interest} {...formProps} />
+            <LeadForm idPrefix="popup" interest={modal.interest} submitLabel={modal.interest === "Rendez-vous au showroom" ? "Demander un rendez-vous" : "Envoyer"} {...formProps} />
           </div>
         </div>
       )}
