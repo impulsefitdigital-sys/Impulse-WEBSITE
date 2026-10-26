@@ -942,6 +942,9 @@
 .imp .pd-lightbox .lb-arrow{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;cursor:pointer;transition:background .2s}
 .imp .pd-lightbox .lb-arrow:hover{background:var(--red);border-color:var(--red)}
 .imp .pd-lightbox .lb-arrow.prev{left:20px}.imp .pd-lightbox .lb-arrow.next{right:20px}
+.imp .pd-lightbox .lb-arrow{z-index:2}
+.imp .pd-lightbox .lb-count{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);color:#fff;font-family:var(--mono);font-size:13px;letter-spacing:.1em;background:rgba(255,255,255,.12);padding:6px 12px;border-radius:999px}
+@media(max-width:700px){.imp .pd-lightbox .lb-arrow{top:auto;bottom:16px;transform:none;width:44px;height:44px}.imp .pd-lightbox .lb-count{bottom:28px}}
 @media(max-width:900px){
   .imp .pd-grid{grid-template-columns:1fr;gap:26px}
   .imp .related-grid{grid-template-columns:repeat(2,1fr)}

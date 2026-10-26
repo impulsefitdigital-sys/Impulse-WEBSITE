@@ -275,6 +275,11 @@ Retours d'Adil après la mise en ligne, et check-up de l'infrastructure.
 - Page catégorie : les 3 cartes catégorie restent en haut, la catégorie ouverte est encadrée en rouge ; filtres de gamme inchangés.
 - Carte produit : « Voir le devis » remplacé par une simple coche verte. Showroom : titre en rouge, bouton « Prendre rendez-vous ». « Être rappelé » → « Nous contacter ».
 
+### 26/10/2026 (bis) — Landing : WhatsApp, photos en noir, glisser les photos
+- WhatsApp de la landing : +212 668-818164 (constante `LP_WHATSAPP` dans `LandingMusculation.tsx`), toujours proposé seulement après l'envoi d'un formulaire ou d'un devis.
+- Photos en noir d'abord sur la landing : cartes (photo + survol) et fiche (couleur « Noir » sélectionnée, ses photos en premier) quand la machine existe en noir. Constante `PREFERRED_COLOR` ; option `preferredColor` de `ProductDetailView` (le site garde sa couleur par défaut).
+- Fiche produit (site et landing) : sur téléphone, on fait glisser la photo du doigt pour passer à la suivante, aussi en plein écran (compteur « 2 / 4 », flèches en bas). Sur ordinateur, rien ne change.
+
 ## 4. Architecture cible
 
 ```

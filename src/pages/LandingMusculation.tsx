@@ -10,7 +10,7 @@ import DevisDrawer, { type DevisLine } from "@/components/landing/DevisDrawer";
 import { formatMad, PRIVACY_EVENT } from "@/components/landing/contact";
 import PrivacyPolicyContent from "@/components/PrivacyPolicyContent";
 import { openConsentSettings } from "@/lib/consent";
-import ProductDetailView from "@/components/ProductDetailView";
+import ProductDetailView, { pickPreferredColor } from "@/components/ProductDetailView";
 import { CROSSED_PRICE_RATIO, STOCK_ITEMS } from "@/data/stock-landing";
 import logo from "@/assets/logo.png";
 import logoWhite from "@/assets/logo-new.png";
@@ -39,6 +39,10 @@ const GAMME_ORDER = ["IT95", "ECP", "SL", "IFP", "ITF"];
 const HERO_ALT = "Impulse Fitness débarque au Maroc : découvrez nos offres de lancement sur les machines disponibles en stock";
 
 /* Textes de la maquette du client — à confirmer avant diffusion. */
+/** WhatsApp de la landing (boutons proposés après l'envoi d'un formulaire ou d'un devis) */
+const LP_WHATSAPP = "212668818164";
+/** couleur montrée en premier quand une machine existe en plusieurs couleurs */
+const PREFERRED_COLOR = "noir";
 const ANNOUNCE = "Offre de lancement · Impulse Fitness Maroc";
 const PERK_WARRANTY = { title: "Garantie 12 mois", sub: "pièces et main-d'œuvre" };
 const PERK_DELIVERY = "Livraison sous 72 h";
@@ -75,13 +79,14 @@ const useLandingData = () =>
   useQuery({
     queryKey: ["lp-musculation-stock"],
     queryFn: async () => {
-      const [products, settings] = await Promise.all([
+      const [products, settings, images] = await Promise.all([
         supabase.from("products").select("*").eq("is_published", true).order("sort_order"),
         supabase.from("contact_settings").select("*"),
+        supabase.from("product_images").select("*").order("sort_order"),
       ]);
       const s: Record<string, string> = {};
       ((settings.data || []) as Row[]).forEach((r) => { s[str(r.key)] = str(r.value); });
-      return { products: (products.data || []) as Row[], settings: s };
+      return { products: (products.data || []) as Row[], images: (images.data || []) as Row[], settings: s };
     },
     staleTime: 5 * 60 * 1000,
   });
@@ -104,7 +109,7 @@ const LandingMusculation = () => {
   const sent = useRef(!!read(LEAD_SENT_KEY));
 
   const s = data?.settings || {};
-  const waNumber = s.whatsapp_number || "";
+  const waNumber = LP_WHATSAPP;
   const mapsEmbed = s.maps_embed_url || "";
 
   // machines de l'offre retrouvées sur le site (photos, nom, gamme), dans l'ordre du catalogue
@@ -118,8 +123,16 @@ const LandingMusculation = () => {
         .sort((a, b) => Number(!b.image_url) - Number(!a.image_url))[0];
       if (!p) continue;
       const name = str(p.name).replace(/\s+/g, " ").trim();
+      // photos en noir si la machine existe en noir (les photos principales sont dans la couleur par défaut)
+      let image = str(p.image_url), hover = str(p.hover_image_url);
+      const gallery = data.images.filter((g) => g.product_id === p.id && str(g.image_url));
+      const black = pickPreferredColor([...new Set(gallery.map((g) => str(g.color)).filter(Boolean))], PREFERRED_COLOR);
+      if (black && !str(p.default_color).startsWith(PREFERRED_COLOR)) {
+        const shots = gallery.filter((g) => g.color === black).map((g) => str(g.image_url));
+        image = shots[0]; hover = shots[1] || "";
+      }
       out.push({
-        ref: it.ref, productId: str(p.id), name, image: str(p.image_url), hover: str(p.hover_image_url),
+        ref: it.ref, productId: str(p.id), name, image, hover,
         category: str(p.category) || "Musculation", pu: it.pu, qty: 0, gamme: str(p.range_code) || it.ref.replace(/\d.*/, ""),
         subTitle: str(p.subcategory),
         type: name.replace(re, "").replace(/\bimpulse\b/gi, "").replace(/\s+/g, " ").trim() || str(p.subcategory),
@@ -374,6 +387,7 @@ const LandingMusculation = () => {
     main = (
       <div className="imp lp-imp lp-pd">
         <ProductDetailView
+          preferredColor={PREFERRED_COLOR}
           id={id}
           backLabel={currentCat ? `Retour : ${currentCat.title}` : "Retour aux machines"}
           onBack={() => navigate(current && currentCat ? `${catHref(currentCat.slug)}#machine-${current.ref}` : `${BASE}#machines`)}

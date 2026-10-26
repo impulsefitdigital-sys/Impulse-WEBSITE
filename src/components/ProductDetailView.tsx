@@ -1,7 +1,7 @@
 import { thumbProps } from "@/lib/images";
-import { useState, useCallback, useEffect, type ReactNode } from "react";
+import { useState, useCallback, useEffect, useRef, type ReactNode } from "react";
 import { ChevronLeft, ChevronRight, ArrowLeft, X, Check } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, type PanInfo } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { track } from "@/lib/analytics";
@@ -42,9 +42,18 @@ interface Props {
   backLabel?: string;
   onBack?: () => void;
   notFound?: ReactNode;
+  /** couleur à montrer d'abord quand le produit existe en plusieurs couleurs (ex. « noir » sur la landing page) */
+  preferredColor?: string;
 }
 
-const ProductDetailView = ({ id, renderActions, renderHead, relatedHref = (rid) => `/produit/${rid}`, relatedIds, relatedTitle = "Produits similaires", renderBelowTitle, backLabel = "Retour", onBack = () => window.history.back(), notFound }: Props) => {
+/** couleur préférée si elle existe : exacte (« noir »), sinon une variante (« noir-rouge ») */
+export const pickPreferredColor = (colors: string[], preferred?: string) =>
+  !preferred ? undefined : colors.includes(preferred) ? preferred : colors.find((c) => c.startsWith(`${preferred}-`));
+
+/** écran tactile : on peut faire glisser les photos du doigt (sur ordinateur, flèches et zoom au survol inchangés) */
+const isTouch = () => typeof window !== "undefined" && !!window.matchMedia?.("(pointer: coarse)").matches;
+
+const ProductDetailView = ({ id, renderActions, renderHead, relatedHref = (rid) => `/produit/${rid}`, relatedIds, relatedTitle = "Produits similaires", renderBelowTitle, backLabel = "Retour", onBack = () => window.history.back(), notFound, preferredColor }: Props) => {
   const [activeImage, setActiveImage] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
@@ -64,12 +73,32 @@ const ProductDetailView = ({ id, renderActions, renderHead, relatedHref = (rid) 
     ...(galleryImages?.map((img) => ({ url: img.image_url, alt: img.alt_text || product.name, color: img.color ?? null })) || []),
   ] : [];
   const colors = Array.from(new Set(baseImages.map((i) => i.color).filter((c): c is string => !!c)));
-  const activeColor = selectedColor && colors.includes(selectedColor) ? selectedColor : (defaultColor && colors.includes(defaultColor) ? defaultColor : colors[0] ?? null);
-  const allImages = colors.length > 1 ? baseImages.filter((i) => !i.color || i.color === activeColor) : baseImages;
+  const preferred = pickPreferredColor(colors, preferredColor);
+  if (preferred) colors.sort((a, b) => Number(b === preferred) - Number(a === preferred));
+  const activeColor = selectedColor && colors.includes(selectedColor) ? selectedColor : preferred ?? (defaultColor && colors.includes(defaultColor) ? defaultColor : colors[0] ?? null);
+  const filtered = colors.length > 1 ? baseImages.filter((i) => !i.color || i.color === activeColor) : baseImages;
+  // couleur mise en avant : ses photos d'abord, puis les photos communes à toutes les couleurs
+  const allImages = preferred ? [...filtered].sort((a, b) => Number(!!b.color) - Number(!!a.color)) : filtered;
   const chooseColor = (c: string) => { setSelectedColor(c); setActiveImage(0); };
   const specs = (product?.specs as { label: string; value: string }[] | null) || [];
   const features = (product?.features as string[] | null) || [];
   const warrantyItems: { component: string; duration: string }[] = (() => { const w = product?.warranty; if (!w) return []; try { const parsed = JSON.parse(w); if (Array.isArray(parsed)) return parsed; } catch { /* texte libre : une ligne par composant */ } return w.split("\n").filter((l: string) => l.trim()).map((line: string) => { const parts = line.split(":"); return { component: parts[0]?.trim() || "Garantie", duration: parts.slice(1).join(":").trim() || line.trim() }; }); })();
+
+  // glisser du doigt pour passer d'une photo à l'autre (photo principale et plein écran)
+  const [touch] = useState(isTouch);
+  const dragged = useRef(false);
+  const swipe = allImages.length > 1 && touch ? {
+    drag: "x" as const,
+    dragConstraints: { left: 0, right: 0 },
+    dragElastic: 0.55,
+    dragSnapToOrigin: true,
+    onDragStart: () => { dragged.current = true; },
+    onDragEnd: (_e: unknown, info: PanInfo) => {
+      if (info.offset.x < -50 || info.velocity.x < -450) setActiveImage((p) => (p + 1) % allImages.length);
+      else if (info.offset.x > 50 || info.velocity.x > 450) setActiveImage((p) => (p - 1 + allImages.length) % allImages.length);
+      window.setTimeout(() => { dragged.current = false; }, 60);
+    },
+  } : {};
 
   const nextImage = useCallback(() => setActiveImage((p) => (p + 1) % allImages.length), [allImages.length]);
   const prevImage = useCallback(() => setActiveImage((p) => (p - 1 + allImages.length) % allImages.length), [allImages.length]);
@@ -95,10 +124,10 @@ const ProductDetailView = ({ id, renderActions, renderHead, relatedHref = (rid) 
           <div className="pd-grid">
             {/* Gallery */}
             <div className="pd-gallery">
-              <div className="pd-main" onClick={() => setLightboxOpen(true)}>
+              <div className="pd-main" onClick={() => { if (!dragged.current) setLightboxOpen(true); }}>
                 <AnimatePresence mode="wait">
                   {allImages.length > 0 && (
-                    <motion.img key={activeImage} src={allImages[activeImage].url} alt={allImages[activeImage].alt} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }} />
+                    <motion.img key={activeImage} src={allImages[activeImage].url} alt={allImages[activeImage].alt} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }} draggable={false} {...swipe} />
                   )}
                 </AnimatePresence>
                 {allImages.length > 1 && (
@@ -188,13 +217,14 @@ const ProductDetailView = ({ id, renderActions, renderHead, relatedHref = (rid) 
 
       {/* Lightbox */}
       {lightboxOpen && (
-        <div className="pd-lightbox" onClick={() => setLightboxOpen(false)}>
+        <div className="pd-lightbox" onClick={() => { if (!dragged.current) setLightboxOpen(false); }}>
           <button className="lb-close" aria-label="Fermer" onClick={() => setLightboxOpen(false)}><X className="h-7 w-7" /></button>
-          {allImages.length > 0 && <img src={allImages[activeImage].url} alt={allImages[activeImage].alt} onClick={(e) => e.stopPropagation()} />}
+          {allImages.length > 0 && <motion.img key={activeImage} src={allImages[activeImage].url} alt={allImages[activeImage].alt} onClick={(e) => e.stopPropagation()} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.25 }} draggable={false} {...swipe} />}
           {allImages.length > 1 && (
             <>
               <button className="lb-arrow prev" aria-label="Précédent" onClick={(e) => { e.stopPropagation(); prevImage(); }}><ChevronLeft /></button>
               <button className="lb-arrow next" aria-label="Suivant" onClick={(e) => { e.stopPropagation(); nextImage(); }}><ChevronRight /></button>
+              <span className="lb-count" aria-live="polite">{activeImage + 1} / {allImages.length}</span>
             </>
           )}
         </div>
