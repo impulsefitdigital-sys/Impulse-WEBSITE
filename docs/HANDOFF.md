@@ -305,6 +305,14 @@ Retours d'Adil après la mise en ligne, et check-up de l'infrastructure.
 ### 29/10/2026 — Correctif : « Statistiques indisponibles … reading 'rest' »
 - `src/lib/stats.ts` appelait `supabase.rpc` détaché de son objet (perte du `this`) : erreur avec le vrai Supabase (le mode démo ne la montrait pas). Corrigé avec `supabase.rpc.bind(supabase)`. Touche les écrans Landing page, Statistiques du site et Tableau de bord. Aucun rapport avec le cache Netlify.
 
+### 29/10/2026 (bis) — Check-up avant montée en charge (600-700 visites/jour)
+- Vérifié en ligne (navigateur, ordinateur + téléphone 375 px) : landing, 3 catégories (5 / 36 / 8 machines), fiches, devis, fenêtres, aucun lien vers le site, pas de débordement horizontal, aucune erreur console, photos recadrées et vignettes servies, /api/content en cache Netlify.
+- Supabase (plan gratuit) : par visiteur, seulement les événements de statistiques (petites écritures) + les demandes ; le contenu passe par /api/content (CDN Netlify). Changements :
+  - `/api/content` : cache CDN 24 h au lieu de 5 min (vidé à chaque modification admin) → Supabase lu ~1 fois par jour au lieu de 288 ;
+  - conservation des statistiques 6 mois (SQL `supabase/mises-a-jour/2026-10-29-stats-conservation.sql`), ménage aussi à l'ouverture de Admin → Landing page ;
+  - requête de contrôle : `supabase/mises-a-jour/verifier-taille-base.sql`.
+- Netlify (crédits) : affiches des catégories de la landing en vignettes 640 px ; barre fixe téléphone : textes qui ne débordent plus. Estimation à 700 visites/jour : ~900–1 000 crédits/mois (bande passante ~500, requêtes ~130, déploiements 15 chacun).
+
 ## 4. Architecture cible
 
 ```

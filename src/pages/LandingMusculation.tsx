@@ -311,7 +311,7 @@ const LandingMusculation = () => {
   // cartes des 3 catégories (accueil, et en haut de chaque page catégorie pour passer de l'une à l'autre)
   const renderCats = (active?: string) => categories.map((c) => (
     <a className={`lp-cat${c.slug === active ? " on" : ""}`} key={c.slug} href={catHref(c.slug)} aria-current={c.slug === active ? "page" : undefined}>
-      <span className="lp-cat-img">{c.coverImage && <img src={c.coverImage} alt="" loading="lazy" decoding="async" />}</span>
+      <span className="lp-cat-img">{c.coverImage && <img {...thumbProps(c.coverImage)} alt="" loading="lazy" decoding="async" />}</span>
       <h2>{c.title}</h2>
       <span className="lp-btn lp-btn-red lp-btn-sm">{c.slug === active ? "Catégorie affichée" : "Voir les machines"}</span>
     </a>

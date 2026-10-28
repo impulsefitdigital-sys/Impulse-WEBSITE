@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Bar, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { AlarmClock, ArrowRight, ExternalLink, Link2, Megaphone, MessageCircle, Phone, ShoppingCart, AlertTriangle } from "lucide-react";
@@ -79,6 +79,8 @@ const AdminLanding = ({ param, navigate }: { param: string | null; navigate: Adm
     },
   });
   const { data: report } = useAnalyticsReport(days, "landing");
+  // conservation des statistiques (6 mois) : le ménage se fait à l'ouverture de l'écran
+  useEffect(() => { void supabase.rpc("purge_analytics_events"); }, []);
 
   const lp = useMemo(() => (requests || []).filter(isLandingRequest), [requests]);
   const since = useMemo(() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime() - (days - 1) * 86400000; }, [days]);

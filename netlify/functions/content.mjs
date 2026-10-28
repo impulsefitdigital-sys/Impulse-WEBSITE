@@ -3,8 +3,9 @@
  *
  * Pourquoi : chaque visite interrogeait directement Supabase (≈ 635 Ko rien que pour les produits),
  * ce qui épuisait la bande passante du plan gratuit. Ici, Supabase n'est lu qu'au plus une fois
- * toutes les 5 minutes ; tous les visiteurs reçoivent la copie servie par le CDN de Netlify.
- * Une modification faite dans l'admin apparaît donc sur le site en moins de 5 minutes.
+ * par jour ; tous les visiteurs reçoivent la copie servie par le CDN de Netlify.
+ * Une modification faite dans l'admin vide ce cache (/api/purge-content) : elle apparaît tout de suite.
+ * (29/10/2026 : 5 min → 24 h, pour ménager la bande passante Supabase pendant les campagnes.)
  *
  * Lecture avec la clé publique : les règles RLS de Supabase s'appliquent, donc seules les lignes
  * publiques (produits publiés, éléments actifs…) sont renvoyées — exactement ce qu'un visiteur voit.
@@ -52,12 +53,13 @@ export default async () => {
     return new Response(body, {
       headers: {
         "content-type": "application/json; charset=utf-8",
-        // navigateur : 1 min ; CDN Netlify (partagé entre tous les visiteurs) : 5 min, puis ancienne
+        // navigateur : 1 min ; CDN Netlify (partagé entre tous les visiteurs) : 24 h (vidé à chaque
+        // modification admin), puis ancienne
         // copie servie pendant le rafraîchissement en arrière-plan (jamais de visiteur qui attend)
         "cache-control": "public, max-age=60",
         // étiquette de cache : /api/purge-content la vide après chaque modification admin
         "netlify-cache-tag": "impulse-content",
-        "netlify-cdn-cache-control": "public, durable, s-maxage=300, stale-while-revalidate=86400",
+        "netlify-cdn-cache-control": "public, durable, s-maxage=86400, stale-while-revalidate=86400",
       },
     });
   } catch (e) {

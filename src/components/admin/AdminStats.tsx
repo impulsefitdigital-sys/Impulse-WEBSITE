@@ -133,7 +133,7 @@ const AdminStats = () => {
   const qc = useQueryClient();
   const { data: r, isLoading, error } = useAnalyticsReport(days, "site");
   const daily = useMemo(() => (r ? fillDays(r.daily, days) : []), [r, days]);
-  useEffect(() => { void supabase.rpc("purge_analytics_events"); }, []); // garde 13 mois
+  useEffect(() => { void supabase.rpc("purge_analytics_events"); }, []); // garde 6 mois (mise à jour SQL du 29/10/2026)
 
   const seedDemo = async () => {
     const { error: e } = await (supabase.rpc as unknown as (fn: string) => Promise<{ error: { message: string } | null }>)("demo_seed");
