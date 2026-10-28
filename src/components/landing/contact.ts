@@ -41,12 +41,31 @@ export const checkContact = (c: LpContact) => {
 };
 
 type Win = Window & { fbq?: (...a: unknown[]) => void; gtag?: (...a: unknown[]) => void };
-/** Conversion envoyée au Pixel Meta et à GA4 (s'ils sont chargés, donc acceptés dans le bandeau cookies). */
-export const reportLead = (kind: "rappel" | "devis", value?: number) => {
+/** Type de demande envoyée depuis la landing (même classement que dans Admin → Landing page). */
+export type LeadKind = "devis" | "rdv" | "projet" | "machine" | "rappel";
+const LEAD_NAMES: Record<LeadKind, string> = {
+  devis: "Commande landing musculation",
+  rdv: "RDV showroom landing",
+  projet: "Projet sur mesure landing",
+  machine: "Question machine landing",
+  rappel: "Contact landing",
+};
+/** D'après le bouton cliqué (« intérêt » du formulaire simple). */
+export const leadKindFromInterest = (interest?: string): LeadKind => {
+  const i = (interest || "").toLowerCase();
+  return !i ? "rappel" : i.includes("showroom") ? "rdv" : i.includes("projet") ? "projet" : "machine";
+};
+
+/**
+ * Conversion envoyée au Pixel Meta (« Lead ») et à GA4 (« generate_lead »), s'ils sont chargés
+ * (donc acceptés dans le bandeau cookies). Une seule conversion par demande envoyée, marquée « landing »,
+ * avec le type de demande et, pour une commande, sa valeur HT en dirhams.
+ */
+export const reportLead = (kind: LeadKind, value?: number) => {
   const w = window as Win;
-  const extra = value ? { value, currency: "MAD" } : {};
-  try { w.fbq?.("track", "Lead", { content_name: kind === "devis" ? "Devis landing musculation" : "Rappel landing musculation", ...extra }); } catch { /* pixel absent */ }
-  try { w.gtag?.("event", "generate_lead", { form: kind === "devis" ? "landing_devis" : "landing_rappel", ...extra }); } catch { /* GA4 absent */ }
+  const extra = value ? { value: Math.round(value), currency: "MAD" } : {};
+  try { w.fbq?.("track", "Lead", { content_name: LEAD_NAMES[kind], content_category: "landing", ...extra }); } catch { /* pixel absent */ }
+  try { w.gtag?.("event", "generate_lead", { form: `landing_${kind}`, site_section: "landing", ...extra }); } catch { /* GA4 absent */ }
 };
 
 /** La landing ne renvoie jamais vers le site : les liens « confidentialité » ouvrent une fenêtre dans la page. */

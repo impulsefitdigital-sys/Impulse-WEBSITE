@@ -41,8 +41,10 @@ const HERO_ALT = "Impulse Fitness débarque au Maroc : découvrez nos offres de 
 /* Textes de la maquette du client — à confirmer avant diffusion. */
 /** WhatsApp de la landing (boutons proposés après l'envoi d'un formulaire ou d'un devis) */
 const LP_WHATSAPP = "212668818164";
-/** couleur montrée en premier quand une machine existe en plusieurs couleurs */
+/** couleur montrée en premier quand une machine existe en plusieurs couleurs : noir, sauf SL et ECP en rouge (demande du client) */
 const PREFERRED_COLOR = "noir";
+const PREFERRED_COLOR_BY_GAMME: Record<string, string> = { SL: "rouge", ECP: "rouge" };
+const preferredColorFor = (gamme?: string) => (gamme && PREFERRED_COLOR_BY_GAMME[gamme.toUpperCase()]) || PREFERRED_COLOR;
 const ANNOUNCE = "Offre de lancement · Impulse Fitness Maroc";
 const PERK_WARRANTY = { title: "Garantie 12 mois", sub: "pièces et main-d'œuvre" };
 const PERK_DELIVERY = "Livraison sous 72 h";
@@ -58,10 +60,10 @@ interface StockProduct extends DevisLine { gamme: string; hover: string; subTitl
  *   charges-libres                  → « Bancs & Racks »       (bancs ITF, bancs olympiques SL)
  * (Sur le site, les sous-catégories ont été renommées dans l'admin ; leurs identifiants n'ont pas changé.)
  */
-interface Category { slug: string; title: string; pitch: string; cover: string; siteSlugs: string[] }
+interface Category { slug: string; title: string; pitch: string; cover: string; siteSlugs: string[]; coverPhoto?: string }
 const CATEGORIES: Category[] = [
   { slug: "musculation-guidee", title: "Musculation guidée", pitch: "Machines à pile de poids : mono-stations et multi-stations.", cover: "IT9530", siteSlugs: ["mono-stations", "multi-stations"] },
-  { slug: "musculation-libre", title: "Musculation libre", pitch: "Machines à disques et Smith machines.", cover: "ECP617", siteSlugs: ["charges-guidees"] },
+  { slug: "musculation-libre", title: "Musculation libre", pitch: "Machines à disques et Smith machines.", cover: "ECP201", siteSlugs: ["charges-guidees"], coverPhoto: "/photos/ecp-series/ecp201/rouge/ecp201-rouge-02.webp" },
   { slug: "bancs-racks", title: "Bancs & Racks", pitch: "Bancs plats, inclinés, réglables et bancs olympiques.", cover: "ITF8202", siteSlugs: ["charges-libres"] },
 ];
 /** anciennes adresses de catégorie → nouvelles */
@@ -123,17 +125,20 @@ const LandingMusculation = () => {
         .sort((a, b) => Number(!b.image_url) - Number(!a.image_url))[0];
       if (!p) continue;
       const name = str(p.name).replace(/\s+/g, " ").trim();
-      // photos en noir si la machine existe en noir (les photos principales sont dans la couleur par défaut)
+      // photos dans la couleur mise en avant (noir, ou rouge pour SL / ECP) si la machine existe dans cette couleur
+      // (les photos principales du site sont dans la couleur par défaut choisie dans l'admin)
       let image = str(p.image_url), hover = str(p.hover_image_url);
+      const gamme = str(p.range_code) || it.ref.replace(/\d.*/, "");
+      const wanted = preferredColorFor(gamme);
       const gallery = data.images.filter((g) => g.product_id === p.id && str(g.image_url));
-      const black = pickPreferredColor([...new Set(gallery.map((g) => str(g.color)).filter(Boolean))], PREFERRED_COLOR);
-      if (black && !str(p.default_color).startsWith(PREFERRED_COLOR)) {
-        const shots = gallery.filter((g) => g.color === black).map((g) => str(g.image_url));
+      const color = pickPreferredColor([...new Set(gallery.map((g) => str(g.color)).filter(Boolean))], wanted);
+      if (color && !str(p.default_color).startsWith(wanted)) {
+        const shots = gallery.filter((g) => g.color === color).map((g) => str(g.image_url));
         image = shots[0]; hover = shots[1] || "";
       }
       out.push({
         ref: it.ref, productId: str(p.id), name, image, hover,
-        category: str(p.category) || "Musculation", pu: it.pu, qty: 0, gamme: str(p.range_code) || it.ref.replace(/\d.*/, ""),
+        category: str(p.category) || "Musculation", pu: it.pu, qty: 0, gamme,
         subTitle: str(p.subcategory),
         type: name.replace(re, "").replace(/\bimpulse\b/gi, "").replace(/\s+/g, " ").trim() || str(p.subcategory),
         crossed: Math.round(it.pu * CROSSED_PRICE_RATIO), trending: !!p.is_trending, order: data.products.indexOf(p),
@@ -158,7 +163,7 @@ const LandingMusculation = () => {
       const cover = items.find((p) => p.ref === c.cover && p.image) || items.find((p) => p.image);
       const picks = [...items].sort((a, b) => Number(b.trending) - Number(a.trending) || b.pu - a.pu).slice(0, PICKS_PER_CATEGORY);
       const gammes = [...new Set(items.map((p) => p.gamme))].sort((a, b) => ((GAMME_ORDER.indexOf(a) + 1) || 99) - ((GAMME_ORDER.indexOf(b) + 1) || 99));
-      return { ...c, items, picks, gammes, coverImage: cover?.image || "" };
+      return { ...c, items, picks, gammes, coverImage: c.coverPhoto || cover?.image || "" };
     }).filter((c) => c.items.length > 0);
   }, [stock]);
   const catOf = useCallback((p: StockProduct) => categories.find((c) => c.items.includes(p)), [categories]);
@@ -387,7 +392,7 @@ const LandingMusculation = () => {
     main = (
       <div className="imp lp-imp lp-pd">
         <ProductDetailView
-          preferredColor={PREFERRED_COLOR}
+          preferredColor={preferredColorFor(current?.gamme)}
           id={id}
           backLabel={currentCat ? `Retour : ${currentCat.title}` : "Retour aux machines"}
           onBack={() => navigate(current && currentCat ? `${catHref(currentCat.slug)}#machine-${current.ref}` : `${BASE}#machines`)}
@@ -548,10 +553,10 @@ const LandingMusculation = () => {
         <div className="lp-modal" role="dialog" aria-modal="true" aria-labelledby="lp-modal-title" onClick={closeModal}>
           <div className="lp-modal-box" onClick={(e) => e.stopPropagation()}>
             <button className="lp-modal-x" onClick={closeModal} aria-label="Fermer"><X /></button>
-            <p className="lp-modal-kicker">{modal.auto ? "Offre de lancement" : modal.interest || "Nous contacter"}</p>
-            <h2 id="lp-modal-title">{modal.interest === "Projet sur mesure" ? "Parlons de votre projet" : modal.interest === "Rendez-vous au showroom" ? "Prenez rendez-vous au showroom" : "Un conseiller vous rappelle sous 24 h"}</h2>
-            <p className="lp-modal-sub">Laissez vos coordonnées, un conseiller Impulse vous rappelle sous 24 h ouvrées. Vous pourrez aussi composer votre devis : elles y seront déjà remplies.</p>
-            <LeadForm idPrefix="popup" interest={modal.interest} submitLabel={modal.interest === "Rendez-vous au showroom" ? "Demander un rendez-vous" : "Envoyer"} {...formProps} />
+            {(modal.auto || (modal.interest && !["Rendez-vous au showroom", "Projet sur mesure"].includes(modal.interest))) && <p className="lp-modal-kicker">{modal.auto ? "Offre de lancement" : modal.interest}</p>}
+            <h2 id="lp-modal-title">{modal.interest === "Projet sur mesure" ? "Parlons de votre projet" : modal.interest === "Rendez-vous au showroom" ? "Prenez rendez-vous au showroom" : "Contactez-nous"}</h2>
+            <p className="lp-modal-sub">Un conseiller vous contactera dans les plus brefs délais.</p>
+            <LeadForm idPrefix="popup" interest={modal.interest} submitLabel="Envoyer" {...formProps} />
           </div>
         </div>
       )}

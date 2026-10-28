@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowRight, CalendarClock, Inbox, TrendingUp } from "lucide-react";
-import { statusInfo, isOpenStatus, formatDate, formatAmount, requestItems, type ContactRequest } from "@/lib/requests";
+import { ArrowRight, CalendarClock, Inbox, Megaphone, TrendingUp } from "lucide-react";
+import { statusInfo, isOpenStatus, formatDate, formatAmount, requestItems, isLandingRequest, isLate, landingKind, type ContactRequest } from "@/lib/requests";
 import { useAnalyticsReport, pct, fmt, sourceName } from "@/lib/stats";
 import type { AdminNavigate } from "@/pages/Admin";
 
@@ -26,9 +26,14 @@ const AdminDashboard = ({ navigate }: { navigate: AdminNavigate }) => {
       return (data || []) as ContactRequest[];
     },
   });
-  const { data: week } = useAnalyticsReport(7);
+  const { data: week } = useAnalyticsReport(7, "site");
 
-  const all = requests || [];
+  // tableau de bord du SITE : la landing page a son propre écran (bandeau ci-dessous)
+  const lp = (requests || []).filter(isLandingRequest);
+  const lpNew = lp.filter((r) => r.status === "nouveau");
+  const weekAgo = Date.now() - 7 * 86400000;
+  const lpWeekOrders = lp.filter((r) => landingKind(r) === "commande" && new Date(r.created_at).getTime() >= weekAgo).length;
+  const all = (requests || []).filter((r) => !isLandingRequest(r));
   const fresh = all.filter((r) => r.status === "nouveau");
   const toFollow = all.filter((r) => r.follow_up_date && r.follow_up_date <= today() && isOpenStatus(r.status))
     .sort((a, b) => String(a.follow_up_date).localeCompare(String(b.follow_up_date)));
@@ -56,9 +61,16 @@ const AdminDashboard = ({ navigate }: { navigate: AdminNavigate }) => {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="font-display text-2xl font-bold text-foreground">Tableau de bord</h1>
-        <p className="text-sm text-muted-foreground">{new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}</p>
+        <h1 className="font-display text-2xl font-bold text-foreground">Tableau de bord du site</h1>
+        <p className="text-sm text-muted-foreground">{new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })} · hors landing page</p>
       </div>
+
+      <button onClick={() => navigate("landing")} className="flex w-full flex-wrap items-center gap-x-4 gap-y-1 rounded-sm border border-red-200 bg-red-50/60 px-4 py-3 text-left text-sm hover:bg-red-50">
+        <Megaphone className="h-5 w-5 text-red-600" />
+        <span className="font-semibold text-foreground">Landing page (campagne en cours)</span>
+        <span className="text-muted-foreground">{lpNew.length} demande{lpNew.length > 1 ? "s" : ""} à traiter{lpNew.some(isLate) ? ` dont ${lpNew.filter(isLate).length} depuis +24 h` : ""} · {lpWeekOrders} commande{lpWeekOrders > 1 ? "s" : ""} cette semaine</span>
+        <span className="ml-auto inline-flex items-center gap-1 text-xs font-semibold text-red-700">Ouvrir <ArrowRight className="h-3 w-3" /></span>
+      </button>
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <button onClick={() => navigate("requests")} className="rounded-sm border border-border bg-card p-4 text-left hover:border-accent/50">

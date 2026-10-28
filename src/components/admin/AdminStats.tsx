@@ -82,11 +82,11 @@ const Table = ({ head, rows, empty }: { head: string[]; rows: React.ReactNode[][
   );
 
 /** Génère un lien de campagne avec paramètres UTM (à mettre dans les publicités). */
-const UtmBuilder = () => {
-  const [page, setPage] = useState("https://impulsemorocco.com/");
+export const UtmBuilder = ({ defaultPage = "https://impulsemorocco.com/", defaultCampaign = "" }: { defaultPage?: string; defaultCampaign?: string }) => {
+  const [page, setPage] = useState(defaultPage);
   const [source, setSource] = useState("facebook");
   const [medium, setMedium] = useState("paid_social");
-  const [campaign, setCampaign] = useState("");
+  const [campaign, setCampaign] = useState(defaultCampaign);
   const slug = (s: string) => s.trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   let url = "";
   try {
@@ -131,7 +131,7 @@ const UtmBuilder = () => {
 const AdminStats = () => {
   const [days, setDays] = useState(30);
   const qc = useQueryClient();
-  const { data: r, isLoading, error } = useAnalyticsReport(days);
+  const { data: r, isLoading, error } = useAnalyticsReport(days, "site");
   const daily = useMemo(() => (r ? fillDays(r.daily, days) : []), [r, days]);
   useEffect(() => { void supabase.rpc("purge_analytics_events"); }, []); // garde 13 mois
 
@@ -148,8 +148,8 @@ const AdminStats = () => {
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-bold text-foreground">Statistiques</h1>
-          <p className="text-sm text-muted-foreground">Visites, parcours jusqu'au devis et provenance des visiteurs.</p>
+          <h1 className="font-display text-2xl font-bold text-foreground">Statistiques du site</h1>
+          <p className="text-sm text-muted-foreground">Visites, parcours jusqu'au devis et provenance des visiteurs du site. La landing page a ses propres chiffres (menu « Landing page »).</p>
         </div>
         <div className="flex items-center gap-2">
           {IS_DEMO && (
@@ -164,6 +164,13 @@ const AdminStats = () => {
           </div>
         </div>
       </div>
+
+      {r?.unscoped && (
+        <p className="flex items-start gap-2 rounded-sm border border-amber-300 bg-amber-50 px-4 py-3 text-xs text-amber-900">
+          <AlertTriangle className="mt-0.5 h-4 w-4 flex-none" />
+          <span>Ces chiffres incluent encore la landing page : exécutez la mise à jour <code>supabase/mises-a-jour/2026-10-27-stats-landing.sql</code> dans Supabase (SQL Editor).</span>
+        </p>
+      )}
 
       {isLoading ? <p className="text-muted-foreground">Chargement…</p> : error || !r || !t ? (
         <p className="text-sm text-destructive">Statistiques indisponibles : {(error as Error)?.message}</p>

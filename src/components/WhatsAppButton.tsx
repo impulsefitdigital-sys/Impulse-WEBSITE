@@ -8,8 +8,8 @@ const WhatsAppButton = () => {
   });
 
   const whatsappNumber = settings?.whatsapp_number || "212661234567";
-  // les landing pages (/lp/…) ont leur propre barre WhatsApp
-  if (typeof window !== "undefined" && window.location.pathname.startsWith("/lp/")) return null;
+  // pas de bouton sur les landing pages (/lp/…) ni dans l'administration
+  if (typeof window !== "undefined" && /^\/(lp|admin|login)(\/|$)/.test(window.location.pathname)) return null;
 
   return (
     <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full px-5 py-3 font-semibold text-sm shadow-lg transition-transform hover:scale-105 text-background" style={{ backgroundColor: '#25D366' }} aria-label="Contacter via WhatsApp">

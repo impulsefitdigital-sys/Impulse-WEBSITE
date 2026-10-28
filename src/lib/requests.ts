@@ -1,4 +1,5 @@
 import type { Database } from "@/integrations/supabase/types";
+import { STOCK_ITEMS } from "@/data/stock-landing";
 
 export type ContactRequest = Database["public"]["Tables"]["contact_requests"]["Row"];
 
@@ -18,6 +19,52 @@ export const isOpenStatus = (s: string) => s !== "gagne" && s !== "perdu";
 
 export const requestItems = (r: Pick<ContactRequest, "items">): RequestItem[] =>
   Array.isArray(r.items) ? (r.items as unknown as RequestItem[]) : [];
+
+// ---------------------------------------------------------------- landing page
+export const isLandingRequest = (r: Pick<ContactRequest, "source">) => r.source === "landing";
+
+/** Nature d'une demande de la landing page (d'après le formulaire utilisé). */
+export const LANDING_KINDS = [
+  { value: "commande", label: "Commande", className: "bg-red-600 text-white" },
+  { value: "rdv", label: "RDV showroom", className: "bg-violet-100 text-violet-800" },
+  { value: "projet", label: "Projet sur mesure", className: "bg-sky-100 text-sky-800" },
+  { value: "machine", label: "Question machine", className: "bg-emerald-100 text-emerald-800" },
+  { value: "contact", label: "Contact", className: "bg-zinc-100 text-zinc-700" },
+] as const;
+export type LandingKind = (typeof LANDING_KINDS)[number]["value"];
+
+/** « Intérêt : … » ajouté au message par le formulaire de la landing (bouton cliqué). */
+export const landingInterest = (r: Pick<ContactRequest, "message">) => /Intérêt : (.+)/.exec(r.message || "")?.[1]?.trim() || "";
+
+export const landingKind = (r: Pick<ContactRequest, "request_type" | "message">): LandingKind => {
+  if (r.request_type === "devis") return "commande";
+  const i = landingInterest(r).toLowerCase();
+  if (!i) return "contact";
+  if (i.includes("showroom")) return "rdv";
+  if (i.includes("projet")) return "projet";
+  return "machine";
+};
+export const landingKindInfo = (k: LandingKind) => LANDING_KINDS.find((x) => x.value === k) ?? LANDING_KINDS[4];
+
+const STOCK_PRICE = new Map(STOCK_ITEMS.map((i) => [i.ref, i.pu]));
+/** Référence de la machine (« Chest press ECP201 (ECP201) » → ECP201). */
+export const itemRef = (i: RequestItem) => /\(([A-Z]{2,4}\d{3,5})\)\s*$/.exec(i.name)?.[1] || "";
+/** Prix unitaire HT affiché sur la landing pour une ligne de commande (0 si la machine n'est plus dans la liste). */
+export const itemPrice = (i: RequestItem) => STOCK_PRICE.get(itemRef(i)) ?? 0;
+/** Valeur HT d'une commande de la landing (prix affichés × quantités). */
+export const landingValue = (r: Pick<ContactRequest, "items">) => requestItems(r).reduce((s, i) => s + itemPrice(i) * Number(i.quantity || 0), 0);
+
+/** Heures écoulées depuis la réception. */
+export const ageHours = (r: Pick<ContactRequest, "created_at">) => (Date.now() - new Date(r.created_at).getTime()) / 3600000;
+/** Demande « Nouveau » depuis plus de 24 h (promesse de rappel de la landing). */
+export const isLate = (r: Pick<ContactRequest, "created_at" | "status">) => r.status === "nouveau" && ageHours(r) > 24;
+export const ageLabel = (r: Pick<ContactRequest, "created_at">) => {
+  const h = ageHours(r);
+  if (h < 1) return `il y a ${Math.max(1, Math.round(h * 60))} min`;
+  if (h < 24) return `il y a ${Math.round(h)} h`;
+  const d = Math.floor(h / 24);
+  return `il y a ${d} jour${d > 1 ? "s" : ""}`;
+};
 
 /** Email réel (les anciennes demandes sans email utilisaient « téléphone@no-email.local »). */
 export const realEmail = (email: string | null) => (email && !email.endsWith("@no-email.local") ? email : "");
@@ -40,12 +87,12 @@ export const formatAmount = (n: number | null) =>
 // ---------------------------------------------------------------- export CSV (Excel, séparateur ;)
 export const exportRequestsCsv = (rows: ContactRequest[]) => {
   const header = ["Numéro", "Date", "Type", "Statut", "Nom", "Téléphone", "Email", "Entreprise", "Ville", "Usage",
-    "Équipements", "Message", "Montant (MAD)", "Relance", "Notes", "Source", "Support", "Campagne", "Page d'arrivée"];
+    "Équipements", "Message", "Valeur affichée HT (landing)", "Montant (MAD)", "Relance", "Notes", "Source", "Support", "Campagne", "Page d'arrivée"];
   const cell = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""').replace(/\r?\n/g, " ")}"`;
   const lines = rows.map((r) => [
-    r.quote_number, formatDate(r.created_at), r.source === "landing" ? "Landing page" : r.request_type === "devis" ? "Devis" : "Contact", statusInfo(r.status).label,
+    r.quote_number, formatDate(r.created_at), r.source === "landing" ? `Landing page · ${landingKindInfo(landingKind(r)).label}` : r.request_type === "devis" ? "Devis" : "Contact", statusInfo(r.status).label,
     r.full_name, r.phone, realEmail(r.email), r.company, r.city, r.usage_type,
-    requestItems(r).map((i) => `${i.name} x${i.quantity}`).join(" ; "), r.message, r.amount ?? "", r.follow_up_date ?? "",
+    requestItems(r).map((i) => `${i.name} x${i.quantity}`).join(" ; "), r.message, r.source === "landing" && r.request_type === "devis" ? landingValue(r) : "", r.amount ?? "", r.follow_up_date ?? "",
     r.notes, r.utm_source ?? r.referrer ?? "direct", r.utm_medium, r.utm_campaign, r.landing_page,
   ].map(cell).join(";"));
   // BOM : accents corrects à l'ouverture dans Excel
@@ -127,8 +174,10 @@ export const downloadRequestPdf = async (r: ContactRequest, company: CompanyInfo
   });
   y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 8;
 
-  // équipements
+  // équipements (commande de la landing page : avec les prix affichés)
   const items = requestItems(r);
+  const priced = r.source === "landing" && isQuote && landingValue(r) > 0;
+  const money = (n: number) => `${Math.round(n).toLocaleString("fr-FR").replace(/[\s\u202f]/g, " ")} DH`;
   if (items.length) {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11);
@@ -136,17 +185,24 @@ export const downloadRequestPdf = async (r: ContactRequest, company: CompanyInfo
     autoTable(doc, {
       startY: y + 3,
       margin: { left: M, right: M },
-      head: [["#", "Équipement", "Catégorie", "Quantité"]],
-      body: items.map((i, idx) => [String(idx + 1), i.name, i.category || "", String(i.quantity)]),
+      ...(priced ? {
+        head: [["#", "Équipement", "Quantité", "PU HT (landing)", "Total HT"]],
+        body: items.map((i, idx) => [String(idx + 1), i.name, String(i.quantity), money(itemPrice(i)), money(itemPrice(i) * Number(i.quantity || 0))]),
+        columnStyles: { 0: { cellWidth: 10 }, 2: { cellWidth: 20, halign: "center" as const }, 3: { cellWidth: 32, halign: "right" as const }, 4: { cellWidth: 32, halign: "right" as const } },
+      } : {
+        head: [["#", "Équipement", "Catégorie", "Quantité"]],
+        body: items.map((i, idx) => [String(idx + 1), i.name, i.category || "", String(i.quantity)]),
+        columnStyles: { 0: { cellWidth: 10 }, 3: { cellWidth: 22, halign: "center" as const } },
+      }),
       headStyles: { fillColor: [23, 23, 23], textColor: 255, fontStyle: "bold", fontSize: 9.5 },
       bodyStyles: { fontSize: 9.5, textColor: [20, 20, 25] },
       alternateRowStyles: { fillColor: [246, 246, 244] },
-      columnStyles: { 0: { cellWidth: 10 }, 3: { cellWidth: 22, halign: "center" } },
     });
     y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 4;
     doc.setFont("helvetica", "normal");
     doc.setFontSize(9.5);
-    doc.text(`Total : ${items.reduce((s, i) => s + Number(i.quantity || 0), 0)} article(s)`, W - M, y + 2, { align: "right" });
+    const count = items.reduce((s, i) => s + Number(i.quantity || 0), 0);
+    doc.text(priced ? `Total : ${count} article(s) — ${money(landingValue(r))} HT (prix affichés sur la landing page)` : `Total : ${count} article(s)`, W - M, y + 2, { align: "right" });
     y += 10;
   }
 

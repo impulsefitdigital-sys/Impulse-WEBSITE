@@ -280,6 +280,28 @@ Retours d'Adil après la mise en ligne, et check-up de l'infrastructure.
 - Photos en noir d'abord sur la landing : cartes (photo + survol) et fiche (couleur « Noir » sélectionnée, ses photos en premier) quand la machine existe en noir. Constante `PREFERRED_COLOR` ; option `preferredColor` de `ProductDetailView` (le site garde sa couleur par défaut).
 - Fiche produit (site et landing) : sur téléphone, on fait glisser la photo du doigt pour passer à la suivante, aussi en plein écran (compteur « 2 / 4 », flèches en bas). Sur ordinateur, rien ne change.
 
+### 27/10/2026 — Admin : espace « Landing page » séparé du site
+- Nouveau menu en tête : « Campagne en cours → Landing page » (ouvert par défaut à l'arrivée sur /admin, pastille des nouvelles demandes). `src/components/admin/AdminLanding.tsx`.
+  - Vue d'ensemble : période (aujourd'hui, 7 j, 30 j, depuis le lancement 22/10), visites, demandes, conversion, commandes + valeur HT (prix de `stock-landing.ts`), panier moyen, à traiter, ventes gagnées ; alerte « sans réponse depuis +24 h » ; liste « À traiter maintenant » avec Appeler / WhatsApp (message prérempli) ; types de demandes ; visites et demandes par jour ; parcours ; campagnes (UTM) ; machines les plus demandées ; lien de campagne prérempli.
+  - Onglet « Demandes » : liste et fiche de suivi de la landing seulement, filtres Commande / RDV showroom / Projet sur mesure / Question machine / Contact, filtre « Sans réponse +24 h », prix et total des commandes dans la fiche, PDF avec prix.
+- Menu « Site web » : Tableau de bord, Demandes du site, Statistiques du site = sans la landing page (bandeau d'accès à la landing sur le tableau de bord).
+- SQL à exécuter UNE fois : `supabase/mises-a-jour/2026-10-27-stats-landing.sql` (paramètre p_scope de analytics_report : site / landing). Sans lui, les visites de la landing affichent tout le site, avec un avertissement.
+- Landing : fenêtre de contact « Laissez vos coordonnées, nous vous contacterons dans les plus brefs délais. », bouton « Envoyer ». Bouton WhatsApp flottant du site masqué dans l'admin.
+
+### 28/10/2026 — Meta Pixel : landing page et site distingués
+- Pixel 3384967751711261 : à saisir dans Admin → Paramètres → Intégrations (ne pas coller le code fourni par Meta dans le site : il serait chargé sans le consentement cookies et en double).
+- Un seul Pixel pour le domaine. Chaque événement porte `content_category` = « landing » (pages /lp/…) ou « site » (GA4 : `site_section`).
+- Landing : une seule conversion « Lead » par demande envoyée (avant : Lead en double pour une commande, Contact + Lead pour un rappel), avec `content_name` = Commande / RDV showroom / Projet sur mesure / Question machine / Contact « landing » et, pour une commande, `value` + `currency: MAD`. `src/lib/analytics.ts`, `src/components/landing/contact.ts`, `LeadForm.tsx`.
+- Côté Meta (Gestionnaire d'événements) : conversion personnalisée « Lead landing » = événement Lead + URL contient /lp/musculation ; campagnes optimisées sur cette conversion, liens des pubs faits avec « Lien de campagne » (UTM).
+
+### 28/10/2026 (bis) — Photos recadrées, rouge pour SL / ECP, textes des fenêtres
+- **Cadrage uniforme des photos produit** (`public/photos`) : 1 204 photos sur fond blanc recadrées en carré, machine centrée occupant 86 % du côté (référence : IFP1201). Avant, les photos très larges (ex. IFP1616, 1600×723) apparaissaient minuscules dans les cartes carrées. 1 187 en « carré + marges », 17 rendus avec sol gris recadrés à l'intérieur de l'image. Non touchées (546) : visuels d'ambiance, photos à fond coloré, gros plans, I-Zone dont la structure touche le bord. Vignettes `public/photos-sm` régénérées (+ vignettes des photos couleur des 49 machines de la landing).
+  - Originaux sauvegardés : `IMPULSE SITEWEB PHOTO\_ANALYSE_CLAUDE\sauvegarde-photos-avant-cadrage-2026-10-28\` ; rapport photo par photo : `_ANALYSE_CLAUDE\cadrage\rapport-cadrage-2026-10-28.csv`.
+  - Scripts : `scripts/photos/cadrage.py` + `scripts/photos/cadrage_appliquer.py` (à relancer pour de nouvelles photos).
+- **Landing** : gammes SL et ECP montrées en rouge d'abord (cartes et fiche), les autres en noir (`PREFERRED_COLOR_BY_GAMME`). Affiche « Musculation libre » : ECP201 rouge vue de 3/4 (`ecp201-rouge-02.webp`).
+- **Fenêtres de contact** : « Un conseiller vous contactera dans les plus brefs délais. », bouton « Envoyer », plus de petite ligne « Rendez-vous au showroom » au-dessus du titre.
+- SQL 2026-10-27-stats-landing.sql exécuté par Adil le 28/10 (vérifié : p_scope présent).
+
 ## 4. Architecture cible
 
 ```

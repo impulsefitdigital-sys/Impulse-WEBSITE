@@ -452,10 +452,12 @@ const demoSubmitRequest = async (p: Row) => {
 
 const casablancaDay = (iso: string) => new Date(new Date(iso).getTime() + 60 * 60 * 1000).toISOString().slice(0, 10);
 
-/** Même calcul que analytics_report() en SQL (migration 20260930120100). */
-const demoAnalyticsReport = async (from: string, to: string) => {
+/** Même calcul que analytics_report() en SQL (migrations 20260930120100 et 20261027100000 : périmètre site / landing). */
+const demoAnalyticsReport = async (from: string, to: string, scope = "all") => {
   const db = await loadDb();
-  const ev = (db.analytics_events || []).filter((e) => e.created_at >= from && e.created_at < to);
+  const onLanding = (e: Row) => String(e.path || "").startsWith("/lp/");
+  const ev = (db.analytics_events || []).filter((e) => e.created_at >= from && e.created_at < to
+    && (scope === "all" || (scope === "landing" ? onLanding(e) : !onLanding(e))));
   const count = (name: string) => ev.filter((e) => e.event === name).length;
 
   const sessions = new Map<string, { product: boolean; add: boolean; form: boolean; quote: boolean; contact: boolean }>();
@@ -584,6 +586,42 @@ const demoSeed = async () => {
       if (Math.random() < 0.02) push("contact_submit", { path: "/contact" });
     }
   }
+  // landing page /lp/musculation : visites des campagnes publicitaires (7 derniers jours)
+  const lpCampaigns = [
+    { utm_source: "facebook", utm_medium: "paid_social", utm_campaign: "offre-lancement-musculation", w: 6 },
+    { utm_source: "instagram", utm_medium: "paid_social", utm_campaign: "offre-lancement-musculation", w: 4 },
+    { utm_source: "google", utm_medium: "cpc", utm_campaign: "machines-musculation-stock", w: 2 },
+  ];
+  const lpWeighted = lpCampaigns.flatMap((c) => Array(c.w).fill(c));
+  const lpProducts = products.filter((p) => /\b(IT95\d\d|ECP\d{3}|SL70\d\d|IFP1\d{3}|ITF8\d{3})\b/.test(String(p.name)));
+  for (let d = 6; d >= 0; d--) {
+    const perDay = 40 + Math.floor(Math.random() * 40);
+    for (let s = 0; s < perDay; s++) {
+      const sid = `demo-lp-${d}-${s}-${Math.random().toString(36).slice(2, 8)}`;
+      const c = pick(lpWeighted);
+      const device = Math.random() < 0.85 ? "mobile" : "desktop";
+      let t = now - d * 86400000 - Math.floor(Math.random() * 60000000);
+      const push = (event: string, extra: Row = {}) => events.push({
+        id: id++, created_at: new Date((t += 15000 + Math.random() * 60000)).toISOString(), event, session_id: sid,
+        visitor_id: null, device, path: "/lp/musculation", product_id: null, label: null, value: null,
+        utm_source: null, utm_medium: null, utm_campaign: null, referrer: null, ...extra,
+      });
+      push("session_start", { utm_source: c.utm_source, utm_medium: c.utm_medium, utm_campaign: c.utm_campaign });
+      push("page_view");
+      if (Math.random() < 0.5) push("page_view", { path: "/lp/musculation/machines/musculation-libre" });
+      if (lpProducts.length && Math.random() < 0.45) {
+        const p = pick(lpProducts);
+        push("page_view", { path: `/lp/musculation/${p.id}` });
+        push("product_view", { product_id: p.id, label: p.name, path: `/lp/musculation/${p.id}` });
+        if (Math.random() < 0.35) {
+          push("quote_add", { product_id: p.id, label: p.name, path: `/lp/musculation/${p.id}` });
+          if (Math.random() < 0.6) push("quote_open");
+          if (Math.random() < 0.45) { push("form_start"); if (Math.random() < 0.5) push("quote_submit"); }
+        }
+      }
+      if (Math.random() < 0.04) { push("form_start"); push("contact_submit"); }
+    }
+  }
   db.analytics_events = [...(db.analytics_events || []), ...events];
   persist("analytics_events", db.analytics_events);
 
@@ -608,6 +646,26 @@ const demoSeed = async () => {
     if (row.status === "contacte") row.follow_up_date = new Date(now - 86400000).toISOString().slice(0, 10);
     if (row.status === "gagne") row.amount = 85000;
   }
+  // demandes fictives de la landing page (commandes avec prix, RDV showroom, projets…)
+  const STOCK_REFS: Record<string, number> = { IT9515: 26000, IT9530: 36000, ECP617: 35000, ECP201: 24500, SL7020: 32000, SL7001: 16500, IFP1201: 12500, IFP1101: 12500, ITF8202: 8500, ITF8802: 5500 };
+  const lpRefs = Object.keys(STOCK_REFS).map((ref) => ({ ref, p: products.find((p) => new RegExp(`\\b${ref}\\b`).test(String(p.name))) })).filter((x) => x.p);
+  const kinds = ["devis", "devis", "devis", "devis", "devis", "devis", "rappel", "Rendez-vous au showroom", "Projet sur mesure", "devis", "rappel", "devis"];
+  for (let i = 0; i < kinds.length && lpRefs.length; i++) {
+    const c = pick(lpCampaigns);
+    const k = kinds[i];
+    const lines = k === "devis" ? Array.from({ length: 1 + Math.floor(Math.random() * 3) }, () => pick(lpRefs)) : [];
+    const res = await demoSubmitRequest({
+      request_type: k === "devis" ? "devis" : "contact", usage_type: "professionnel",
+      full_name: `Prospect landing ${i + 1} (démo)`, phone: `06100000${String(i).padStart(2, "0")}`,
+      items: lines.map(({ ref, p }) => ({ id: p!.id, name: `${String(p!.name).trim()} (${ref})`, category: p!.category, quantity: 1 + Math.floor(Math.random() * 2) })),
+      message: k === "devis" ? "Devis préparé sur la landing page Musculation (démo)" : ["Landing page Musculation professionnelle : demande de rappel", k !== "rappel" && `Intérêt : ${k}`].filter(Boolean).join("\n"),
+      source: "landing", ...c, landing_page: "/lp/musculation",
+    });
+    const row = reqs.find((r) => r.id === (res.data as Row).id)!;
+    row.created_at = new Date(now - (i < 4 ? i * 5 + 1 : i * 14 + 3) * 3600000).toISOString();
+    row.status = i < 5 ? "nouveau" : pick(["contacte", "devis_envoye", "gagne", "nouveau"]);
+    if (row.status === "gagne") row.amount = 60000;
+  }
   persist("contact_requests", reqs);
   return { data: events.length, error: null };
 };
@@ -624,7 +682,7 @@ export const demoClient = {
     if (fn === "submit_request") return demoSubmitRequest((args?.p ?? {}) as Row);
     if (fn === "analytics_report") {
       if (!isAdmin()) return { data: null, error: { message: "Accès réservé à l'administrateur" } };
-      return { data: await demoAnalyticsReport(String(args?.p_from), String(args?.p_to)), error: null };
+      return { data: await demoAnalyticsReport(String(args?.p_from), String(args?.p_to), String(args?.p_scope || "all")), error: null };
     }
     if (fn === "purge_audit_log" || fn === "purge_analytics_events") return { data: 0, error: null };
     if (fn === "resync_sheet") return { data: null, error: { message: "Envoi vers Google Sheets indisponible en mode démo (nécessite Supabase)." } };

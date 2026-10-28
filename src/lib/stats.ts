@@ -14,6 +14,8 @@ export interface AnalyticsReport {
   searches: { term: string; count: number; no_result: number }[];
   sources: { source: string; medium: string; campaign: string; sessions: number; quotes: number; contacts: number }[];
   devices: { device: string; sessions: number }[];
+  /** la base n'a pas encore la mise à jour « p_scope » : chiffres de tout le site */
+  unscoped?: boolean;
 }
 
 export const PERIODS = [
@@ -31,14 +33,28 @@ export const periodRange = (days: number) => {
   return { from: from.toISOString(), to: new Date(to.getTime() + 1).toISOString() };
 };
 
-export const useAnalyticsReport = (days: number) =>
+/**
+ * Périmètre des statistiques : « site » (tout sauf la landing page), « landing » (pages /lp/…) ou « all ».
+ * Nécessite la mise à jour SQL du 27/10/2026 (paramètre p_scope). Sans elle, on retombe sur les chiffres
+ * de tout le site et le rapport porte « unscoped: true » (l'écran affiche alors un avertissement).
+ */
+export type StatsScope = "site" | "landing" | "all";
+
+export const useAnalyticsReport = (days: number, scope: StatsScope = "all") =>
   useQuery({
-    queryKey: ["admin-stats", days],
+    queryKey: ["admin-stats", days, scope],
     queryFn: async () => {
       const { from, to } = periodRange(days);
-      const { data, error } = await supabase.rpc("analytics_report", { p_from: from, p_to: to });
-      if (error) throw error;
-      return data as unknown as AnalyticsReport;
+      const args = scope === "all" ? { p_from: from, p_to: to } : { p_from: from, p_to: to, p_scope: scope };
+      const rpc = supabase.rpc as unknown as (fn: string, a: Record<string, string>) => Promise<{ data: unknown; error: { message: string } | null }>;
+      const res = await rpc("analytics_report", args);
+      if (res.error && scope !== "all") {
+        const old = await rpc("analytics_report", { p_from: from, p_to: to });
+        if (old.error) throw old.error;
+        return { ...(old.data as AnalyticsReport), unscoped: true };
+      }
+      if (res.error) throw res.error;
+      return res.data as AnalyticsReport;
     },
   });
 

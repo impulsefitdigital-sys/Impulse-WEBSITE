@@ -166,10 +166,22 @@ export const track = (event: Exclude<AnalyticsEvent, "session_start">, props: Ev
   send(event, props, session);
 
   const w = window as unknown as { fbq?: Fbq; gtag?: Gtag };
+  // Un seul Pixel Meta pour tout le domaine : chaque événement indique s'il vient de la landing page
+  // des campagnes (/lp/…) ou du site, via content_category (Meta) / site_section (GA4).
+  const onLanding = window.location.pathname.startsWith("/lp/");
+  // demandes envoyées depuis la landing : signalées une seule fois par reportLead() (avec le type et la valeur)
+  if (onLanding && (event === "quote_submit" || event === "contact_submit")) return;
+  const area = onLanding ? "landing" : "site";
   const pixelName = PIXEL_EVENTS[event];
-  if (pixelName && w.fbq) w.fbq("track", pixelName, props.product_id ? { content_ids: [props.product_id] } : props.label ? { search_string: props.label } : {});
+  if (pixelName && w.fbq) {
+    w.fbq("track", pixelName, {
+      content_category: area,
+      ...(props.product_id ? { content_ids: [props.product_id], content_type: "product" } : {}),
+      ...(event === "search" && props.label ? { search_string: props.label } : {}),
+    });
+  }
   const gaName = GA_EVENTS[event];
-  if (gaName && w.gtag) w.gtag("event", gaName, { item_id: props.product_id ?? undefined, search_term: props.label ?? undefined });
+  if (gaName && w.gtag) w.gtag("event", gaName, { site_section: area, item_id: props.product_id ?? undefined, search_term: event === "search" ? props.label ?? undefined : undefined });
 };
 
 /** Provenance à joindre à une demande de devis / contact. */

@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getAttribution, track } from "@/lib/analytics";
 import { ArrowRight, Check } from "lucide-react";
 import ContactFields, { LegalLine } from "./ContactFields";
-import { checkContact, loadContact, markLeadSent, onContactChange, reportLead, saveContact, whatsappLink, type LpContact } from "./contact";
+import { checkContact, leadKindFromInterest, loadContact, markLeadSent, onContactChange, reportLead, saveContact, whatsappLink, type LpContact } from "./contact";
 import WhatsAppIcon from "./WhatsAppIcon";
 
 export { LEAD_SENT_KEY } from "./contact";
@@ -65,7 +65,7 @@ const LeadForm = ({ idPrefix, interest, onStarted, onDone, onOpenDevis, submitLa
     if (rpcError) { setError("L'envoi n'a pas fonctionné. Réessayez ou appelez-nous."); return; }
     markLeadSent();
     track("contact_submit", { label: "landing" });
-    reportLead("rappel");
+    reportLead(leadKindFromInterest(interest));
     setDone(true);
     onDone?.();
   };
@@ -75,7 +75,7 @@ const LeadForm = ({ idPrefix, interest, onStarted, onDone, onOpenDevis, submitLa
       <div className="lf lf-done" role="status">
         <span className="lf-done-icon"><Check /></span>
         <h3>Merci {contact.name.trim().split(" ")[0]} !</h3>
-        <p>Votre demande est bien reçue. Un conseiller Impulse vous rappelle <strong>sous 24 h ouvrées</strong> au <strong>{contact.phone}</strong>.</p>
+        <p>Votre demande est bien reçue. Un conseiller Impulse vous contactera <strong>dans les plus brefs délais</strong> au <strong>{contact.phone}</strong>.</p>
         <div className="lf-done-actions">
           {whatsappNumber && (
             <a className="lp-btn lp-btn-wa" href={whatsappLink(whatsappNumber, `Bonjour, je suis ${contact.name.trim()}. Je viens de laisser mes coordonnées sur votre page Offre de lancement${interest ? ` (${interest})` : ""}.`)} target="_blank" rel="noopener noreferrer"><WhatsAppIcon /> Écrire sur WhatsApp</a>

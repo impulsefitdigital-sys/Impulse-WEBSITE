@@ -2,24 +2,41 @@ import { useEffect, useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase, IS_DEMO } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Download, FileDown, Phone, Mail, MessageCircle, Trash2, Search, X, Save, CalendarClock, Sparkles } from "lucide-react";
+import { Download, FileDown, Phone, Mail, MessageCircle, Trash2, Search, X, Save, CalendarClock, Sparkles, AlarmClock } from "lucide-react";
 import {
   STATUSES, statusInfo, isOpenStatus, requestItems, realEmail, sourceLabel, formatDate, formatAmount,
-  exportRequestsCsv, downloadRequestPdf, type ContactRequest,
+  exportRequestsCsv, downloadRequestPdf, isLandingRequest, LANDING_KINDS, landingKind, landingKindInfo, landingInterest,
+  landingValue, itemPrice, isLate, ageLabel, type ContactRequest, type LandingKind,
 } from "@/lib/requests";
+import { formatMad } from "@/components/landing/contact";
 import type { AdminNavigate } from "@/pages/Admin";
 import logo from "@/assets/logo-new.png";
 
-type TypeFilter = "tous" | "devis" | "contact" | "landing";
-const isLanding = (r: ContactRequest) => r.source === "landing";
+/**
+ * Liste et fiche des demandes. Deux périmètres :
+ *   « site »    : formulaires du site (Admin → Demandes du site)
+ *   « landing » : landing page des campagnes (Admin → Landing page → Demandes)
+ */
+export type RequestsScope = "site" | "landing";
+type TypeFilter = "tous" | "devis" | "contact" | LandingKind;
 
 const today = () => new Date().toISOString().slice(0, 10);
 const due = (r: ContactRequest) => !!r.follow_up_date && r.follow_up_date <= today() && isOpenStatus(r.status);
 
-const AdminRequests = ({ selectedId, navigate }: { selectedId: string | null; navigate: AdminNavigate }) => {
+interface Props {
+  selectedId: string | null;
+  navigate: AdminNavigate;
+  scope?: RequestsScope;
+  /** filtre de statut au départ (ex. « nouveau » depuis le tableau de bord de la landing) */
+  initialStatus?: string;
+}
+
+const AdminRequests = ({ selectedId, navigate, scope = "site", initialStatus = "tous" }: Props) => {
   const qc = useQueryClient();
+  const landing = scope === "landing";
+  const open = (id?: string) => (landing ? navigate("landing", id || "demandes") : navigate("requests", id));
   const [type, setType] = useState<TypeFilter>("tous");
-  const [status, setStatus] = useState<string | "tous" | "relance">("tous");
+  const [status, setStatus] = useState<string | "tous" | "relance" | "retard">(initialStatus);
   const [q, setQ] = useState("");
 
   const { data: requests, isLoading } = useQuery({
@@ -42,16 +59,16 @@ const AdminRequests = ({ selectedId, navigate }: { selectedId: string | null; na
     },
   });
 
-  const all = useMemo(() => requests || [], [requests]);
+  const all = useMemo(() => (requests || []).filter((r) => isLandingRequest(r) === landing), [requests, landing]);
 
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
     return all.filter((r) =>
-      (type === "tous" || (type === "landing" ? isLanding(r) : r.request_type === type && !isLanding(r))) &&
-      (status === "tous" || (status === "relance" ? due(r) : r.status === status)) &&
+      (type === "tous" || (landing ? landingKind(r) === type : r.request_type === type)) &&
+      (status === "tous" || (status === "relance" ? due(r) : status === "retard" ? isLate(r) : r.status === status)) &&
       (!term || [r.full_name, r.phone, r.email, r.company, r.city, r.quote_number, r.notes]
         .some((v) => String(v ?? "").toLowerCase().includes(term))));
-  }, [all, type, status, q]);
+  }, [all, type, status, q, landing]);
 
   const selected = all.find((r) => r.id === selectedId) ?? null;
 
@@ -75,7 +92,7 @@ const AdminRequests = ({ selectedId, navigate }: { selectedId: string | null; na
       const { error } = await supabase.from("contact_requests").delete().eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => { invalidate(); navigate("requests"); toast.success("Demande supprimée (elle reste dans le Google Sheet)"); },
+    onSuccess: () => { invalidate(); open(); toast.success("Demande supprimée (elle reste dans le Google Sheet)"); },
     onError: () => toast.error("Erreur lors de la suppression"),
   });
 
@@ -89,7 +106,10 @@ const AdminRequests = ({ selectedId, navigate }: { selectedId: string | null; na
     if (error) toast.error(error.message); else { toast.success("Données fictives générées"); invalidate(); qc.invalidateQueries({ queryKey: ["admin-stats"] }); }
   };
 
-  const countBy = (s: string) => all.filter((r) => (s === "relance" ? due(r) : r.status === s)).length;
+  const countBy = (s: string) => all.filter((r) => (s === "relance" ? due(r) : s === "retard" ? isLate(r) : r.status === s)).length;
+  const typeOptions: { value: TypeFilter; label: string }[] = landing
+    ? [{ value: "tous", label: "Toutes" }, ...LANDING_KINDS.map((k) => ({ value: k.value as TypeFilter, label: `${k.label} (${all.filter((r) => landingKind(r) === k.value).length})` }))]
+    : [{ value: "tous", label: "Tous" }, { value: "devis", label: "Devis" }, { value: "contact", label: "Contact" }];
 
   if (isLoading) return <div className="text-muted-foreground">Chargement...</div>;
 
@@ -97,8 +117,14 @@ const AdminRequests = ({ selectedId, navigate }: { selectedId: string | null; na
     <div>
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-bold text-foreground">Demandes</h1>
-          <p className="text-sm text-muted-foreground">Devis et messages reçus par le site — suivi commercial.</p>
+          {landing ? (
+            <h2 className="text-lg font-bold text-foreground">Toutes les demandes de la landing page</h2>
+          ) : (
+            <>
+              <h1 className="font-display text-2xl font-bold text-foreground">Demandes du site</h1>
+              <p className="text-sm text-muted-foreground">Devis et messages reçus par le site (hors landing page) — suivi commercial.</p>
+            </>
+          )}
         </div>
         <div className="flex gap-2">
           {IS_DEMO && (
@@ -115,9 +141,9 @@ const AdminRequests = ({ selectedId, navigate }: { selectedId: string | null; na
       {/* filtres */}
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <div className="inline-flex overflow-hidden rounded-sm border border-border">
-          {(["tous", "devis", "contact", "landing"] as const).map((t) => (
-            <button key={t} onClick={() => setType(t)} className={`px-3 py-1.5 text-xs font-semibold ${type === t ? "bg-accent text-accent-foreground" : "bg-card hover:bg-muted"}`}>
-              {t === "tous" ? "Tous" : t === "devis" ? "Devis" : t === "contact" ? "Contact" : `Landing page (${all.filter(isLanding).length})`}
+          {typeOptions.map((t) => (
+            <button key={t.value} onClick={() => setType(t.value)} className={`px-3 py-1.5 text-xs font-semibold ${type === t.value ? "bg-accent text-accent-foreground" : "bg-card hover:bg-muted"}`}>
+              {t.label}
             </button>
           ))}
         </div>
@@ -129,6 +155,9 @@ const AdminRequests = ({ selectedId, navigate }: { selectedId: string | null; na
         ))}
         <button onClick={() => setStatus("relance")} className={`inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs ${status === "relance" ? "border-foreground bg-foreground text-background" : "border-amber-300 bg-amber-50 text-amber-900"}`}>
           <CalendarClock className="h-3 w-3" /> À relancer ({countBy("relance")})
+        </button>
+        <button onClick={() => setStatus("retard")} className={`inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs ${status === "retard" ? "border-foreground bg-foreground text-background" : "border-red-300 bg-red-50 text-red-800"}`}>
+          <AlarmClock className="h-3 w-3" /> Sans réponse +24 h ({countBy("retard")})
         </button>
         <div className="relative ml-auto">
           <Search className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground" />
@@ -151,22 +180,39 @@ const AdminRequests = ({ selectedId, navigate }: { selectedId: string | null; na
                   const st = statusInfo(r.status);
                   const items = requestItems(r);
                   return (
-                    <tr key={r.id} onClick={() => navigate("requests", r.id)} className={`cursor-pointer border-b border-border last:border-0 hover:bg-secondary/40 ${r.id === selectedId ? "bg-accent/5" : ""}`}>
+                    <tr key={r.id} onClick={() => open(r.id)} className={`cursor-pointer border-b border-border last:border-0 hover:bg-secondary/40 ${r.id === selectedId ? "bg-accent/5" : ""}`}>
                       <td className="whitespace-nowrap px-3 py-2.5 align-top text-xs text-muted-foreground">
                         {formatDate(r.created_at, false)}
                         {due(r) && <CalendarClock className="ml-1 inline h-3.5 w-3.5 text-amber-600" aria-label="À relancer" />}
+                        {isLate(r) && <span className="mt-0.5 flex items-center gap-1 font-semibold text-red-600"><AlarmClock className="h-3 w-3" /> {ageLabel(r)}</span>}
                       </td>
                       <td className="px-3 py-2.5 align-top">
                         <p className={`text-foreground ${r.is_read ? "font-medium" : "font-bold"}`}>{r.full_name}</p>
-                        <p className="text-xs text-muted-foreground">{[r.city, r.company].filter(Boolean).join(" · ")}</p>
+                        <p className="text-xs text-muted-foreground">{landing ? r.phone : [r.city, r.company].filter(Boolean).join(" · ")}</p>
                       </td>
                       <td className="hidden px-3 py-2.5 align-top md:table-cell">
-                        <p className="text-xs font-semibold">
-                          {isLanding(r) ? <span className="rounded-sm bg-violet-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-violet-800">Landing page</span> : r.request_type === "devis" ? (r.quote_number || "Devis") : "Contact"}
-                        </p>
-                        <p className="max-w-[260px] truncate text-xs text-muted-foreground">
-                          {isLanding(r) ? [r.project_type, r.surface].filter(Boolean).join(" · ") || r.message : items.length ? items.map((i) => `${i.name} ×${i.quantity}`).join(", ") : r.message}
-                        </p>
+                        {landing ? (() => {
+                          const k = landingKindInfo(landingKind(r));
+                          return (
+                            <>
+                              <p className="flex items-center gap-1.5 text-xs font-semibold">
+                                <span className={`rounded-sm px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide ${k.className}`}>{k.label}</span>
+                                {r.quote_number}
+                                {k.value === "commande" && <span className="ml-auto whitespace-nowrap tabular-nums text-foreground">{formatMad(landingValue(r))} HT</span>}
+                              </p>
+                              <p className="max-w-[300px] truncate text-xs text-muted-foreground">
+                                {items.length ? items.map((i) => `${i.name.replace(/\s*\([A-Z0-9]+\)$/, "")} ×${i.quantity}`).join(", ") : landingInterest(r) || "Demande de contact"}
+                              </p>
+                            </>
+                          );
+                        })() : (
+                          <>
+                            <p className="text-xs font-semibold">{r.request_type === "devis" ? (r.quote_number || "Devis") : "Contact"}</p>
+                            <p className="max-w-[260px] truncate text-xs text-muted-foreground">
+                              {items.length ? items.map((i) => `${i.name} ×${i.quantity}`).join(", ") : r.message}
+                            </p>
+                          </>
+                        )}
                       </td>
                       <td className="px-3 py-2.5 align-top"><span className={`whitespace-nowrap rounded-full px-2 py-0.5 text-[11px] font-semibold ${st.className}`}>{st.label}</span></td>
                     </tr>
@@ -182,7 +228,7 @@ const AdminRequests = ({ selectedId, navigate }: { selectedId: string | null; na
           <RequestDetail
             key={selected.id}
             r={selected}
-            onClose={() => navigate("requests")}
+            onClose={() => open()}
             onSave={(patch) => update.mutateAsync({ id: selected.id, patch }).then(() => toast.success("Suivi enregistré"))}
             onDelete={() => { if (confirm("Supprimer cette demande du site ? Elle restera dans le Google Sheet.")) remove.mutate(selected.id); }}
             onPdf={() => downloadRequestPdf(selected, {
@@ -209,6 +255,9 @@ const RequestDetail = ({ r, onClose, onSave, onDelete, onPdf }: {
   const [amount, setAmount] = useState(r.amount == null ? "" : String(r.amount));
   const dirty = status !== r.status || notes !== (r.notes || "") || followUp !== (r.follow_up_date || "") || amount !== (r.amount == null ? "" : String(r.amount));
   const items = requestItems(r);
+  const lp = isLandingRequest(r);
+  const value = lp ? landingValue(r) : 0;
+  const interest = lp ? landingInterest(r) : "";
   const email = realEmail(r.email);
   const phoneDigits = (r.phone || "").replace(/[^\d+]/g, "");
   const waNumber = phoneDigits.startsWith("0") ? "212" + phoneDigits.slice(1) : phoneDigits.replace(/^\+/, "");
@@ -224,9 +273,10 @@ const RequestDetail = ({ r, onClose, onSave, onDelete, onPdf }: {
     <div className="self-start rounded-sm border border-border bg-card xl:sticky xl:top-6">
       <div className="flex items-start justify-between gap-3 border-b border-border p-5">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-accent">{r.source === "landing" ? "Landing page (campagne)" : r.request_type === "devis" ? `Devis ${r.quote_number || ""}` : "Demande de contact"}</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-accent">{lp ? `Landing page · ${landingKindInfo(landingKind(r)).label} ${r.quote_number || ""}` : r.request_type === "devis" ? `Devis ${r.quote_number || ""}` : "Demande de contact"}</p>
           <h2 className="mt-1 text-lg font-bold text-foreground">{r.full_name}</h2>
-          <p className="text-xs text-muted-foreground">Reçue le {formatDate(r.created_at)}</p>
+          <p className="text-xs text-muted-foreground">Reçue le {formatDate(r.created_at)} ({ageLabel(r)})</p>
+          {isLate(r) && <p className="mt-1 inline-flex items-center gap-1 rounded-sm bg-red-50 px-2 py-0.5 text-xs font-semibold text-red-700"><AlarmClock className="h-3.5 w-3.5" /> Rappel promis sous 24 h : à traiter en priorité</p>}
         </div>
         <button onClick={onClose} className="rounded-sm p-1.5 text-muted-foreground hover:bg-secondary" aria-label="Fermer"><X className="h-4 w-4" /></button>
       </div>
@@ -245,7 +295,8 @@ const RequestDetail = ({ r, onClose, onSave, onDelete, onPdf }: {
           <div><dt className="text-[11px] uppercase text-muted-foreground">Ville</dt><dd>{r.city || "—"}</dd></div>
           <div><dt className="text-[11px] uppercase text-muted-foreground">Usage</dt><dd>{r.usage_type === "professionnel" ? "Professionnel" : r.usage_type === "residentiel" ? "Résidentiel" : "—"}</dd></div>
           <div><dt className="text-[11px] uppercase text-muted-foreground">Provenance</dt><dd className="break-words">{sourceLabel(r)}</dd></div>
-          {r.source === "landing" && <>
+          {lp && interest && <div className="col-span-2"><dt className="text-[11px] uppercase text-muted-foreground">Bouton cliqué</dt><dd>{interest}</dd></div>}
+          {lp && (r.project_type || r.surface) && <>
             <div><dt className="text-[11px] uppercase text-muted-foreground">Projet</dt><dd>{r.project_type || "—"}</dd></div>
             <div><dt className="text-[11px] uppercase text-muted-foreground">Surface</dt><dd>{r.surface || "—"}</dd></div>
           </>}
@@ -257,10 +308,18 @@ const RequestDetail = ({ r, onClose, onSave, onDelete, onPdf }: {
             <ul className="divide-y divide-border rounded-sm border border-border">
               {items.map((i, idx) => (
                 <li key={idx} className="flex items-center justify-between gap-3 px-3 py-2 text-sm">
-                  <a href={`/produit/${i.id}`} target="_blank" rel="noopener noreferrer" className="hover:text-accent hover:underline">{i.name}</a>
-                  <span className="whitespace-nowrap font-semibold">× {i.quantity}</span>
+                  <a href={lp ? `/lp/musculation/${i.id}` : `/produit/${i.id}`} target="_blank" rel="noopener noreferrer" className="hover:text-accent hover:underline">{i.name}</a>
+                  <span className="whitespace-nowrap text-right">
+                    <span className="font-semibold">× {i.quantity}</span>
+                    {lp && itemPrice(i) > 0 && <span className="block text-[11px] tabular-nums text-muted-foreground">{formatMad(itemPrice(i))} HT · {formatMad(itemPrice(i) * Number(i.quantity || 0))}</span>}
+                  </span>
                 </li>
               ))}
+              {lp && value > 0 && (
+                <li className="flex items-center justify-between gap-3 bg-secondary/40 px-3 py-2 text-sm font-bold">
+                  <span>Total affiché sur la landing</span><span className="tabular-nums">{formatMad(value)} HT</span>
+                </li>
+              )}
             </ul>
           </div>
         )}
@@ -285,7 +344,7 @@ const RequestDetail = ({ r, onClose, onSave, onDelete, onPdf }: {
               <input type="date" value={followUp} onChange={(e) => setFollowUp(e.target.value)} className="mt-1 w-full rounded-sm border border-border bg-card px-2 py-1.5 text-sm text-foreground" />
             </label>
             <label className="text-xs text-muted-foreground">Montant du devis (MAD)
-              <input inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="ex. 85000" className="mt-1 w-full rounded-sm border border-border bg-card px-2 py-1.5 text-sm text-foreground" />
+              <input inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder={value ? `ex. ${Math.round(value)}` : "ex. 85000"} className="mt-1 w-full rounded-sm border border-border bg-card px-2 py-1.5 text-sm text-foreground" />
             </label>
           </div>
           <label className="block text-xs text-muted-foreground">Notes internes

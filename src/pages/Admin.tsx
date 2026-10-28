@@ -5,8 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import {
   LogOut, Package, MessageSquare, Settings, ArrowLeft, Image, Briefcase, FolderOpen, LayoutGrid, Info, Layers,
-  Mail, HelpCircle, FileText, Eye, Boxes, Tags, LayoutDashboard, BarChart3, Plug, History,
+  Mail, HelpCircle, FileText, Eye, Boxes, Tags, LayoutDashboard, BarChart3, Plug, History, Megaphone,
 } from "lucide-react";
+import AdminLanding from "@/components/admin/AdminLanding";
 import AdminProducts from "@/components/admin/AdminProducts";
 import AdminRequests from "@/components/admin/AdminRequests";
 import AdminContactSettings from "@/components/admin/AdminContactSettings";
@@ -29,16 +30,19 @@ import AdminHistory from "@/components/admin/AdminHistory";
 import AdminUndo from "@/components/admin/AdminUndo";
 import logo from "@/assets/logo-new.png";
 
+// La landing page des campagnes est l'activité principale : elle passe en premier (et s'ouvre par défaut).
+// Ses demandes et statistiques sont séparées de celles du site.
 const groups = [
-  { label: null, tabs: [{ id: "dashboard", label: "Tableau de bord", icon: LayoutDashboard }] },
+  { label: "Campagne en cours", tabs: [{ id: "landing", label: "Landing page", icon: Megaphone }] },
   {
-    label: "Commercial",
+    label: "Site web",
     tabs: [
-      { id: "requests", label: "Demandes", icon: MessageSquare },
+      { id: "dashboard", label: "Tableau de bord", icon: LayoutDashboard },
+      { id: "requests", label: "Demandes du site", icon: MessageSquare },
       { id: "newsletter", label: "Newsletter", icon: Mail },
+      { id: "stats", label: "Statistiques du site", icon: BarChart3 },
     ],
   },
-  { label: "Data", tabs: [{ id: "stats", label: "Statistiques", icon: BarChart3 }] },
   {
     label: "Contenu du site",
     tabs: [
@@ -72,7 +76,7 @@ const TAB_IDS = groups.flatMap((g) => g.tabs.map((t) => t.id)) as TabId[];
 // onglet dans l'adresse (#demandes/…) : un rechargement garde l'écran ouvert
 const readHash = (): { tab: TabId; param: string | null } => {
   const [tab, param] = window.location.hash.slice(1).split("/");
-  return { tab: (TAB_IDS as string[]).includes(tab) ? (tab as TabId) : "dashboard", param: param || null };
+  return { tab: (TAB_IDS as string[]).includes(tab) ? (tab as TabId) : "landing", param: param || null };
 };
 
 export type AdminNavigate = (tab: TabId, param?: string) => void;
@@ -92,12 +96,14 @@ const AdminPage = () => {
     window.scrollTo({ top: 0 });
   };
 
-  // pastille « nouvelles demandes » dans le menu
+  // pastilles « nouvelles demandes » dans le menu : landing page et site comptés à part
   const { data: newCount } = useQuery({
     queryKey: ["admin-requests-new-count"],
     queryFn: async () => {
-      const { count } = await supabase.from("contact_requests").select("id", { count: "exact", head: true }).eq("status", "nouveau");
-      return count ?? 0;
+      const { data } = await supabase.from("contact_requests").select("id, source").eq("status", "nouveau");
+      const rows = (data || []) as { source: string | null }[];
+      const landing = rows.filter((r) => r.source === "landing").length;
+      return { landing, site: rows.length - landing };
     },
     enabled: isAdmin,
     refetchInterval: 60_000,
@@ -131,8 +137,8 @@ const AdminPage = () => {
                 {g.tabs.map((tab) => (
                   <button key={tab.id} onClick={() => navigate(tab.id)} className={`flex w-full items-center gap-3 rounded-sm px-3 py-2 text-sm font-medium transition-colors ${activeTab === tab.id ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-secondary hover:text-foreground"}`}>
                     <tab.icon className="h-4 w-4" /><span className="flex-1 text-left">{tab.label}</span>
-                    {tab.id === "requests" && !!newCount && (
-                      <span className={`rounded-full px-1.5 text-[10px] font-bold ${activeTab === tab.id ? "bg-accent-foreground text-accent" : "bg-accent text-accent-foreground"}`}>{newCount}</span>
+                    {(tab.id === "requests" || tab.id === "landing") && !!newCount?.[tab.id === "landing" ? "landing" : "site"] && (
+                      <span className={`rounded-full px-1.5 text-[10px] font-bold ${activeTab === tab.id ? "bg-accent-foreground text-accent" : "bg-accent text-accent-foreground"}`}>{newCount[tab.id === "landing" ? "landing" : "site"]}</span>
                     )}
                   </button>
                 ))}
@@ -146,6 +152,7 @@ const AdminPage = () => {
         </div>
       </aside>
       <main className="ml-56 min-w-0 flex-1 p-8">
+        {activeTab === "landing" && <AdminLanding param={param} navigate={navigate} />}
         {activeTab === "dashboard" && <AdminDashboard navigate={navigate} />}
         {activeTab === "requests" && <AdminRequests selectedId={param} navigate={navigate} />}
         {activeTab === "newsletter" && <AdminNewsletter />}
