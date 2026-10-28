@@ -302,6 +302,9 @@ Retours d'Adil après la mise en ligne, et check-up de l'infrastructure.
 - **Fenêtres de contact** : « Un conseiller vous contactera dans les plus brefs délais. », bouton « Envoyer », plus de petite ligne « Rendez-vous au showroom » au-dessus du titre.
 - SQL 2026-10-27-stats-landing.sql exécuté par Adil le 28/10 (vérifié : p_scope présent).
 
+### 29/10/2026 — Correctif : « Statistiques indisponibles … reading 'rest' »
+- `src/lib/stats.ts` appelait `supabase.rpc` détaché de son objet (perte du `this`) : erreur avec le vrai Supabase (le mode démo ne la montrait pas). Corrigé avec `supabase.rpc.bind(supabase)`. Touche les écrans Landing page, Statistiques du site et Tableau de bord. Aucun rapport avec le cache Netlify.
+
 ## 4. Architecture cible
 
 ```

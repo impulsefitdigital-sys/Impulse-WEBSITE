@@ -46,7 +46,8 @@ export const useAnalyticsReport = (days: number, scope: StatsScope = "all") =>
     queryFn: async () => {
       const { from, to } = periodRange(days);
       const args = scope === "all" ? { p_from: from, p_to: to } : { p_from: from, p_to: to, p_scope: scope };
-      const rpc = supabase.rpc as unknown as (fn: string, a: Record<string, string>) => Promise<{ data: unknown; error: { message: string } | null }>;
+      // .bind : sans lui, supabase.rpc perd son « this » (erreur « reading 'rest' »)
+      const rpc = supabase.rpc.bind(supabase) as unknown as (fn: string, a: Record<string, string>) => Promise<{ data: unknown; error: { message: string } | null }>;
       const res = await rpc("analytics_report", args);
       if (res.error && scope !== "all") {
         const old = await rpc("analytics_report", { p_from: from, p_to: to });
