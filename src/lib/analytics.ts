@@ -159,16 +159,23 @@ const GA_EVENTS: Partial<Record<AnalyticsEvent, string>> = {
 type Fbq = (...args: unknown[]) => void;
 type Gtag = (...args: unknown[]) => void;
 
-/** Enregistre un événement. Sans effet dans l'admin et pour les robots. */
-export const track = (event: Exclude<AnalyticsEvent, "session_start">, props: EventProps = {}) => {
+/** Pages des landing pages des campagnes : /lp/… (stock musculation) et /lp2 (accueil + questionnaire). */
+export const isLandingPath = (path: string) => path.startsWith("/lp/") || path === "/lp2" || path.startsWith("/lp2/");
+
+/**
+ * Enregistre un événement. Sans effet dans l'admin et pour les robots.
+ * relay: false → pas de relais vers Meta / Google (la conversion est envoyée à part par reportLead()).
+ */
+export const track = (event: Exclude<AnalyticsEvent, "session_start">, props: EventProps = {}, opts: { relay?: boolean } = {}) => {
   if (isExcluded()) return;
   const session = ensureSession();
   send(event, props, session);
 
+  if (opts.relay === false) return;
   const w = window as unknown as { fbq?: Fbq; gtag?: Gtag };
-  // Un seul Pixel Meta pour tout le domaine : chaque événement indique s'il vient de la landing page
-  // des campagnes (/lp/…) ou du site, via content_category (Meta) / site_section (GA4).
-  const onLanding = window.location.pathname.startsWith("/lp/");
+  // Un seul Pixel Meta pour tout le domaine : chaque événement indique s'il vient d'une landing page
+  // des campagnes (/lp/…, /lp2) ou du site, via content_category (Meta) / site_section (GA4).
+  const onLanding = isLandingPath(window.location.pathname);
   // demandes envoyées depuis la landing : signalées une seule fois par reportLead() (avec le type et la valeur)
   if (onLanding && (event === "quote_submit" || event === "contact_submit")) return;
   const area = onLanding ? "landing" : "site";

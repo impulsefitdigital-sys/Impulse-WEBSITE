@@ -33,7 +33,7 @@ import logo from "@/assets/logo-new.png";
 // La landing page des campagnes est l'activité principale : elle passe en premier (et s'ouvre par défaut).
 // Ses demandes et statistiques sont séparées de celles du site.
 const groups = [
-  { label: "Campagne en cours", tabs: [{ id: "landing", label: "Landing page", icon: Megaphone }] },
+  { label: "Campagne en cours", tabs: [{ id: "landing", label: "Landing pages", icon: Megaphone }] },
   {
     label: "Site web",
     tabs: [

@@ -49,7 +49,10 @@ export default async () => {
   }
   try {
     const entries = await Promise.all(TABLES.map(async (t) => [t, await fetchTable(url, key, t)]));
-    const body = JSON.stringify({ generated_at: new Date().toISOString(), tables: Object.fromEntries(entries) });
+    // Images envoyées depuis l'admin (Supabase Storage) : servies par Netlify via /img/sb/… (fonction
+    // sb-image, cache d'un an) au lieu d'être téléchargées chez Supabase à chaque visite (bande passante).
+    const body = JSON.stringify({ generated_at: new Date().toISOString(), tables: Object.fromEntries(entries) })
+      .split(`${url}/storage/v1/object/public/`).join("/img/sb/");
     return new Response(body, {
       headers: {
         "content-type": "application/json; charset=utf-8",

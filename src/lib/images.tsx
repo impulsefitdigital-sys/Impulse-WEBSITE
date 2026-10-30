@@ -84,6 +84,7 @@ export const thumb = (src?: string | null) =>
 
 const useFull = (e: React.SyntheticEvent<HTMLImageElement>) => {
   const el = e.currentTarget;
+  if (el.dataset.sbFallback) return; // déjà rechargée depuis Supabase (installImageFallback)
   const full = el.dataset.full;
   if (full && !el.src.endsWith(full)) el.src = full;
 };
@@ -92,4 +93,25 @@ const useFull = (e: React.SyntheticEvent<HTMLImageElement>) => {
 export const thumbProps = (src?: string | null, fallback = "/placeholder.svg") => {
   const full = src || fallback;
   return { src: src ? thumb(src) : fallback, "data-full": full, onError: useFull };
+};
+
+/**
+ * Images de Supabase Storage servies par Netlify (/img/sb/…, voir netlify/functions/sb-image.mjs).
+ * Filet de sécurité : si /img/sb/… ne répond pas (fonction absente en local, panne…), l'image
+ * est rechargée depuis son adresse Supabase d'origine. Installé une fois pour tout le site.
+ */
+const SB_PUBLIC = `${String(import.meta.env.VITE_SUPABASE_URL || "").replace(/\/$/, "")}/storage/v1/object/public/`;
+export const sbOriginal = (src: string) => (src.startsWith("/img/sb/") || src.includes("/img/sb/") ? SB_PUBLIC + src.slice(src.indexOf("/img/sb/") + "/img/sb/".length) : src);
+
+export const installImageFallback = () => {
+  if (typeof document === "undefined") return () => {};
+  const onError = (e: Event) => {
+    const el = e.target as HTMLImageElement | null;
+    if (!el || el.tagName !== "IMG" || !el.src.includes("/img/sb/") || el.dataset.sbFallback) return;
+    el.dataset.sbFallback = "1";
+    el.removeAttribute("srcset");
+    el.src = sbOriginal(new URL(el.src).pathname);
+  };
+  document.addEventListener("error", onError, true);
+  return () => document.removeEventListener("error", onError, true);
 };

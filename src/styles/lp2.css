@@ -1,0 +1,135 @@
+/* ============================================================================
+   LANDING PAGE 2 (/lp2) — accueil du site + questionnaire rapide + barre de relance
+   Les couleurs et polices viennent des variables :root du thème (impulse-theme.css).
+   La barre et la fenêtre sont rendues dans <body> (hors .imp) : pas de dépendance au scope.
+   ============================================================================ */
+
+/* ---------- hero + formulaire ---------- */
+.lp2-hero{margin-top:63px;position:relative}
+/* le hero garde son comportement d'origine ; il est simplement placé sous l'en-tête par .lp2-hero */
+.imp .lp2-hero .hero-media{margin-top:0}
+
+@media(min-width:1024px){
+  .lp2-hero.with-form{display:grid;grid-template-columns:minmax(0,1fr) clamp(390px,30vw,440px);align-items:stretch;background:#0e0e10}
+  .lp2-hero.with-form .lp2-form-col{order:2;border-left:4px solid var(--red)}
+  .lp2-hero.with-form .lp2-hero-media{order:1;min-width:0;position:relative}
+  .lp2-hero.with-form .lp2-hero-media > section{height:100%}
+  /* la bannière (texte intégré à l'image) reste entière : affichée sans recadrage sur son fond flouté */
+  .imp .lp2-hero.with-form .hero-media{aspect-ratio:auto;height:100%;min-height:540px;max-height:none}
+  .imp .lp2-hero.with-form .hero-fg{object-fit:contain}
+  .imp .lp2-hero.with-form .hero-slide.active .hero-fg{animation:none}
+  .lp2-hero.with-form.no-media{grid-template-columns:minmax(0,560px);justify-content:center;background:var(--ink);padding:40px 0}
+  .lp2-hero.with-form.no-media .lp2-form-col{border-left:0;border-top:4px solid var(--red)}
+}
+
+.lp2-form-col{background:#fff;position:relative;display:flex;flex-direction:column;justify-content:center}
+@media(max-width:1023px){
+  .lp2-form-col{border-top:4px solid var(--red);border-bottom:1px solid var(--line)}
+  .lp2-form-col .lp2-form{max-width:600px;margin:0 auto;width:100%}
+}
+
+/* ---------- questionnaire ---------- */
+.lp2-form{position:relative;padding:30px clamp(20px,2.2vw,32px) 24px;font-family:var(--body);color:var(--ink-text);text-align:left}
+.lp2-form *{box-sizing:border-box}
+.lp2-eyebrow{margin:0;display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+.lp2-eyebrow::before{content:"";width:18px;height:3px;background:var(--red);transform:skewX(var(--skew))}
+.lp2-form h2{margin:8px 44px 6px 0;font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:clamp(1.35rem,2vw,1.7rem);line-height:1.08;letter-spacing:.005em;color:var(--ink-text)}
+.lp2-sub{margin:0 0 16px;color:var(--steel);font-size:13.5px;line-height:1.45}
+
+.lp2-fields{display:grid;gap:10px;margin-bottom:14px}
+@media(min-width:1024px){.lp2-hero .lp2-fields{grid-template-columns:1fr 1fr}}
+.lp2-fields label{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--ink-text)}
+.lp2-fields input{width:100%;height:46px;border:1.5px solid var(--line-strong);border-radius:6px;background:#fff;padding:0 13px;font:500 15px/1 var(--body);color:var(--ink-text);transition:border-color .15s,box-shadow .15s}
+.lp2-fields input::placeholder{color:var(--steel-dim);font-weight:400}
+.lp2-fields input:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(227,6,19,.12)}
+
+.lp2-q{border:0;margin:0 0 12px;padding:0;min-width:0}
+.lp2-q legend{padding:0;margin-bottom:7px;font-size:12.5px;font-weight:700;color:var(--ink-text);line-height:1.3}
+.lp2-chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.lp2-q:nth-of-type(2) .lp2-chips{grid-template-columns:repeat(3,minmax(0,1fr))}
+.lp2-chips button{display:flex;align-items:center;justify-content:center;gap:6px;min-height:42px;padding:8px 8px;border:1.5px solid var(--line-strong);border-radius:6px;background:#fff;font:600 13px/1.15 var(--body);color:var(--ink-text);cursor:pointer;text-align:center;transition:border-color .15s,background .15s,color .15s}
+.lp2-chips button:hover{border-color:var(--ink-text)}
+.lp2-chips button.on{border-color:var(--red);background:rgba(227,6,19,.07);color:var(--red-deep)}
+.lp2-chips button svg{width:15px;height:15px;flex:none;stroke-width:3}
+.lp2-chips button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+
+.lp2-error{margin:2px 0 10px;padding:9px 12px;border-radius:6px;background:#fdecee;color:var(--red-deep);font-size:13px;font-weight:600}
+
+.lp2-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:6px;padding:14px 20px;font:800 13.5px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:background .2s,transform .2s,box-shadow .2s}
+.lp2-btn svg{width:17px;height:17px;flex:none}
+.lp2-btn-red{background:var(--red);color:#fff;box-shadow:0 10px 24px -12px rgba(227,6,19,.8)}
+.lp2-btn-red:hover{background:var(--red-deep)}
+.lp2-btn-red:disabled{opacity:.7;cursor:wait}
+.lp2-btn-dark{background:var(--dark);color:#fff}
+.lp2-btn-dark:hover{background:#000}
+.lp2-btn-wa{background:#25d366;color:#fff}
+.lp2-btn-wa:hover{background:#1ebe5b}
+.lp2-submit{width:100%;padding:16px 20px;font-size:14.5px;margin-top:4px}
+
+.lp2-legal{margin:12px 0 0;font-size:11px;line-height:1.45;color:var(--steel-dim)}
+.lp2-legal a{color:var(--steel);text-decoration:underline}
+
+.lp2-x{position:absolute;top:12px;right:12px;z-index:2;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--ink-text);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s,color .2s}
+.lp2-x:hover{background:var(--ink-text);color:#fff}
+.lp2-x svg{width:18px;height:18px}
+
+/* écran de confirmation */
+.lp2-done{text-align:center;padding-top:42px;padding-bottom:36px}
+.lp2-done h2{margin:14px 0 8px;margin-right:0}
+.lp2-done p{margin:0 auto;max-width:34ch;color:var(--steel);font-size:14px;line-height:1.55}
+.lp2-done p strong{color:var(--ink-text);white-space:nowrap}
+.lp2-done-icon{display:inline-flex;align-items:center;justify-content:center;width:58px;height:58px;border-radius:50%;background:var(--red);color:#fff;box-shadow:0 12px 30px -12px rgba(227,6,19,.9)}
+.lp2-done-icon svg{width:30px;height:30px;stroke-width:3}
+.lp2-done-actions{display:flex;flex-direction:column;gap:10px;margin-top:22px}
+.lp2-done-actions .lp2-btn{width:100%}
+.lp2-done-actions .lp2-btn-wa svg{width:19px;height:19px}
+
+/* ---------- barre de relance ---------- */
+.lp2-bar{position:fixed;left:0;right:0;bottom:0;z-index:55;display:flex;align-items:center;gap:16px;
+  padding:12px max(var(--gutter),env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(var(--gutter),env(safe-area-inset-left,0px));
+  background:var(--dark);color:#fff;border-top:3px solid var(--red);box-shadow:0 -12px 30px -12px rgba(0,0,0,.45);font-family:var(--body);
+  animation:lp2-up .35s cubic-bezier(.2,.8,.2,1) both}
+.lp2-bar-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;line-height:1.25}
+.lp2-bar-text strong{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.03em;font-size:15px}
+.lp2-bar-text span{color:rgba(255,255,255,.72);font-size:13px}
+.lp2-bar-cta{flex:none;padding:13px 22px}
+.lp2-bar-x{flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.lp2-bar-x:hover{background:rgba(255,255,255,.12)}
+.lp2-bar-x svg{width:16px;height:16px}
+@media(max-width:640px){
+  .lp2-bar{gap:10px;padding-top:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+  .lp2-bar-text strong{font-size:13px}
+  .lp2-bar-text span{display:none}
+  .lp2-bar-cta{padding:12px 14px;font-size:12.5px}
+  .lp2-bar-x{width:30px;height:30px}
+}
+@media(max-width:360px){.lp2-bar-text{display:none}.lp2-bar-cta{flex:1}}
+
+/* éléments flottants du site relevés au-dessus de la barre */
+body.has-lp2-bar .imp-wa-float{bottom:84px}
+body.has-lp2-bar .imp-cookie{bottom:86px}
+body.has-lp2-bar .imp-footer{padding-bottom:70px}
+@media(max-width:520px){body.has-lp2-bar .imp-cookie{bottom:62px}}
+
+/* ---------- fenêtre (bouton de la barre) ---------- */
+.lp2-modal{position:fixed;inset:0;z-index:100;background:rgba(8,8,10,.66);display:flex;align-items:center;justify-content:center;padding:20px;animation:lp2-fade .25s ease-out both}
+.lp2-modal-box{position:relative;width:min(480px,100%);max-height:calc(100dvh - 40px);overflow-y:auto;background:#fff;border-radius:8px;border-top:5px solid var(--red);box-shadow:0 40px 100px rgba(0,0,0,.5);animation:lp2-up .35s cubic-bezier(.2,.8,.2,1) both}
+@media(max-width:640px){
+  .lp2-modal{align-items:flex-end;padding:0}
+  .lp2-modal-box{width:100%;border-radius:14px 14px 0 0;max-height:94dvh}
+  .lp2-modal-box .lp2-form{padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+}
+
+/* ---------- téléphone ---------- */
+@media(max-width:640px){
+  .lp2-form{padding:22px 16px 18px}
+  .lp2-form h2{font-size:1.3rem}
+  .lp2-sub{margin-bottom:14px;font-size:13px}
+  .lp2-fields input{font-size:16px} /* évite le zoom automatique d'iOS */
+  .lp2-chips button{font-size:12.5px;min-height:44px}
+  .lp2-q:nth-of-type(2) .lp2-chips button{padding:6px 4px}
+}
+
+@keyframes lp2-up{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
+@keyframes lp2-fade{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.lp2-bar,.lp2-modal,.lp2-modal-box{animation:none}}

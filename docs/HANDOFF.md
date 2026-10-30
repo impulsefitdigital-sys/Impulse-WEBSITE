@@ -313,6 +313,14 @@ Retours d'Adil après la mise en ligne, et check-up de l'infrastructure.
   - requête de contrôle : `supabase/mises-a-jour/verifier-taille-base.sql`.
 - Netlify (crédits) : affiches des catégories de la landing en vignettes 640 px ; barre fixe téléphone : textes qui ne débordent plus. Estimation à 700 visites/jour : ~900–1 000 crédits/mois (bande passante ~500, requêtes ~130, déploiements 15 chacun).
 
+### 30/10/2026 — Landing page 2 (/lp2) : accueil + questionnaire, barre de relance
+- **`/lp2`** (`src/pages/LandingAccueil.tsx`, styles `src/styles/lp2.css`) : la page d'accueil du site (mêmes sections, mêmes réglages « Sections accueil ») avec un questionnaire rapide (`src/components/lp2/QuickLeadForm.tsx`) : nom et prénom, téléphone, type de projet (Salle de gym / Hôtel / Résidentiel / Autre), superficie (moins de 100 m² / 100 à 500 m² / plus de 500 m²). Ordinateur : formulaire à droite du carrousel (bannière entière sur fond flouté) ; téléphone : formulaire d'abord, carrousel dessous. Croix = formulaire fermé pour la session, le site normal reste. Non indexée (noindex).
+- **Barre de relance** (`src/components/lp2/LeadBar.tsx`, montée dans `App.tsx`) : sur /lp2 dès que le formulaire du haut n'est plus visible (dépassé ou fermé) ; sur le reste du site pour les visiteurs arrivés par /lp2 (même session), jamais sur /devis, /contact, /lp/…, admin. Bouton « Être recontacté » → même questionnaire en fenêtre. Disparaît après l'envoi ; sa croix la masque pour la session. Bouton WhatsApp flottant masqué sur /lp2 (classe `imp-wa-float` relevée quand la barre est là).
+- Demandes : `submit_request` avec `source = 'landing'`, `project_type`, `surface`, message qui commence par « Landing page 2 (accueil) : questionnaire » → type **« Questionnaire LP2 »** dans Admin → Landing pages (compteurs LP1 / LP2). Meta : un seul `Lead` (« Questionnaire landing accueil (LP2) »).
+- Statistiques : SQL `supabase/mises-a-jour/2026-10-30-stats-lp2.sql` (migration `20261030100000_stats_lp2.sql`) — /lp2 compte comme landing, et un visiteur arrivé par une landing page reste compté « landing » sur la suite de son parcours.
+- Images envoyées depuis l'admin (carrousel, catégories, gammes…) : `/api/content` remplace les adresses Supabase Storage par `/img/sb/…`, servies par la fonction `netlify/functions/sb-image.mjs` (cache CDN Netlify 1 an) → Supabase n'est plus lu qu'une fois par image (bande passante du plan gratuit). Si une image `/img/sb/` échoue, le navigateur repasse sur l'adresse Supabase (`installImageFallback`, `src/lib/images.tsx`).
+- À signaler : une image de `equipment_categories` pointe encore vers l'ancien projet Supabase (`cxeafynonjezukddtpxg`) et ne s'affiche pas ; à remplacer depuis l'admin.
+
 ## 4. Architecture cible
 
 ```

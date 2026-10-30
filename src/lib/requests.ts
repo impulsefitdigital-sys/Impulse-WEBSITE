@@ -30,14 +30,19 @@ export const LANDING_KINDS = [
   { value: "projet", label: "Projet sur mesure", className: "bg-sky-100 text-sky-800" },
   { value: "machine", label: "Question machine", className: "bg-emerald-100 text-emerald-800" },
   { value: "contact", label: "Contact", className: "bg-zinc-100 text-zinc-700" },
+  { value: "questionnaire", label: "Questionnaire LP2", className: "bg-amber-100 text-amber-900" },
 ] as const;
 export type LandingKind = (typeof LANDING_KINDS)[number]["value"];
+
+/** Marque des demandes envoyées par le questionnaire de la landing page 2 (/lp2 et sa barre de relance). */
+export const LP2_MARK = "Landing page 2 (accueil) : questionnaire";
 
 /** « Intérêt : … » ajouté au message par le formulaire de la landing (bouton cliqué). */
 export const landingInterest = (r: Pick<ContactRequest, "message">) => /Intérêt : (.+)/.exec(r.message || "")?.[1]?.trim() || "";
 
 export const landingKind = (r: Pick<ContactRequest, "request_type" | "message">): LandingKind => {
   if (r.request_type === "devis") return "commande";
+  if ((r.message || "").startsWith(LP2_MARK)) return "questionnaire";
   const i = landingInterest(r).toLowerCase();
   if (!i) return "contact";
   if (i.includes("showroom")) return "rdv";
@@ -45,6 +50,8 @@ export const landingKind = (r: Pick<ContactRequest, "request_type" | "message">)
   return "machine";
 };
 export const landingKindInfo = (k: LandingKind) => LANDING_KINDS.find((x) => x.value === k) ?? LANDING_KINDS[4];
+/** Landing page d'origine d'une demande « landing » : LP1 (stock musculation) ou LP2 (accueil + questionnaire). */
+export const landingPageOf = (r: Pick<ContactRequest, "request_type" | "message">) => (landingKind(r) === "questionnaire" ? "LP2" : "LP1");
 
 const STOCK_PRICE = new Map(STOCK_ITEMS.map((i) => [i.ref, i.pu]));
 /** Référence de la machine (« Chest press ECP201 (ECP201) » → ECP201). */

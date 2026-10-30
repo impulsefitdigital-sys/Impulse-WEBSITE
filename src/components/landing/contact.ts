@@ -42,8 +42,9 @@ export const checkContact = (c: LpContact) => {
 
 type Win = Window & { fbq?: (...a: unknown[]) => void; gtag?: (...a: unknown[]) => void };
 /** Type de demande envoyée depuis la landing (même classement que dans Admin → Landing page). */
-export type LeadKind = "devis" | "rdv" | "projet" | "machine" | "rappel";
+export type LeadKind = "devis" | "rdv" | "projet" | "machine" | "rappel" | "questionnaire";
 const LEAD_NAMES: Record<LeadKind, string> = {
+  questionnaire: "Questionnaire landing accueil (LP2)",
   devis: "Commande landing musculation",
   rdv: "RDV showroom landing",
   projet: "Projet sur mesure landing",

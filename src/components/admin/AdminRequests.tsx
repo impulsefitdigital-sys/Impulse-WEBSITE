@@ -201,7 +201,7 @@ const AdminRequests = ({ selectedId, navigate, scope = "site", initialStatus = "
                                 {k.value === "commande" && <span className="ml-auto whitespace-nowrap tabular-nums text-foreground">{formatMad(landingValue(r))} HT</span>}
                               </p>
                               <p className="max-w-[300px] truncate text-xs text-muted-foreground">
-                                {items.length ? items.map((i) => `${i.name.replace(/\s*\([A-Z0-9]+\)$/, "")} ×${i.quantity}`).join(", ") : landingInterest(r) || "Demande de contact"}
+                                {items.length ? items.map((i) => `${i.name.replace(/\s*\([A-Z0-9]+\)$/, "")} ×${i.quantity}`).join(", ") : k.value === "questionnaire" ? [r.project_type, r.surface].filter(Boolean).join(" · ") || "Questionnaire" : landingInterest(r) || "Demande de contact"}
                               </p>
                             </>
                           );

@@ -4,7 +4,7 @@ import { Bar, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, 
 import { AlarmClock, ArrowRight, ExternalLink, Link2, Megaphone, MessageCircle, Phone, ShoppingCart, AlertTriangle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import {
-  requestItems, statusInfo, isLandingRequest, landingKind, landingKindInfo, landingValue, landingInterest, itemPrice,
+  requestItems, statusInfo, isLandingRequest, landingKind, landingKindInfo, landingPageOf, landingValue, landingInterest, itemPrice,
   isLate, ageLabel, LANDING_KINDS, type ContactRequest,
 } from "@/lib/requests";
 import { useAnalyticsReport, fillDays, pct, fmt, sourceName } from "@/lib/stats";
@@ -14,7 +14,8 @@ import { UtmBuilder } from "@/components/admin/AdminStats";
 import type { AdminNavigate } from "@/pages/Admin";
 
 /**
- * Admin → Landing page : tout ce qui vient de la landing page des campagnes (/lp/musculation),
+ * Admin → Landing pages : tout ce qui vient des landing pages des campagnes (LP1 /lp/musculation,
+ * LP2 /lp2 ; un visiteur arrivé par une landing page y reste compté quand il continue sur le site),
  * séparé du site. Vue d'ensemble (chiffres, demandes à traiter, parcours, machines, campagnes)
  * et liste complète des demandes avec la fiche de suivi.
  */
@@ -152,17 +153,18 @@ const AdminLanding = ({ param, navigate }: { param: string | null; navigate: Adm
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="inline-flex items-center gap-1.5 rounded-full bg-red-600 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white"><Megaphone className="h-3 w-3" /> Campagne en cours</p>
-          <h1 className="mt-2 font-display text-2xl font-bold text-foreground">Landing page — Offre de lancement</h1>
-          <p className="text-sm text-muted-foreground">Visites et demandes de la landing page uniquement. Le site a ses propres écrans (menu « Site web »).</p>
+          <h1 className="mt-2 font-display text-2xl font-bold text-foreground">Landing pages des campagnes</h1>
+          <p className="text-sm text-muted-foreground">LP1 : offre de lancement (stock musculation, /lp/musculation) · LP2 : accueil + questionnaire (/lp2). Le site a ses propres écrans (menu « Site web »).</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <a href="/lp/musculation" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-sm border border-border bg-card px-3 py-2 text-sm font-medium hover:bg-secondary"><ExternalLink className="h-4 w-4" /> Ouvrir la landing</a>
+          <a href="/lp/musculation" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-sm border border-border bg-card px-3 py-2 text-sm font-medium hover:bg-secondary"><ExternalLink className="h-4 w-4" /> LP1 stock</a>
+          <a href="/lp2" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-sm border border-border bg-card px-3 py-2 text-sm font-medium hover:bg-secondary"><ExternalLink className="h-4 w-4" /> LP2 accueil</a>
           <button onClick={() => setShowUtm((v) => !v)} className="inline-flex items-center gap-2 rounded-sm border border-border bg-card px-3 py-2 text-sm font-medium hover:bg-secondary"><Link2 className="h-4 w-4" /> Lien de campagne</button>
         </div>
       </div>
 
       {showUtm && (
-        <Panel title="Lien de campagne pour la landing page" subtitle="À mettre dans chaque publicité : les visites, demandes et commandes de la campagne apparaissent ci-dessous dans « Campagnes ».">
+        <Panel title="Lien de campagne" subtitle="À mettre dans chaque publicité. Page de destination : LP1 = https://impulsemorocco.com/lp/musculation, LP2 = https://impulsemorocco.com/lp2. Les visites, demandes et commandes apparaissent ci-dessous dans « Campagnes ».">
           <UtmBuilder defaultPage={LANDING_URL} defaultCampaign="offre-lancement-musculation" />
         </Panel>
       )}
@@ -222,6 +224,8 @@ const AdminLanding = ({ param, navigate }: { param: string | null; navigate: Adm
                   {fresh.slice(0, 8).map((r) => {
                     const k = landingKindInfo(landingKind(r));
                     const v = landingValue(r);
+                    // LP2 : type de projet et superficie ; LP1 : bouton utilisé
+                    const detail = k.value === "questionnaire" ? [r.project_type, r.surface].filter(Boolean).join(" · ") : landingInterest(r);
                     return (
                       <li key={r.id} className="flex flex-wrap items-center gap-x-3 gap-y-1.5 py-2.5">
                         <button onClick={() => navigate("landing", r.id)} className="min-w-0 flex-1 text-left">
@@ -230,7 +234,7 @@ const AdminLanding = ({ param, navigate }: { param: string | null; navigate: Adm
                             <span className="truncate text-sm font-semibold text-foreground hover:text-accent">{r.full_name}</span>
                           </span>
                           <span className="mt-0.5 block truncate text-xs text-muted-foreground">
-                            {r.quote_number ? `${r.quote_number} · ` : ""}{v ? `${formatMad(v)} HT · ` : ""}{landingInterest(r) && !v ? `${landingInterest(r)} · ` : ""}
+                            {r.quote_number ? `${r.quote_number} · ` : ""}{v ? `${formatMad(v)} HT · ` : ""}{detail && !v ? `${detail} · ` : ""}
                             <span className={isLate(r) ? "font-semibold text-red-600" : ""}>{ageLabel(r)}</span>
                           </span>
                         </button>
@@ -256,13 +260,17 @@ const AdminLanding = ({ param, navigate }: { param: string | null; navigate: Adm
                   </div>
                 ))}
               </div>
-              <p className="mt-3 text-[11px] text-muted-foreground">Commande = devis composé sur la landing (panier). RDV showroom = bouton « Prendre rendez-vous ». Projet sur mesure = bandeau « Demander un devis personnalisé ». Question machine = « Nous contacter » depuis une fiche. Contact = pop-up ou barre du bas.</p>
+              <p className="mt-3 text-sm text-muted-foreground">
+                Par landing page : <strong className="text-foreground">LP1 stock {inPeriod.filter((r) => landingPageOf(r) === "LP1").length}</strong> ·{" "}
+                <strong className="text-foreground">LP2 accueil {inPeriod.filter((r) => landingPageOf(r) === "LP2").length}</strong>
+              </p>
+              <p className="mt-2 text-[11px] text-muted-foreground">LP1 — Commande = devis composé (panier) ; RDV showroom = « Prendre rendez-vous » ; Projet sur mesure = « Demander un devis personnalisé » ; Question machine = « Nous contacter » depuis une fiche ; Contact = pop-up ou barre du bas. LP2 — Questionnaire = formulaire de l'accueil ou sa barre de relance (type de projet + superficie).</p>
             </Panel>
           </div>
 
           {/* par jour */}
           {days > 1 && (
-            <Panel title="Visites et demandes par jour" subtitle="Barres rouges : demandes reçues · ligne bleue : visites de la landing page.">
+            <Panel title="Visites et demandes par jour" subtitle="Barres rouges : demandes reçues · ligne bleue : visites arrivées par une landing page (LP1 ou LP2).">
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <ComposedChart data={daily} margin={{ top: 8, right: 8, left: -12, bottom: 0 }}>
@@ -281,7 +289,7 @@ const AdminLanding = ({ param, navigate }: { param: string | null; navigate: Adm
 
           <div className="grid gap-5 xl:grid-cols-2">
             {/* parcours */}
-            <Panel title="Parcours des visiteurs" subtitle="Combien de visiteurs passent chaque étape (sessions de la landing page).">
+            <Panel title="Parcours des visiteurs" subtitle="Combien de visiteurs passent chaque étape (visites arrivées par une landing page, y compris la suite de leur parcours sur le site).">
               {report ? (() => {
                 const f = report.funnel;
                 const steps = [

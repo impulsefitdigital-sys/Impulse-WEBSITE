@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { track, installClickTracking } from "@/lib/analytics";
 import { getConsent, onConsentChange } from "@/lib/consent";
+import { installImageFallback } from "@/lib/images";
 
 /**
  * - page_view à chaque changement de page + clics WhatsApp / téléphone / email
@@ -31,6 +32,7 @@ const SiteTracking = () => {
 
   useEffect(() => onConsentChange(() => setConsentState(getConsent())), []);
   useEffect(() => installClickTracking(), []);
+  useEffect(() => installImageFallback(), []);
   useEffect(() => { track("page_view", { path: pathname }); }, [pathname]);
 
   const { data: ids } = useQuery({

@@ -16,6 +16,7 @@ import SpaLinks from "@/components/SpaLinks";
 import DemoBanner from "@/components/DemoBanner";
 import SiteTracking from "@/components/SiteTracking";
 import CookieBanner from "@/components/CookieBanner";
+import LeadBar from "@/components/lp2/LeadBar";
 
 // pages chargées à la demande : le premier affichage ne télécharge que l'accueil
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -34,6 +35,7 @@ const AProposPage = lazy(() => import("./pages/APropos"));
 const BlogPage = lazy(() => import("./pages/Blog"));
 const BlogDetailPage = lazy(() => import("./pages/BlogDetail"));
 const LandingMusculationPage = lazy(() => import("./pages/LandingMusculation"));
+const LandingAccueilPage = lazy(() => import("./pages/LandingAccueil"));
 const PolitiqueConfidentialitePage = lazy(() => import("./pages/PolitiqueConfidentialite"));
 
 const queryClient = new QueryClient();
@@ -62,6 +64,7 @@ const App = () => (
             <DemoBanner />
             <SiteTracking />
             <CookieBanner />
+            <LeadBar />
             <Suspense fallback={<div className="imp min-h-screen" />}>
             <Routes>
               <Route path="/" element={<Index />} />
@@ -89,6 +92,7 @@ const App = () => (
               <Route path="/lp/musculation/machines/:cat" element={<LandingMusculationPage />} />
               <Route path="/lp/musculation/gamme/:gamme" element={<LandingMusculationPage />} />
               <Route path="/lp/musculation/:id?" element={<LandingMusculationPage />} />
+              <Route path="/lp2" element={<LandingAccueilPage />} />
               <Route path="/politique-de-confidentialite" element={<PolitiqueConfidentialitePage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
