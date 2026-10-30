@@ -103,11 +103,11 @@ const LeadBar = () => {
       {visible && !open && (
         <div className="lp2-bar" role="region" aria-label="Demande de conseil gratuit">
           <div className="lp2-bar-text">
-            <strong>Votre projet fitness ?</strong>
-            <span>Conseil et devis gratuits, réponse rapide d'un conseiller Impulse.</span>
+            <strong>Parlons de votre projet&nbsp;!</strong>
+            <span>Un conseiller Impulse vous contactera dans les plus brefs délais.</span>
           </div>
           <button type="button" className="lp2-btn lp2-btn-red lp2-bar-cta" onClick={() => setOpen(true)}>
-            Être recontacté <ArrowRight />
+            Contactez-nous <ArrowRight />
           </button>
           <button type="button" className="lp2-bar-x" onClick={closeBar} aria-label="Masquer cette barre"><X /></button>
         </div>

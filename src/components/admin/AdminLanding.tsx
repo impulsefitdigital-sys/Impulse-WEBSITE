@@ -118,7 +118,7 @@ const AdminLanding = ({ param, navigate }: { param: string | null; navigate: Adm
       const ref = /\(([A-Z0-9]+)\)$/.exec(i.name)?.[1];
       const clean = ref && i.name.slice(0, -ref.length - 2).includes(ref) ? i.name.slice(0, -ref.length - 2).trim() : i.name;
       const x = get(String(i.id), clean);
-      x.qty += Number(i.quantity || 0); x.orders += 1; x.value += itemPrice(i) * Number(i.quantity || 0);
+      x.qty += Number(i.quantity || 0); x.orders += 1; x.value += itemPrice(i, r.message) * Number(i.quantity || 0);
     }));
     return [...m.values()].sort((a, b) => b.qty - a.qty || b.adds - a.adds || b.views - a.views).slice(0, 12);
   }, [report, orders]);

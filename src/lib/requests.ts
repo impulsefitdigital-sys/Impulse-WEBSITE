@@ -56,10 +56,20 @@ export const landingPageOf = (r: Pick<ContactRequest, "request_type" | "message"
 const STOCK_PRICE = new Map(STOCK_ITEMS.map((i) => [i.ref, i.pu]));
 /** Référence de la machine (« Chest press ECP201 (ECP201) » → ECP201). */
 export const itemRef = (i: RequestItem) => /\(([A-Z]{2,4}\d{3,5})\)\s*$/.exec(i.name)?.[1] || "";
-/** Prix unitaire HT affiché sur la landing pour une ligne de commande (0 si la machine n'est plus dans la liste). */
-export const itemPrice = (i: RequestItem) => STOCK_PRICE.get(itemRef(i)) ?? 0;
-/** Valeur HT d'une commande de la landing (prix affichés × quantités). */
-export const landingValue = (r: Pick<ContactRequest, "items">) => requestItems(r).reduce((s, i) => s + itemPrice(i) * Number(i.quantity || 0), 0);
+/** Prix unitaire HT écrit dans le message de la commande (« … (ECP201) × 2 : 24 500 DH HT l'unité »), 0 si absent. */
+const orderedPrice = (message: string | null | undefined, ref: string) => {
+  if (!message || !ref) return 0;
+  const m = new RegExp(`\\(${ref}\\) × \\d+ : ([\\d\\s\\u00a0\\u202f]+)\\s*DH`).exec(message);
+  return m ? Number(m[1].replace(/\D/g, "")) : 0;
+};
+/**
+ * Prix unitaire HT d'une ligne de commande : celui affiché au moment de la commande (lu dans le message),
+ * sinon le prix actuel de la landing (0 si la machine n'est plus dans la liste). Ainsi, un changement de
+ * prix ne modifie pas la valeur des commandes déjà reçues.
+ */
+export const itemPrice = (i: RequestItem, message?: string | null) => orderedPrice(message, itemRef(i)) || STOCK_PRICE.get(itemRef(i)) || 0;
+/** Valeur HT d'une commande de la landing (prix affichés au moment de la commande × quantités). */
+export const landingValue = (r: Pick<ContactRequest, "items" | "message">) => requestItems(r).reduce((s, i) => s + itemPrice(i, r.message) * Number(i.quantity || 0), 0);
 
 /** Heures écoulées depuis la réception. */
 export const ageHours = (r: Pick<ContactRequest, "created_at">) => (Date.now() - new Date(r.created_at).getTime()) / 3600000;

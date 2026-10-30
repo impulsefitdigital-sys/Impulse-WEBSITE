@@ -311,7 +311,7 @@ const RequestDetail = ({ r, onClose, onSave, onDelete, onPdf }: {
                   <a href={lp ? `/lp/musculation/${i.id}` : `/produit/${i.id}`} target="_blank" rel="noopener noreferrer" className="hover:text-accent hover:underline">{i.name}</a>
                   <span className="whitespace-nowrap text-right">
                     <span className="font-semibold">× {i.quantity}</span>
-                    {lp && itemPrice(i) > 0 && <span className="block text-[11px] tabular-nums text-muted-foreground">{formatMad(itemPrice(i))} HT · {formatMad(itemPrice(i) * Number(i.quantity || 0))}</span>}
+                    {lp && itemPrice(i, r.message) > 0 && <span className="block text-[11px] tabular-nums text-muted-foreground">{formatMad(itemPrice(i, r.message))} HT · {formatMad(itemPrice(i, r.message) * Number(i.quantity || 0))}</span>}
                   </span>
                 </li>
               ))}

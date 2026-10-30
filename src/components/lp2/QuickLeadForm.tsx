@@ -112,9 +112,8 @@ const QuickLeadForm = ({ idPrefix, origin, onClose, onContinue }: Props) => {
   return (
     <form className="lp2-form" onSubmit={submit} noValidate>
       {close}
-      <p className="lp2-eyebrow">Conseil et devis gratuits</p>
-      <h2>Équipez votre projet fitness</h2>
-      <p className="lp2-sub">Un conseiller vous contactera dans les plus brefs délais.</p>
+      <h2>Parlons de votre projet</h2>
+      <p className="lp2-sub">Merci de partager vos coordonnées, nous vous contacterons dans les plus brefs délais.</p>
       <div className="lp2-fields">
         <label htmlFor={`${idPrefix}-name`}>Nom et prénom
           <input id={`${idPrefix}-name`} autoComplete="name" value={name} onChange={(e) => { start(); setName(e.target.value); }} placeholder="Ex. Karim Benali" required />
