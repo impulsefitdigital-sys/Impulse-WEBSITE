@@ -5,8 +5,9 @@ import { AlarmClock, ArrowRight, ExternalLink, Link2, Megaphone, MessageCircle, 
 import { supabase } from "@/integrations/supabase/client";
 import {
   requestItems, statusInfo, isLandingRequest, landingKind, landingKindInfo, landingPageOf, landingValue, landingInterest, itemPrice,
-  isLate, ageLabel, LANDING_KINDS, type ContactRequest,
+  isLate, ageLabel, LANDING_KINDS, LANDING_PAGES, landingPageInfo, type ContactRequest, type LandingKind, type LandingPageId,
 } from "@/lib/requests";
+import LandingPageBadge from "@/components/admin/LandingPageBadge";
 import { useAnalyticsReport, fillDays, pct, fmt, sourceName } from "@/lib/stats";
 import { formatMad } from "@/components/landing/contact";
 import AdminRequests from "@/components/admin/AdminRequests";
@@ -21,6 +22,13 @@ import type { AdminNavigate } from "@/pages/Admin";
  */
 
 const LANDING_URL = "https://impulsemorocco.com/lp/musculation";
+const LP2_URL = "https://impulsemorocco.com/lp2";
+/** types de demandes possibles sur chaque landing page (les autres sont masqués quand on filtre) */
+const KINDS_OF: Record<LandingPageId, LandingKind[]> = {
+  LP1: ["commande", "rdv", "projet", "machine", "contact", "site"],
+  LP2: ["questionnaire", "site"],
+};
+type PageFilter = "tous" | LandingPageId;
 /** mise en ligne de la landing page « Offre de lancement » */
 const LAUNCH = new Date("2026-10-22T00:00:00");
 const daysSinceLaunch = () => Math.max(1, Math.ceil((Date.now() - LAUNCH.getTime()) / 86400000));
@@ -70,6 +78,8 @@ const AdminLanding = ({ param, navigate }: { param: string | null; navigate: Adm
   ];
   const [days, setDays] = useState(PERIODS[3].days);
   const [showUtm, setShowUtm] = useState(false);
+  // landing page affichée : les deux, ou seulement LP1 / LP2 (partagé avec l'onglet Demandes)
+  const [page, setPage] = useState<PageFilter>("tous");
 
   const { data: requests } = useQuery({
     queryKey: ["admin-requests"],
@@ -79,11 +89,14 @@ const AdminLanding = ({ param, navigate }: { param: string | null; navigate: Adm
       return (data || []) as ContactRequest[];
     },
   });
-  const { data: report } = useAnalyticsReport(days, "landing");
+  const { data: rawReport } = useAnalyticsReport(days, page === "tous" ? "landing" : page === "LP1" ? "lp1" : "lp2");
+  // filtre LP1 / LP2 sans la mise à jour SQL du 30/10 : pas de chiffres de visites (plutôt que des chiffres faux)
+  const report = rawReport?.needsUpdate ? undefined : rawReport;
   // conservation des statistiques (6 mois) : le ménage se fait à l'ouverture de l'écran
   useEffect(() => { void supabase.rpc("purge_analytics_events"); }, []);
 
-  const lp = useMemo(() => (requests || []).filter(isLandingRequest), [requests]);
+  const lpAll = useMemo(() => (requests || []).filter(isLandingRequest), [requests]);
+  const lp = useMemo(() => (page === "tous" ? lpAll : lpAll.filter((r) => landingPageOf(r) === page)), [lpAll, page]);
   const since = useMemo(() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime() - (days - 1) * 86400000; }, [days]);
   const inPeriod = useMemo(() => lp.filter((r) => new Date(r.created_at).getTime() >= since), [lp, since]);
 
@@ -140,7 +153,21 @@ const AdminLanding = ({ param, navigate }: { param: string | null; navigate: Adm
     return [...m.values()].sort((a, b) => b.requests - a.requests || b.visits - a.visits);
   }, [report, inPeriod]);
 
-  const kinds = LANDING_KINDS.map((k) => ({ ...k, count: inPeriod.filter((r) => landingKind(r) === k.value).length }));
+  const kinds = LANDING_KINDS.map((k) => ({ ...k, count: inPeriod.filter((r) => landingKind(r) === k.value).length }))
+    .filter((k) => page === "tous" ? k.count > 0 || k.value !== "site" : KINDS_OF[page].includes(k.value));
+
+  // comparatif LP1 / LP2 (vue « toutes les landing pages »)
+  const compare = LANDING_PAGES.map((p) => {
+    const reqs = lpAll.filter((r) => landingPageOf(r) === p.value);
+    const period = reqs.filter((r) => new Date(r.created_at).getTime() >= since);
+    const visits = report?.landings ? report.landings[p.value.toLowerCase()] ?? 0 : null;
+    const ord = period.filter((r) => landingKind(r) === "commande");
+    return {
+      ...p, visits, requests: period.length, orders: ord.length, orderValue: ord.reduce((n, r) => n + landingValue(r), 0),
+      fresh: reqs.filter((r) => r.status === "nouveau").length, late: reqs.filter(isLate).length,
+      won: period.filter((r) => r.status === "gagne").length,
+    };
+  });
   const maxKind = Math.max(1, ...kinds.map((k) => k.count));
 
   const listView = !!param;
@@ -154,7 +181,7 @@ const AdminLanding = ({ param, navigate }: { param: string | null; navigate: Adm
         <div>
           <p className="inline-flex items-center gap-1.5 rounded-full bg-red-600 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white"><Megaphone className="h-3 w-3" /> Campagne en cours</p>
           <h1 className="mt-2 font-display text-2xl font-bold text-foreground">Landing pages des campagnes</h1>
-          <p className="text-sm text-muted-foreground">LP1 : offre de lancement (stock musculation, /lp/musculation) · LP2 : accueil + questionnaire (/lp2). Le site a ses propres écrans (menu « Site web »).</p>
+          <p className="text-sm text-muted-foreground">Chaque demande indique la landing page par laquelle le visiteur est arrivé : <LandingPageBadge id="LP1" /> offre de lancement (stock musculation, /lp/musculation) · <LandingPageBadge id="LP2" /> accueil + questionnaire (/lp2). Le site a ses propres écrans (menu « Site web »).</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <a href="/lp/musculation" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-sm border border-border bg-card px-3 py-2 text-sm font-medium hover:bg-secondary"><ExternalLink className="h-4 w-4" /> LP1 stock</a>
@@ -165,9 +192,24 @@ const AdminLanding = ({ param, navigate }: { param: string | null; navigate: Adm
 
       {showUtm && (
         <Panel title="Lien de campagne" subtitle="À mettre dans chaque publicité. Page de destination : LP1 = https://impulsemorocco.com/lp/musculation, LP2 = https://impulsemorocco.com/lp2. Les visites, demandes et commandes apparaissent ci-dessous dans « Campagnes ».">
-          <UtmBuilder defaultPage={LANDING_URL} defaultCampaign="offre-lancement-musculation" />
+          <UtmBuilder key={page} defaultPage={page === "LP2" ? LP2_URL : LANDING_URL} defaultCampaign={page === "LP2" ? "lp2-accueil-questionnaire" : "offre-lancement-musculation"} />
         </Panel>
       )}
+
+      {/* landing page affichée (vue d'ensemble et demandes) */}
+      <div className="flex flex-wrap items-center gap-2 rounded-sm border border-border bg-card p-2">
+        <span className="px-2 text-[11px] font-bold uppercase tracking-wide text-muted-foreground">Landing page</span>
+        {([{ value: "tous", label: "Toutes les landing pages" }, ...LANDING_PAGES] as { value: PageFilter; label: string }[]).map((p) => {
+          const n = p.value === "tous" ? lpAll.length : lpAll.filter((r) => landingPageOf(r) === p.value).length;
+          return (
+            <button key={p.value} onClick={() => setPage(p.value)} className={`inline-flex items-center gap-2 rounded-sm border px-3 py-1.5 text-sm font-semibold ${page === p.value ? "border-foreground bg-foreground text-background" : "border-transparent hover:bg-secondary"}`}>
+              {p.value !== "tous" && <LandingPageBadge id={p.value} />}
+              {p.value === "tous" ? p.label : p.label.replace(/^LP\d · /, "")}
+              <span className={`text-xs font-normal ${page === p.value ? "text-background/70" : "text-muted-foreground"}`}>{n} demande{n > 1 ? "s" : ""}</span>
+            </button>
+          );
+        })}
+      </div>
 
       {/* onglets */}
       <div className="flex items-center gap-1 border-b border-border">
@@ -187,7 +229,7 @@ const AdminLanding = ({ param, navigate }: { param: string | null; navigate: Adm
       )}
 
       {listView ? (
-        <AdminRequests key={listStatus} scope="landing" selectedId={selectedId} navigate={navigate} initialStatus={listStatus} />
+        <AdminRequests key={listStatus} scope="landing" selectedId={selectedId} navigate={navigate} initialStatus={listStatus} landingPage={page} onLandingPageChange={setPage} />
       ) : (
         <>
           {/* période */}
@@ -205,15 +247,52 @@ const AdminLanding = ({ param, navigate }: { param: string | null; navigate: Adm
             </p>
           )}
 
+          {rawReport?.needsUpdate && (
+            <p className="flex items-start gap-2 rounded-sm border border-amber-300 bg-amber-50 px-4 py-3 text-xs text-amber-900">
+              <AlertTriangle className="mt-0.5 h-4 w-4 flex-none" />
+              <span>Visites par landing page indisponibles : exécutez la mise à jour <code>supabase/mises-a-jour/2026-10-30-stats-par-landing.sql</code> dans Supabase (SQL Editor). Les demandes ci-dessous sont déjà filtrées sur {landingPageInfo(page as LandingPageId).label}.</span>
+            </p>
+          )}
+
           {/* chiffres clés */}
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
-            <Tile label="Visites" value={report ? fmt(sessions) : "…"} hint={report ? `${pct(mobile, sessions)} sur téléphone` : ""} />
+            <Tile label="Visites" value={report ? fmt(sessions) : rawReport?.needsUpdate ? "—" : "…"} hint={report ? `${pct(mobile, sessions)} sur téléphone` : ""} />
             <Tile label="Demandes reçues" value={fmt(inPeriod.length)} hint={<>conversion <strong>{pct(inPeriod.length, sessions)}</strong> des visites</>} />
             <Tile label="Commandes (devis)" value={fmt(orders.length)} hint={`${fmt(machines)} machine${machines > 1 ? "s" : ""} demandée${machines > 1 ? "s" : ""}`} />
             <Tile label="Valeur des commandes" value={orderValue ? formatMad(orderValue) : "—"} hint={orders.length ? `HT · panier moyen ${formatMad(orderValue / orders.length)}` : "HT, prix affichés"} />
             <Tile label="À traiter" value={fmt(fresh.length)} tone={late.length ? "alert" : undefined} hint={late.length ? <span className="font-semibold text-red-700">{late.length} depuis plus de 24 h</span> : "statut « Nouveau », toutes dates"} />
             <Tile label="Ventes gagnées" value={fmt(won.length)} hint={wonAmount ? formatMad(wonAmount) : "statut « Gagné »"} />
           </div>
+
+          {/* comparatif des landing pages */}
+          {page === "tous" && (
+            <Panel title="Comparatif des landing pages" subtitle="Sur la période. Visites = visiteurs arrivés par chaque landing page (y compris la suite de leur parcours sur le site). Cliquez sur une ligne pour n'afficher que cette landing page.">
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[640px] text-sm">
+                  <thead className="text-left text-[11px] uppercase tracking-wide text-muted-foreground">
+                    <tr className="border-b border-border">
+                      <th className="py-2 pr-3">Landing page</th><th className="py-2 pr-3 text-right">Visites</th><th className="py-2 pr-3 text-right">Demandes</th>
+                      <th className="py-2 pr-3 text-right">Conversion</th><th className="py-2 pr-3 text-right">Commandes</th><th className="py-2 pr-3 text-right">À traiter</th><th className="py-2 text-right">Gagnées</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {compare.map((c) => (
+                      <tr key={c.value} onClick={() => setPage(c.value)} className="cursor-pointer border-b border-border last:border-0 hover:bg-secondary/40">
+                        <td className="py-2.5 pr-3"><span className="flex items-center gap-2"><LandingPageBadge id={c.value} /><span className="font-semibold">{c.label.replace(/^LP\d · /, "")}</span><span className="text-xs text-muted-foreground">{c.path}</span></span></td>
+                        <td className="py-2.5 pr-3 text-right tabular-nums">{c.visits == null ? "—" : fmt(c.visits)}</td>
+                        <td className="py-2.5 pr-3 text-right font-semibold tabular-nums">{fmt(c.requests)}</td>
+                        <td className="py-2.5 pr-3 text-right tabular-nums">{c.visits == null ? "—" : pct(c.requests, c.visits)}</td>
+                        <td className="py-2.5 pr-3 text-right tabular-nums">{c.orders ? `${fmt(c.orders)}${c.orderValue ? ` · ${formatMad(c.orderValue)}` : ""}` : "—"}</td>
+                        <td className={`py-2.5 pr-3 text-right tabular-nums ${c.late ? "font-semibold text-red-600" : ""}`}>{fmt(c.fresh)}{c.late ? ` (${c.late} +24 h)` : ""}</td>
+                        <td className="py-2.5 text-right tabular-nums">{fmt(c.won)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {report && !report.landings && <p className="mt-2 text-[11px] text-muted-foreground">Visites par landing page : exécutez la mise à jour <code>2026-10-30-stats-par-landing.sql</code> dans Supabase.</p>}
+            </Panel>
+          )}
 
           <div className="grid gap-5 xl:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
             {/* à traiter */}
@@ -230,6 +309,7 @@ const AdminLanding = ({ param, navigate }: { param: string | null; navigate: Adm
                       <li key={r.id} className="flex flex-wrap items-center gap-x-3 gap-y-1.5 py-2.5">
                         <button onClick={() => navigate("landing", r.id)} className="min-w-0 flex-1 text-left">
                           <span className="flex items-center gap-2">
+                            <LandingPageBadge id={landingPageOf(r)} />
                             <span className={`rounded-sm px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide ${k.className}`}>{k.label}</span>
                             <span className="truncate text-sm font-semibold text-foreground hover:text-accent">{r.full_name}</span>
                           </span>
@@ -260,11 +340,7 @@ const AdminLanding = ({ param, navigate }: { param: string | null; navigate: Adm
                   </div>
                 ))}
               </div>
-              <p className="mt-3 text-sm text-muted-foreground">
-                Par landing page : <strong className="text-foreground">LP1 stock {inPeriod.filter((r) => landingPageOf(r) === "LP1").length}</strong> ·{" "}
-                <strong className="text-foreground">LP2 accueil {inPeriod.filter((r) => landingPageOf(r) === "LP2").length}</strong>
-              </p>
-              <p className="mt-2 text-[11px] text-muted-foreground">LP1 — Commande = devis composé (panier) ; RDV showroom = « Prendre rendez-vous » ; Projet sur mesure = « Demander un devis personnalisé » ; Question machine = « Nous contacter » depuis une fiche ; Contact = pop-up ou barre du bas. LP2 — Questionnaire = formulaire de l'accueil ou sa barre de relance (type de projet + superficie).</p>
+              <p className="mt-2 text-[11px] text-muted-foreground">LP1 — Commande = devis composé (panier) ; RDV showroom = « Prendre rendez-vous » ; Projet sur mesure = « Demander un devis personnalisé » ; Question machine = « Nous contacter » depuis une fiche ; Contact = pop-up ou barre du bas. LP2 — Questionnaire = formulaire de l'accueil ou sa barre de relance (type de projet + superficie). Via le site = devis ou message envoyé ensuite depuis les formulaires du site par un visiteur arrivé par une landing page.</p>
             </Panel>
           </div>
 

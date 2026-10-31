@@ -8,6 +8,7 @@ import {
   Mail, HelpCircle, FileText, Eye, Boxes, Tags, LayoutDashboard, BarChart3, Plug, History, Megaphone,
 } from "lucide-react";
 import AdminLanding from "@/components/admin/AdminLanding";
+import { isLandingRequest } from "@/lib/requests";
 import AdminProducts from "@/components/admin/AdminProducts";
 import AdminRequests from "@/components/admin/AdminRequests";
 import AdminContactSettings from "@/components/admin/AdminContactSettings";
@@ -100,9 +101,9 @@ const AdminPage = () => {
   const { data: newCount } = useQuery({
     queryKey: ["admin-requests-new-count"],
     queryFn: async () => {
-      const { data } = await supabase.from("contact_requests").select("id, source").eq("status", "nouveau");
-      const rows = (data || []) as { source: string | null }[];
-      const landing = rows.filter((r) => r.source === "landing").length;
+      const { data } = await supabase.from("contact_requests").select("id, source, landing_page").eq("status", "nouveau");
+      const rows = (data || []) as { source: string | null; landing_page: string | null }[];
+      const landing = rows.filter(isLandingRequest).length;
       return { landing, site: rows.length - landing };
     },
     enabled: isAdmin,

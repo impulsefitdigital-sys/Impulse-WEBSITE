@@ -20,8 +20,30 @@ export const isOpenStatus = (s: string) => s !== "gagne" && s !== "perdu";
 export const requestItems = (r: Pick<ContactRequest, "items">): RequestItem[] =>
   Array.isArray(r.items) ? (r.items as unknown as RequestItem[]) : [];
 
-// ---------------------------------------------------------------- landing page
-export const isLandingRequest = (r: Pick<ContactRequest, "source">) => r.source === "landing";
+// ---------------------------------------------------------------- landing pages
+/** Les landing pages des campagnes : chaque demande indique celle par laquelle le visiteur est arrivé. */
+export const LANDING_PAGES = [
+  { value: "LP1", label: "LP1 · Stock musculation", short: "LP1 stock", path: "/lp/musculation", className: "bg-zinc-900 text-white" },
+  { value: "LP2", label: "LP2 · Accueil + questionnaire", short: "LP2 accueil", path: "/lp2", className: "bg-red-600 text-white" },
+] as const;
+export type LandingPageId = (typeof LANDING_PAGES)[number]["value"];
+export const landingPageInfo = (id: LandingPageId) => LANDING_PAGES.find((x) => x.value === id) ?? LANDING_PAGES[0];
+
+/** Landing page correspondant à une adresse (/lp/… → LP1, /lp2 → LP2), sinon null. */
+export const landingPageOfPath = (path?: string | null): LandingPageId | null => {
+  const p = (path || "").split(/[?#]/)[0];
+  if (p === "/lp2" || p.startsWith("/lp2/")) return "LP2";
+  if (p.startsWith("/lp/")) return "LP1";
+  return null;
+};
+
+/**
+ * Demande « campagne » : envoyée depuis une landing page (source = landing), ou envoyée depuis le site par un
+ * visiteur arrivé par une landing page (page d'arrivée /lp/… ou /lp2 — la LP2 est l'accueil du site : le
+ * visiteur peut continuer et faire un devis ou un message depuis le site).
+ */
+export const isLandingRequest = (r: Pick<ContactRequest, "source" | "landing_page">) =>
+  r.source === "landing" || landingPageOfPath(r.landing_page) !== null;
 
 /** Nature d'une demande de la landing page (d'après le formulaire utilisé). */
 export const LANDING_KINDS = [
@@ -30,7 +52,8 @@ export const LANDING_KINDS = [
   { value: "projet", label: "Projet sur mesure", className: "bg-sky-100 text-sky-800" },
   { value: "machine", label: "Question machine", className: "bg-emerald-100 text-emerald-800" },
   { value: "contact", label: "Contact", className: "bg-zinc-100 text-zinc-700" },
-  { value: "questionnaire", label: "Questionnaire LP2", className: "bg-amber-100 text-amber-900" },
+  { value: "questionnaire", label: "Questionnaire", className: "bg-amber-100 text-amber-900" },
+  { value: "site", label: "Via le site", className: "bg-blue-100 text-blue-800" },
 ] as const;
 export type LandingKind = (typeof LANDING_KINDS)[number]["value"];
 
@@ -40,7 +63,9 @@ export const LP2_MARK = "Landing page 2 (accueil) : questionnaire";
 /** « Intérêt : … » ajouté au message par le formulaire de la landing (bouton cliqué). */
 export const landingInterest = (r: Pick<ContactRequest, "message">) => /Intérêt : (.+)/.exec(r.message || "")?.[1]?.trim() || "";
 
-export const landingKind = (r: Pick<ContactRequest, "request_type" | "message">): LandingKind => {
+export const landingKind = (r: Pick<ContactRequest, "request_type" | "message"> & Partial<Pick<ContactRequest, "source">>): LandingKind => {
+  // devis ou message envoyé depuis le site (formulaires du site) par un visiteur arrivé par une landing page
+  if (r.source && r.source !== "landing") return "site";
   if (r.request_type === "devis") return "commande";
   if ((r.message || "").startsWith(LP2_MARK)) return "questionnaire";
   const i = landingInterest(r).toLowerCase();
@@ -50,8 +75,15 @@ export const landingKind = (r: Pick<ContactRequest, "request_type" | "message">)
   return "machine";
 };
 export const landingKindInfo = (k: LandingKind) => LANDING_KINDS.find((x) => x.value === k) ?? LANDING_KINDS[4];
-/** Landing page d'origine d'une demande « landing » : LP1 (stock musculation) ou LP2 (accueil + questionnaire). */
-export const landingPageOf = (r: Pick<ContactRequest, "request_type" | "message">) => (landingKind(r) === "questionnaire" ? "LP2" : "LP1");
+/**
+ * Landing page par laquelle le visiteur est arrivé : LP2 pour le questionnaire, LP1 pour les formulaires de la
+ * LP1 (stock), sinon d'après la page d'arrivée de la visite.
+ */
+export const landingPageOf = (r: Pick<ContactRequest, "request_type" | "message" | "source" | "landing_page">): LandingPageId => {
+  if ((r.message || "").startsWith(LP2_MARK)) return "LP2";
+  if (r.source === "landing") return "LP1";
+  return landingPageOfPath(r.landing_page) ?? "LP1";
+};
 
 const STOCK_PRICE = new Map(STOCK_ITEMS.map((i) => [i.ref, i.pu]));
 /** Référence de la machine (« Chest press ECP201 (ECP201) » → ECP201). */
@@ -107,7 +139,7 @@ export const exportRequestsCsv = (rows: ContactRequest[]) => {
     "Équipements", "Message", "Valeur affichée HT (landing)", "Montant (MAD)", "Relance", "Notes", "Source", "Support", "Campagne", "Page d'arrivée"];
   const cell = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""').replace(/\r?\n/g, " ")}"`;
   const lines = rows.map((r) => [
-    r.quote_number, formatDate(r.created_at), r.source === "landing" ? `Landing page · ${landingKindInfo(landingKind(r)).label}` : r.request_type === "devis" ? "Devis" : "Contact", statusInfo(r.status).label,
+    r.quote_number, formatDate(r.created_at), isLandingRequest(r) ? `${landingPageOf(r)} · ${landingKindInfo(landingKind(r)).label}` : r.request_type === "devis" ? "Devis" : "Contact", statusInfo(r.status).label,
     r.full_name, r.phone, realEmail(r.email), r.company, r.city, r.usage_type,
     requestItems(r).map((i) => `${i.name} x${i.quantity}`).join(" ; "), r.message, r.source === "landing" && r.request_type === "devis" ? landingValue(r) : "", r.amount ?? "", r.follow_up_date ?? "",
     r.notes, r.utm_source ?? r.referrer ?? "direct", r.utm_medium, r.utm_campaign, r.landing_page,

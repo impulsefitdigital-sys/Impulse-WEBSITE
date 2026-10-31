@@ -452,12 +452,30 @@ const demoSubmitRequest = async (p: Row) => {
 
 const casablancaDay = (iso: string) => new Date(new Date(iso).getTime() + 60 * 60 * 1000).toISOString().slice(0, 10);
 
-/** Même calcul que analytics_report() en SQL (migrations 20260930120100 et 20261027100000 : périmètre site / landing). */
+/**
+ * Même calcul que analytics_report() en SQL (migrations 20260930120100, 20261027100000 et 20261030110000) :
+ * chaque événement est rattaché à une landing page (lp1 = /lp/…, lp2 = /lp2) par son adresse ou par la page
+ * d'arrivée de sa visite ; périmètres all / landing / lp1 / lp2 / site.
+ */
+const lpOfPath = (path: unknown) => {
+  const p = String(path || "");
+  return p === "/lp2" || p.startsWith("/lp2/") ? "lp2" : p.startsWith("/lp/") ? "lp1" : null;
+};
 const demoAnalyticsReport = async (from: string, to: string, scope = "all") => {
   const db = await loadDb();
-  const onLanding = (e: Row) => String(e.path || "").startsWith("/lp/");
-  const ev = (db.analytics_events || []).filter((e) => e.created_at >= from && e.created_at < to
-    && (scope === "all" || (scope === "landing" ? onLanding(e) : !onLanding(e))));
+  const fromDay = new Date(new Date(from).getTime() - 86400000).toISOString();
+  const startLp = new Map<string, string>();
+  (db.analytics_events || [])
+    .filter((e) => e.event === "session_start" && e.session_id && e.created_at >= fromDay && e.created_at < to && lpOfPath(e.path))
+    .sort((a, b) => (a.created_at < b.created_at ? -1 : 1))
+    .forEach((e) => { if (!startLp.has(e.session_id)) startLp.set(e.session_id, lpOfPath(e.path)!); });
+  const tagged = (db.analytics_events || []).filter((e) => e.created_at >= from && e.created_at < to)
+    .map((e) => ({ e, lp: lpOfPath(e.path) ?? startLp.get(e.session_id) ?? null }));
+  const ev = tagged.filter(({ lp }) => scope === "all" || (scope === "landing" ? !!lp : scope === "site" ? !lp : lp === scope)).map(({ e }) => e);
+  const landings: Record<string, number> = {};
+  [...new Set(tagged.filter((t) => t.lp && t.e.session_id).map((t) => `${t.lp}|${t.e.session_id}`))].forEach((k) => {
+    const lp = k.split("|")[0]; landings[lp] = (landings[lp] || 0) + 1;
+  });
   const count = (name: string) => ev.filter((e) => e.event === name).length;
 
   const sessions = new Map<string, { product: boolean; add: boolean; form: boolean; quote: boolean; contact: boolean }>();
@@ -529,6 +547,7 @@ const demoAnalyticsReport = async (from: string, to: string, scope = "all") => {
       quote: sessionList.filter((s) => s.quote).length,
     },
     daily, pages, products, searches, sources, devices,
+    scope, landings,
   };
 };
 
@@ -622,6 +641,32 @@ const demoSeed = async () => {
       if (Math.random() < 0.04) { push("form_start"); push("contact_submit"); }
     }
   }
+  // landing page 2 /lp2 : accueil + questionnaire (7 derniers jours), une partie continue sur le site
+  for (let d = 6; d >= 0; d--) {
+    const perDay = 30 + Math.floor(Math.random() * 30);
+    for (let s = 0; s < perDay; s++) {
+      const sid = `demo-lp2-${d}-${s}-${Math.random().toString(36).slice(2, 8)}`;
+      const c = pick(lpWeighted);
+      const device = Math.random() < 0.8 ? "mobile" : "desktop";
+      let t = now - d * 86400000 - Math.floor(Math.random() * 60000000);
+      const push = (event: string, extra: Row = {}) => events.push({
+        id: id++, created_at: new Date((t += 15000 + Math.random() * 60000)).toISOString(), event, session_id: sid,
+        visitor_id: null, device, path: "/lp2", product_id: null, label: null, value: null,
+        utm_source: null, utm_medium: null, utm_campaign: null, referrer: null, ...extra,
+      });
+      push("session_start", { utm_source: c.utm_source, utm_medium: c.utm_medium, utm_campaign: "lp2-accueil-questionnaire" });
+      push("page_view");
+      if (Math.random() < 0.12) { push("form_start", { label: "lp2" }); if (Math.random() < 0.6) push("contact_submit", { label: "lp2" }); }
+      if (Math.random() < 0.4) {
+        push("page_view", { path: "/professionnel" });
+        if (products.length && Math.random() < 0.5) {
+          const p = pick(products);
+          push("page_view", { path: `/produit/${p.id}` });
+          push("product_view", { product_id: p.id, label: p.name, path: `/produit/${p.id}` });
+        }
+      }
+    }
+  }
   db.analytics_events = [...(db.analytics_events || []), ...events];
   persist("analytics_events", db.analytics_events);
 
@@ -665,6 +710,28 @@ const demoSeed = async () => {
     row.created_at = new Date(now - (i < 4 ? i * 5 + 1 : i * 14 + 3) * 3600000).toISOString();
     row.status = i < 5 ? "nouveau" : pick(["contacte", "devis_envoye", "gagne", "nouveau"]);
     if (row.status === "gagne") row.amount = 60000;
+  }
+  // demandes fictives arrivées par la landing page 2 : questionnaire, et devis envoyé ensuite depuis le site
+  const projects = ["Salle de gym", "Hôtel", "Résidentiel", "Autre"];
+  const surfaces = ["Moins de 100 m²", "100 à 500 m²", "Plus de 500 m²"];
+  for (let i = 0; i < 6; i++) {
+    const c = pick(lpCampaigns);
+    const viaSite = i === 5;
+    const project = projects[i % projects.length], surface = surfaces[i % surfaces.length];
+    const res = await demoSubmitRequest(viaSite ? {
+      request_type: "devis", usage_type: "professionnel", full_name: `Prospect LP2 ${i + 1} (démo)`, phone: `06200000${String(i).padStart(2, "0")}`,
+      items: [products[0], products[1]].filter(Boolean).map((p) => ({ id: p.id, name: p.name, category: p.category, quantity: 1 })),
+      message: "Devis envoyé depuis le site (démo)", ...c, utm_campaign: "lp2-accueil-questionnaire", landing_page: "/lp2",
+    } : {
+      request_type: "contact", usage_type: project === "Résidentiel" ? "residentiel" : "professionnel",
+      full_name: `Prospect LP2 ${i + 1} (démo)`, phone: `06200000${String(i).padStart(2, "0")}`, email: "",
+      project_type: project, surface,
+      message: `Landing page 2 (accueil) : questionnaire\nType de projet : ${project}\nSuperficie : ${surface}\nFormulaire : haut de l'accueil`,
+      source: "landing", ...c, utm_campaign: "lp2-accueil-questionnaire", landing_page: "/lp2",
+    });
+    const row = reqs.find((r) => r.id === (res.data as Row).id)!;
+    row.created_at = new Date(now - (i * 7 + 2) * 3600000).toISOString();
+    row.status = i < 3 ? "nouveau" : pick(["contacte", "devis_envoye"]);
   }
   persist("contact_requests", reqs);
   return { data: events.length, error: null };

@@ -1,15 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
 const WhatsAppButton = () => {
+  const { pathname } = useLocation();
   const { data: settings } = useQuery({
     queryKey: ["contact-settings"],
     queryFn: async () => { const { data, error } = await supabase.from("contact_settings").select("*"); if (error) throw error; const map: Record<string, string> = {}; data.forEach((s: any) => { map[s.key] = s.value; }); return map; },
   });
 
   const whatsappNumber = settings?.whatsapp_number || "212661234567";
-  // pas de bouton sur les landing pages (/lp/…, /lp2) ni dans l'administration
-  if (typeof window !== "undefined" && /^\/(lp|lp2|admin|login)(\/|$)/.test(window.location.pathname)) return null;
+  // partout sur le site et les landing pages (/lp/…, /lp2), même numéro (Admin → Coordonnées) ; pas dans l'administration.
+  // Sur les landing pages, le bouton est relevé au-dessus des barres fixes du bas (landing.css, lp2.css).
+  if (/^\/(admin|login)(\/|$)/.test(pathname)) return null;
 
   return (
     <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="imp-wa-float fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full px-5 py-3 font-semibold text-sm shadow-lg transition-transform hover:scale-105 text-background" style={{ backgroundColor: '#25D366' }} aria-label="Contacter via WhatsApp">

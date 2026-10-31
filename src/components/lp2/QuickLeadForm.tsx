@@ -9,7 +9,7 @@ import WhatsAppIcon from "@/components/landing/WhatsAppIcon";
 /**
  * Questionnaire rapide de la landing page 2 (/lp2) et de sa barre de relance :
  * nom et prénom, téléphone, type de projet, superficie. La demande arrive dans
- * Admin → Landing pages, type « Questionnaire LP2 » (projet et superficie dans la fiche).
+ * Admin → Landing pages, pastille LP2 + type « Questionnaire » (projet et superficie dans la fiche).
  */
 export const PROJECTS = ["Salle de gym", "Hôtel", "Résidentiel", "Autre"] as const;
 export const SURFACES = ["Moins de 100 m²", "100 à 500 m²", "Plus de 500 m²"] as const;

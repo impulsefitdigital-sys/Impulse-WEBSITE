@@ -57,8 +57,8 @@ const App = () => (
           <Toaster />
           <Sonner />
           <QuoteCartSheet />
-          <WhatsAppButton />
           <BrowserRouter>
+            <WhatsAppButton />
             <ScrollToTop />
             <SpaLinks />
             <DemoBanner />

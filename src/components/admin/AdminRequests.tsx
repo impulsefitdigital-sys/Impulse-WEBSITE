@@ -6,8 +6,10 @@ import { Download, FileDown, Phone, Mail, MessageCircle, Trash2, Search, X, Save
 import {
   STATUSES, statusInfo, isOpenStatus, requestItems, realEmail, sourceLabel, formatDate, formatAmount,
   exportRequestsCsv, downloadRequestPdf, isLandingRequest, LANDING_KINDS, landingKind, landingKindInfo, landingInterest,
-  landingValue, itemPrice, isLate, ageLabel, type ContactRequest, type LandingKind,
+  landingValue, itemPrice, isLate, ageLabel, LANDING_PAGES, landingPageOf, landingPageInfo,
+  type ContactRequest, type LandingKind, type LandingPageId,
 } from "@/lib/requests";
+import LandingPageBadge from "@/components/admin/LandingPageBadge";
 import { formatMad } from "@/components/landing/contact";
 import type { AdminNavigate } from "@/pages/Admin";
 import logo from "@/assets/logo-new.png";
@@ -15,7 +17,8 @@ import logo from "@/assets/logo-new.png";
 /**
  * Liste et fiche des demandes. Deux périmètres :
  *   « site »    : formulaires du site (Admin → Demandes du site)
- *   « landing » : landing page des campagnes (Admin → Landing page → Demandes)
+ *   « landing » : landing pages des campagnes (Admin → Landing pages → Demandes), avec la landing page
+ *                 d'arrivée de chaque demande (LP1 / LP2) et un filtre par landing page
  */
 export type RequestsScope = "site" | "landing";
 type TypeFilter = "tous" | "devis" | "contact" | LandingKind;
@@ -29,14 +32,20 @@ interface Props {
   scope?: RequestsScope;
   /** filtre de statut au départ (ex. « nouveau » depuis le tableau de bord de la landing) */
   initialStatus?: string;
+  /** filtre par landing page (partagé avec la vue d'ensemble) */
+  landingPage?: "tous" | LandingPageId;
+  onLandingPageChange?: (p: "tous" | LandingPageId) => void;
 }
 
-const AdminRequests = ({ selectedId, navigate, scope = "site", initialStatus = "tous" }: Props) => {
+const AdminRequests = ({ selectedId, navigate, scope = "site", initialStatus = "tous", landingPage, onLandingPageChange }: Props) => {
   const qc = useQueryClient();
   const landing = scope === "landing";
   const open = (id?: string) => (landing ? navigate("landing", id || "demandes") : navigate("requests", id));
   const [type, setType] = useState<TypeFilter>("tous");
   const [status, setStatus] = useState<string | "tous" | "relance" | "retard">(initialStatus);
+  const [ownPage, setOwnPage] = useState<"tous" | LandingPageId>("tous");
+  const lpPage = landingPage ?? ownPage;
+  const setLpPage = onLandingPageChange ?? setOwnPage;
   const [q, setQ] = useState("");
 
   const { data: requests, isLoading } = useQuery({
@@ -59,7 +68,9 @@ const AdminRequests = ({ selectedId, navigate, scope = "site", initialStatus = "
     },
   });
 
-  const all = useMemo(() => (requests || []).filter((r) => isLandingRequest(r) === landing), [requests, landing]);
+  // landing : toutes les landing pages, ou seulement LP1 / LP2
+  const scoped = useMemo(() => (requests || []).filter((r) => isLandingRequest(r) === landing), [requests, landing]);
+  const all = useMemo(() => (landing && lpPage !== "tous" ? scoped.filter((r) => landingPageOf(r) === lpPage) : scoped), [scoped, landing, lpPage]);
 
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
@@ -70,7 +81,7 @@ const AdminRequests = ({ selectedId, navigate, scope = "site", initialStatus = "
         .some((v) => String(v ?? "").toLowerCase().includes(term))));
   }, [all, type, status, q, landing]);
 
-  const selected = all.find((r) => r.id === selectedId) ?? null;
+  const selected = scoped.find((r) => r.id === selectedId) ?? null;
 
   const invalidate = () => {
     qc.invalidateQueries({ queryKey: ["admin-requests"] });
@@ -108,7 +119,11 @@ const AdminRequests = ({ selectedId, navigate, scope = "site", initialStatus = "
 
   const countBy = (s: string) => all.filter((r) => (s === "relance" ? due(r) : s === "retard" ? isLate(r) : r.status === s)).length;
   const typeOptions: { value: TypeFilter; label: string }[] = landing
-    ? [{ value: "tous", label: "Toutes" }, ...LANDING_KINDS.map((k) => ({ value: k.value as TypeFilter, label: `${k.label} (${all.filter((r) => landingKind(r) === k.value).length})` }))]
+    ? [{ value: "tous", label: "Toutes" }, ...LANDING_KINDS
+      .map((k) => ({ value: k.value as TypeFilter, n: all.filter((r) => landingKind(r) === k.value).length, label: k.label }))
+      // types sans demande masqués (ex. « Commande » pour la LP2), sauf celui sélectionné
+      .filter((k) => k.n > 0 || k.value === type)
+      .map((k) => ({ value: k.value, label: `${k.label} (${k.n})` }))]
     : [{ value: "tous", label: "Tous" }, { value: "devis", label: "Devis" }, { value: "contact", label: "Contact" }];
 
   if (isLoading) return <div className="text-muted-foreground">Chargement...</div>;
@@ -118,7 +133,7 @@ const AdminRequests = ({ selectedId, navigate, scope = "site", initialStatus = "
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <div>
           {landing ? (
-            <h2 className="text-lg font-bold text-foreground">Toutes les demandes de la landing page</h2>
+            <h2 className="text-lg font-bold text-foreground">{lpPage === "tous" ? "Toutes les demandes des landing pages" : `Demandes — ${landingPageInfo(lpPage).label}`}</h2>
           ) : (
             <>
               <h1 className="font-display text-2xl font-bold text-foreground">Demandes du site</h1>
@@ -137,6 +152,19 @@ const AdminRequests = ({ selectedId, navigate, scope = "site", initialStatus = "
           </button>
         </div>
       </div>
+
+      {/* filtre par landing page (sauf s'il est déjà affiché par l'écran parent) */}
+      {landing && !onLandingPageChange && (
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <span className="text-xs font-semibold text-muted-foreground">Arrivés par :</span>
+          {([{ value: "tous", label: "Toutes les landing pages" }, ...LANDING_PAGES] as { value: "tous" | LandingPageId; label: string }[]).map((p) => (
+            <button key={p.value} onClick={() => setLpPage(p.value)} className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${lpPage === p.value ? "border-foreground bg-foreground text-background" : "border-border bg-card hover:bg-secondary"}`}>
+              {p.value !== "tous" && <LandingPageBadge id={p.value} />}
+              {p.value === "tous" ? p.label : p.label.replace(/^LP\d · /, "")} ({p.value === "tous" ? scoped.length : scoped.filter((r) => landingPageOf(r) === p.value).length})
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* filtres */}
       <div className="mb-4 flex flex-wrap items-center gap-2">
@@ -196,6 +224,7 @@ const AdminRequests = ({ selectedId, navigate, scope = "site", initialStatus = "
                           return (
                             <>
                               <p className="flex items-center gap-1.5 text-xs font-semibold">
+                                <LandingPageBadge id={landingPageOf(r)} />
                                 <span className={`rounded-sm px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide ${k.className}`}>{k.label}</span>
                                 {r.quote_number}
                                 {k.value === "commande" && <span className="ml-auto whitespace-nowrap tabular-nums text-foreground">{formatMad(landingValue(r))} HT</span>}
@@ -273,7 +302,7 @@ const RequestDetail = ({ r, onClose, onSave, onDelete, onPdf }: {
     <div className="self-start rounded-sm border border-border bg-card xl:sticky xl:top-6">
       <div className="flex items-start justify-between gap-3 border-b border-border p-5">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-accent">{lp ? `Landing page · ${landingKindInfo(landingKind(r)).label} ${r.quote_number || ""}` : r.request_type === "devis" ? `Devis ${r.quote_number || ""}` : "Demande de contact"}</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-accent">{lp ? `${landingPageInfo(landingPageOf(r)).label} · ${landingKindInfo(landingKind(r)).label} ${r.quote_number || ""}` : r.request_type === "devis" ? `Devis ${r.quote_number || ""}` : "Demande de contact"}</p>
           <h2 className="mt-1 text-lg font-bold text-foreground">{r.full_name}</h2>
           <p className="text-xs text-muted-foreground">Reçue le {formatDate(r.created_at)} ({ageLabel(r)})</p>
           {isLate(r) && <p className="mt-1 inline-flex items-center gap-1 rounded-sm bg-red-50 px-2 py-0.5 text-xs font-semibold text-red-700"><AlarmClock className="h-3.5 w-3.5" /> Rappel promis sous 24 h : à traiter en priorité</p>}
@@ -295,6 +324,16 @@ const RequestDetail = ({ r, onClose, onSave, onDelete, onPdf }: {
           <div><dt className="text-[11px] uppercase text-muted-foreground">Ville</dt><dd>{r.city || "—"}</dd></div>
           <div><dt className="text-[11px] uppercase text-muted-foreground">Usage</dt><dd>{r.usage_type === "professionnel" ? "Professionnel" : r.usage_type === "residentiel" ? "Résidentiel" : "—"}</dd></div>
           <div><dt className="text-[11px] uppercase text-muted-foreground">Provenance</dt><dd className="break-words">{sourceLabel(r)}</dd></div>
+          {lp && (
+            <div className="col-span-2">
+              <dt className="text-[11px] uppercase text-muted-foreground">Landing page d'arrivée</dt>
+              <dd className="flex flex-wrap items-center gap-2">
+                <LandingPageBadge id={landingPageOf(r)} />
+                <span>{landingPageInfo(landingPageOf(r)).label.replace(/^LP\d · /, "")} ({landingPageInfo(landingPageOf(r)).path})</span>
+                {r.source !== "landing" && <span className="text-xs text-muted-foreground">— demande envoyée ensuite depuis le site</span>}
+              </dd>
+            </div>
+          )}
           {lp && interest && <div className="col-span-2"><dt className="text-[11px] uppercase text-muted-foreground">Bouton cliqué</dt><dd>{interest}</dd></div>}
           {lp && (r.project_type || r.surface) && <>
             <div><dt className="text-[11px] uppercase text-muted-foreground">Projet</dt><dd>{r.project_type || "—"}</dd></div>

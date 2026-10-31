@@ -16,6 +16,12 @@ export interface AnalyticsReport {
   devices: { device: string; sessions: number }[];
   /** la base n'a pas encore la mise à jour « p_scope » : chiffres de tout le site */
   unscoped?: boolean;
+  /** périmètre réellement calculé par la base (mise à jour SQL du 30/10/2026) */
+  scope?: string;
+  /** visites par landing page d'arrivée ({ lp1: n, lp2: n }) — mise à jour SQL du 30/10/2026 */
+  landings?: Record<string, number>;
+  /** filtre LP1 / LP2 demandé mais la base n'a pas encore la mise à jour du 30/10/2026 : pas de chiffres */
+  needsUpdate?: boolean;
 }
 
 export const PERIODS = [
@@ -34,11 +40,12 @@ export const periodRange = (days: number) => {
 };
 
 /**
- * Périmètre des statistiques : « site » (tout sauf la landing page), « landing » (pages /lp/…) ou « all ».
- * Nécessite la mise à jour SQL du 27/10/2026 (paramètre p_scope). Sans elle, on retombe sur les chiffres
- * de tout le site et le rapport porte « unscoped: true » (l'écran affiche alors un avertissement).
+ * Périmètre des statistiques : « site » (visiteurs hors campagnes), « landing » (les deux landing pages et la
+ * suite du parcours de leurs visiteurs), « lp1 » / « lp2 » (une seule landing page) ou « all ».
+ * « landing » / « site » nécessitent la mise à jour SQL du 27/10/2026 (sinon chiffres de tout le site et
+ * « unscoped: true ») ; « lp1 » / « lp2 » celle du 30/10/2026 (sinon « needsUpdate: true », pas de chiffres).
  */
-export type StatsScope = "site" | "landing" | "all";
+export type StatsScope = "site" | "landing" | "lp1" | "lp2" | "all";
 
 export const useAnalyticsReport = (days: number, scope: StatsScope = "all") =>
   useQuery({
@@ -49,6 +56,9 @@ export const useAnalyticsReport = (days: number, scope: StatsScope = "all") =>
       // .bind : sans lui, supabase.rpc perd son « this » (erreur « reading 'rest' »)
       const rpc = supabase.rpc.bind(supabase) as unknown as (fn: string, a: Record<string, string>) => Promise<{ data: unknown; error: { message: string } | null }>;
       const res = await rpc("analytics_report", args);
+      if ((scope === "lp1" || scope === "lp2") && (res.error || (res.data as AnalyticsReport | null)?.scope !== scope)) {
+        return { needsUpdate: true } as AnalyticsReport;
+      }
       if (res.error && scope !== "all") {
         const old = await rpc("analytics_report", { p_from: from, p_to: to });
         if (old.error) throw old.error;
