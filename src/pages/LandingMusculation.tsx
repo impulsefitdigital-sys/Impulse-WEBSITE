@@ -16,6 +16,7 @@ import logo from "@/assets/logo.png";
 import logoWhite from "@/assets/logo-new.png";
 import { ArrowLeft, ArrowRight, Check, ChevronRight, FileText, MapPin, Minus, NotebookPen, Phone, Plus, ShieldCheck, ShoppingCart, Truck, X } from "lucide-react";
 import "@/styles/landing.css";
+import { WHATSAPP_NUMBER } from "@/lib/whatsapp";
 
 /**
  * Landing page des campagnes « Offre de lancement » : Musculation professionnelle (/lp/musculation).
@@ -39,8 +40,8 @@ const GAMME_ORDER = ["IT95", "ECP", "SL", "IFP", "ITF"];
 const HERO_ALT = "Impulse Fitness débarque au Maroc : découvrez nos offres de lancement sur les machines disponibles en stock";
 
 /* Textes de la maquette du client — à confirmer avant diffusion. */
-/** WhatsApp de la landing (boutons proposés après l'envoi d'un formulaire ou d'un devis) */
-const LP_WHATSAPP = "212668818164";
+/** WhatsApp de la landing (boutons proposés après l'envoi d'un formulaire ou d'un devis) : +212 661-464603 */
+const LP_WHATSAPP = WHATSAPP_NUMBER;
 /** couleur montrée en premier quand une machine existe en plusieurs couleurs : noir, sauf SL et ECP en rouge (demande du client) */
 const PREFERRED_COLOR = "noir";
 const PREFERRED_COLOR_BY_GAMME: Record<string, string> = { SL: "rouge", ECP: "rouge" };

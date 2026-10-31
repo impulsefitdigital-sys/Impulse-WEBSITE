@@ -5,6 +5,7 @@ import { getAttribution, track } from "@/lib/analytics";
 import { LP2_MARK } from "@/lib/requests";
 import { checkContact, reportLead, whatsappLink } from "@/components/landing/contact";
 import WhatsAppIcon from "@/components/landing/WhatsAppIcon";
+import { WHATSAPP_NUMBER } from "@/lib/whatsapp";
 
 /**
  * Questionnaire rapide de la landing page 2 (/lp2) et de sa barre de relance :
@@ -15,8 +16,8 @@ export const PROJECTS = ["Salle de gym", "Hôtel", "Résidentiel", "Autre"] as c
 export const SURFACES = ["Moins de 100 m²", "100 à 500 m²", "Plus de 500 m²"] as const;
 export const LP2_SENT_KEY = "impulse-lp2-envoye";
 export const LP2_SENT_EVENT = "impulse-lp2-envoye";
-/** WhatsApp des campagnes : proposé seulement après l'envoi (contact déjà qualifié) */
-const CAMPAIGN_WHATSAPP = "212668818164";
+/** WhatsApp des campagnes (+212 661-464603) : proposé seulement après l'envoi (contact déjà qualifié) */
+const CAMPAIGN_WHATSAPP = WHATSAPP_NUMBER;
 
 export const lp2Sent = () => { try { return !!localStorage.getItem(LP2_SENT_KEY); } catch { return false; } };
 

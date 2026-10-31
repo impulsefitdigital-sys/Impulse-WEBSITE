@@ -1,3 +1,5 @@
+import { whatsappHref } from "@/lib/whatsapp";
+
 /**
  * Coordonnées du visiteur de la landing page, gardées dans son navigateur :
  * si la personne remplit d'abord le formulaire simple, le formulaire du devis est déjà rempli (et inversement).
@@ -74,6 +76,6 @@ export const PRIVACY_EVENT = "impulse-lp-confidentialite";
 export const openLpPrivacy = () => window.dispatchEvent(new CustomEvent(PRIVACY_EVENT));
 
 /** Lien WhatsApp avec message prérempli (proposé seulement après l'envoi d'un formulaire ou d'un devis). */
-export const whatsappLink = (number: string, text: string) => `https://wa.me/${number.replace(/\D/g, "")}?text=${encodeURIComponent(text)}`;
+export const whatsappLink = (number: string, text: string) => whatsappHref(number, text);
 
 export const formatMad = (n: number) => `${Math.round(n).toLocaleString("fr-FR").replace(/[\s\u202f]/g, "\u00a0")}\u00a0DH`;

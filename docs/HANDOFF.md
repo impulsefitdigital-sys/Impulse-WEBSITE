@@ -331,6 +331,10 @@ Retours d'Adil après la mise en ligne, et check-up de l'infrastructure.
 - Admin → Landing pages : sélecteur « Toutes / LP1 / LP2 » (vue d'ensemble + demandes), comparatif LP1 vs LP2 (visites, demandes, conversion, commandes, à traiter, gagnées).
 - SQL `supabase/mises-a-jour/2026-10-30-stats-par-landing.sql` (migration `20261030110000_stats_par_landing.sql`) : `analytics_report` accepte `p_scope` = lp1 / lp2 et renvoie `landings` (visites par landing page) et `scope`. Remplace aussi `2026-10-30-stats-lp2.sql`. Sans lui, l'admin affiche un avertissement au lieu des visites par LP.
 
+### 31/10/2026 — Correctif WhatsApp (site + landing pages)
+- Le bouton WhatsApp ne s'ouvrait pas : le réglage Admin → Coordonnées contenait « 06 61 46 46 03 » et le lien devenait `wa.me/06 61 46 46 03` (wa.me exige 212661464603). Nouveau `src/lib/whatsapp.ts` : `normalizeWhatsApp` accepte tous les formats (06…, +212…, 00212…) et `whatsappHref` construit le lien (repli : +212 661-464603).
+- Même numéro +212 661-464603 partout : bouton flottant (site, LP1, LP2) et boutons WhatsApp affichés après l'envoi d'un formulaire sur la LP1 et la LP2 (avant : 0668 818 164). Vérifié : wa.me/212661464603 ouvre « Discuter sur WhatsApp avec le +212 661-464603 ».
+
 ## 4. Architecture cible
 
 ```

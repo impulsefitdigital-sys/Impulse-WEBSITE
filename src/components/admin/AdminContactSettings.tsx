@@ -13,7 +13,7 @@ const fields = [
   { key: "address_line_2", label: "Adresse ligne 2", icon: MapPin, placeholder: "Casablanca, Maroc" },
   { key: "hours_line_1", label: "Horaires ligne 1", icon: Clock, placeholder: "Lun - Ven : 9h00 - 18h00" },
   { key: "hours_line_2", label: "Horaires ligne 2", icon: Clock, placeholder: "Sam : 9h00 - 13h00" },
-  { key: "whatsapp_number", label: "Numéro WhatsApp (sans +)", icon: MessageSquare, placeholder: "212600000000" },
+  { key: "whatsapp_number", label: "Numéro WhatsApp (bouton du site et des landing pages, ex. 06 61 46 46 03 ou +212 661 464603)", icon: MessageSquare, placeholder: "06 61 46 46 03" },
   { key: "maps_embed_url", label: "URL Google Maps Embed", icon: MapPin, placeholder: "https://www.google.com/maps/embed?pb=..." },
   { key: "social_instagram", label: "Instagram (URL)", icon: MessageSquare, placeholder: "https://instagram.com/votre-page" },
   { key: "social_facebook", label: "Facebook (URL)", icon: MessageSquare, placeholder: "https://facebook.com/votre-page" },
