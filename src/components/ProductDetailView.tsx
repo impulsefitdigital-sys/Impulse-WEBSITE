@@ -71,7 +71,7 @@ const ProductDetailView = ({ id, renderActions, renderHead, relatedHref = (rid) 
     ...(product.image_url ? [{ url: product.image_url, alt: product.name, color: defaultColor }] : []),
     ...(product.hover_image_url ? [{ url: product.hover_image_url, alt: `${product.name} - vue alternative`, color: defaultColor }] : []),
     ...(galleryImages?.map((img) => ({ url: img.image_url, alt: img.alt_text || product.name, color: img.color ?? null })) || []),
-  ] : [];
+  ].filter((img, i, all) => all.findIndex((x) => x.url === img.url) === i) : []; // une photo n'apparaît qu'une fois
   const colors = Array.from(new Set(baseImages.map((i) => i.color).filter((c): c is string => !!c)));
   const preferred = pickPreferredColor(colors, preferredColor);
   if (preferred) colors.sort((a, b) => Number(b === preferred) - Number(a === preferred));

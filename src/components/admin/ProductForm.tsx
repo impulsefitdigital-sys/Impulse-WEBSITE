@@ -2,7 +2,7 @@ import { optimizeImage, uploadOptions, ImageHint } from "@/lib/images";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, Upload, X, Plus, Trash2, Star, MousePointer2, ArrowLeftRight } from "lucide-react";
+import { ArrowLeft, Upload, X, Plus, Trash2, Star, MousePointer2, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 
 interface Spec { label: string; value: string; }
@@ -87,8 +87,10 @@ const ProductForm = ({ product, onClose }: { product: any | null; onClose: () =>
   const [features, setFeatures] = useState<string[]>(draft?.features ?? (product?.features as string[]) ?? []);
   const [imageUrl, setImageUrl] = useState(draft?.imageUrl ?? product?.image_url ?? "");
   const [hoverImageUrl, setHoverImageUrl] = useState(draft?.hoverImageUrl ?? product?.hover_image_url ?? "");
-  const [defaultColor, setDefaultColor] = useState<string>(draft?.defaultColor ?? (product as any)?.default_color ?? "");
-  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
+  const [defaultColor] = useState<string>(draft?.defaultColor ?? (product as any)?.default_color ?? "");
+  // toutes les photos du produit (principale, survol et galerie) dans une seule liste ; à l'enregistrement,
+  // la principale et la survol vont dans image_url / hover_image_url, les autres dans product_images
+  const [photos, setPhotos] = useState<GalleryImage[]>([]);
   const [isTrending, setIsTrending] = useState(draft?.isTrending ?? product?.is_trending ?? false);
   const [isPublished, setIsPublished] = useState(draft?.isPublished ?? product?.is_published ?? false);
   const [sortOrder, setSortOrder] = useState(draft?.sortOrder ?? product?.sort_order ?? 0);
@@ -109,17 +111,31 @@ const ProductForm = ({ product, onClose }: { product: any | null; onClose: () =>
     return () => clearTimeout(timer);
   }, [DRAFT_KEY, name, category, usageType, subcategory, shortDesc, description, warrantyItems, specs, features, imageUrl, hoverImageUrl, defaultColor, isTrending, isPublished, sortOrder, rangeCode]);
 
-  const mainImageRef = useRef<HTMLInputElement>(null);
-  const hoverImageRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
 
-  if (isEditing && loadingGallery) {
+  // liste unique : photo principale, photo de survol puis galerie (sans doublon)
+  const buildPhotos = (gallery: GalleryImage[]) => {
+    const seen = new Set<string>();
+    const list: GalleryImage[] = [];
+    const add = (g: GalleryImage) => { if (!g.image_url || seen.has(g.image_url)) return; seen.add(g.image_url); list.push(g); };
+    if (imageUrl) add({ image_url: imageUrl, alt_text: "", sort_order: 0, color: defaultColor || null });
+    if (hoverImageUrl) add({ image_url: hoverImageUrl, alt_text: "", sort_order: 1, color: defaultColor || null });
+    gallery.forEach(add);
+    return list;
+  };
+  const galleryRequested = useRef(false);
+  useEffect(() => {
+    if (galleryRequested.current) return;
+    galleryRequested.current = true;
+    if (!isEditing) { setPhotos(buildPhotos([])); return; }
     supabase.from("product_images").select("*").eq("product_id", product.id).order("sort_order")
       .then(({ data }) => {
-        if (data) setGalleryImages(data.map((d) => ({ ...d, alt_text: d.alt_text || "" })));
+        setPhotos(buildPhotos((data || []).map((d) => ({ ...d, alt_text: d.alt_text || "" }))));
         setLoadingGallery(false);
       });
-  }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const mainPhoto = photos.find((p) => p.image_url === imageUrl);
+  const hoverPhoto = photos.find((p) => p.image_url === hoverImageUrl);
 
   // Siblings in the same category + subcategory (for per-subcategory ordering)
   const [siblings, setSiblings] = useState<Array<{ id: string; name: string; sort_order: number }>>([]);
@@ -177,35 +193,54 @@ const ProductForm = ({ product, onClose }: { product: any | null; onClose: () =>
     return supabase.storage.from("product-images").getPublicUrl(path).data.publicUrl;
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, setter: (url: string) => void, folder: string) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    try { setter(await uploadImage(file, folder)); toast.success("Image uploadée"); } catch { toast.error("Erreur lors de l'upload"); }
-  };
-
   const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
     for (const file of Array.from(files)) {
       try {
         const url = await uploadImage(file, "gallery");
-        setGalleryImages((prev) => [...prev, { image_url: url, alt_text: "", sort_order: prev.length, isNew: true }]);
+        setPhotos((prev) => [...prev, { image_url: url, alt_text: "", sort_order: prev.length, isNew: true, color: null }]);
+        // pas encore de photo principale : la première photo ajoutée le devient
+        setImageUrl((cur) => cur || url);
       } catch { toast.error(`Erreur upload: ${file.name}`); }
     }
-    toast.success("Images ajoutées");
+    e.target.value = "";
+    toast.success("Photos ajoutées");
   };
 
-  const removeGalleryImage = (index: number) => setGalleryImages((prev) => prev.filter((_, i) => i !== index));
-  // une photo de la galerie devient l'image principale ou l'image de survol (sans réimporter le fichier)
-  const pickAsMain = (img: GalleryImage) => {
-    setImageUrl(img.image_url);
-    if (img.color && img.color !== defaultColor) {
-      setDefaultColor(img.color);
-      toast.success(`Image principale changée (couleur par défaut : ${PHOTO_COLORS.find((c) => c.value === img.color)?.label || img.color})`);
-    } else toast.success("Image principale changée");
+  const removePhoto = (index: number) => {
+    const removed = photos[index];
+    const rest = photos.filter((_, i) => i !== index);
+    setPhotos(rest);
+    if (removed?.image_url === hoverImageUrl) setHoverImageUrl("");
+    if (removed?.image_url === imageUrl) {
+      // la photo principale est retirée : la suivante (hors survol) prend sa place
+      const next = rest.find((p) => p.image_url !== hoverImageUrl);
+      setImageUrl(next?.image_url || "");
+      if (next) toast.info("Photo principale retirée : la photo suivante devient la principale");
+    }
   };
-  const pickAsHover = (img: GalleryImage) => { setHoverImageUrl(img.image_url); toast.success("Image de survol changée"); };
-  const swapMainHover = () => { const m = imageUrl; setImageUrl(hoverImageUrl); setHoverImageUrl(m); };
+  const movePhoto = (index: number, dir: -1 | 1) => setPhotos((prev) => {
+    const j = index + dir;
+    if (j < 0 || j >= prev.length) return prev;
+    const next = [...prev];
+    [next[index], next[j]] = [next[j], next[index]];
+    return next;
+  });
+  // une seule photo principale et une seule photo de survol : en choisir une annule l'ancienne
+  const pickAsMain = (index: number) => {
+    const img = photos[index];
+    if (!img || img.image_url === imageUrl) return;
+    setImageUrl(img.image_url);
+    if (img.image_url === hoverImageUrl) setHoverImageUrl("");
+  };
+  const pickAsHover = (index: number) => {
+    const img = photos[index];
+    if (!img) return;
+    if (img.image_url === hoverImageUrl) { setHoverImageUrl(""); return; } // second clic : plus de survol
+    if (img.image_url === imageUrl) { toast.error("C'est la photo principale : choisissez une autre photo pour le survol."); return; }
+    setHoverImageUrl(img.image_url);
+  };
   const addSpec = () => setSpecs((prev) => [...prev, { label: "", value: "" }]);
   const removeSpec = (i: number) => setSpecs((prev) => prev.filter((_, idx) => idx !== i));
   const updateSpec = (i: number, field: keyof Spec, val: string) => setSpecs((prev) => prev.map((s, idx) => (idx === i ? { ...s, [field]: val } : s)));
@@ -231,7 +266,8 @@ const ProductForm = ({ product, onClose }: { product: any | null; onClose: () =>
         features: features.filter((f) => f.trim()) as any,
         image_url: imageUrl || null,
         hover_image_url: hoverImageUrl || null,
-        default_color: defaultColor || null,
+        // couleur affichée par défaut = couleur de la photo principale
+        default_color: (mainPhoto ? mainPhoto.color : defaultColor) || null,
         is_trending: isTrending,
         is_published: isPublished,
         sort_order: sortOrder,
@@ -251,9 +287,10 @@ const ProductForm = ({ product, onClose }: { product: any | null; onClose: () =>
 
       if (productId) {
         await supabase.from("product_images").delete().eq("product_id", productId);
-        if (galleryImages.length > 0) {
+        const gallery = photos.filter((p) => p.image_url !== imageUrl && p.image_url !== hoverImageUrl);
+        if (gallery.length > 0) {
           const { error } = await supabase.from("product_images").insert(
-            galleryImages.map((img, i) => ({ product_id: productId, image_url: img.image_url, alt_text: img.alt_text || null, color: img.color || null, sort_order: i }))
+            gallery.map((img, i) => ({ product_id: productId, image_url: img.image_url, alt_text: img.alt_text || null, color: img.color || null, sort_order: i }))
           );
           if (error) throw error;
         }
@@ -406,83 +443,58 @@ const ProductForm = ({ product, onClose }: { product: any | null; onClose: () =>
           </label>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <div>
-            <div className="mb-1 flex items-center justify-between gap-2">
-              <label className="block text-xs font-medium text-muted-foreground">Image principale</label>
-              <ImageHint kind="product" className="mt-0" />
-              <select value={defaultColor} onChange={(e) => setDefaultColor(e.target.value)} className="rounded-sm border border-border bg-background px-1 py-0.5 text-[11px]" aria-label="Couleur de l'image principale et de survol" title="Couleur de l'image principale et de survol (couleur affichée par défaut)">
-                {PHOTO_COLORS.map((c) => <option key={c.value} value={c.value}>{c.value ? `Couleur : ${c.label}` : "Couleur : —"}</option>)}
-              </select>
-            </div>
-            <input type="file" ref={mainImageRef} className="hidden" accept="image/*" onChange={(e) => handleImageUpload(e, setImageUrl, "main")} />
-            {imageUrl ? (
-              <div className="relative">
-                <img src={imageUrl} alt="" className="h-40 w-full rounded-sm bg-white object-contain" />
-                <button onClick={() => mainImageRef.current?.click()} className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-sm bg-background/80 px-2 py-1 text-xs text-foreground backdrop-blur-sm"><Upload className="h-3 w-3" /> Importer</button>
-              </div>
-            ) : (
-              <button onClick={() => mainImageRef.current?.click()} className="flex h-40 w-full flex-col items-center justify-center gap-2 rounded-sm border border-dashed border-border text-muted-foreground hover:border-accent hover:text-accent">
-                <Upload className="h-6 w-6" /> <span className="text-xs">Upload</span>
-              </button>
-            )}
-          </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-muted-foreground">Image hover</label>
-            <input type="file" ref={hoverImageRef} className="hidden" accept="image/*" onChange={(e) => handleImageUpload(e, setHoverImageUrl, "hover")} />
-            {hoverImageUrl ? (
-              <div className="relative">
-                <img src={hoverImageUrl} alt="" className="h-40 w-full rounded-sm bg-white object-contain" />
-                <button onClick={() => hoverImageRef.current?.click()} className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-sm bg-background/80 px-2 py-1 text-xs text-foreground backdrop-blur-sm"><Upload className="h-3 w-3" /> Importer</button>
-                <button onClick={() => setHoverImageUrl("")} className="absolute right-2 top-2 rounded-full bg-background/80 p-1 text-muted-foreground backdrop-blur-sm hover:text-destructive" title="Retirer l'image de survol" aria-label="Retirer l'image de survol"><X className="h-3 w-3" /></button>
-              </div>
-            ) : (
-              <button onClick={() => hoverImageRef.current?.click()} className="flex h-40 w-full flex-col items-center justify-center gap-2 rounded-sm border border-dashed border-border text-muted-foreground hover:border-accent hover:text-accent">
-                <Upload className="h-6 w-6" /> <span className="text-xs">Upload</span>
-              </button>
-            )}
-          </div>
-        </div>
-        <div className="-mt-2 flex flex-wrap items-center justify-between gap-2 text-[11px] text-muted-foreground">
-          <span>Pour changer l'image principale ou de survol, choisissez une photo de la galerie (boutons <strong>Principale</strong> / <strong>Survol</strong> sous chaque photo) ou importez-en une nouvelle.</span>
-          {imageUrl && hoverImageUrl && (
-            <button onClick={swapMainHover} className="inline-flex items-center gap-1 rounded-sm border border-border px-2 py-1 text-xs text-foreground hover:bg-secondary"><ArrowLeftRight className="h-3 w-3" /> Inverser principale / survol</button>
-          )}
-        </div>
-
+        {/* Photos : une seule galerie ; chaque photo peut devenir l'image principale ou l'image de survol */}
         <div>
-          <div className="mb-2 flex items-center justify-between">
-            <label className="text-xs font-medium text-muted-foreground">Galerie d'images</label>
-            <input type="file" ref={galleryInputRef} className="hidden" accept="image/*" multiple onChange={handleGalleryUpload} />
-            <button onClick={() => galleryInputRef.current?.click()} className="flex items-center gap-1 text-xs text-accent hover:text-accent/80"><Plus className="h-3 w-3" /> Ajouter</button>
-          </div>
-          {galleryImages.length > 0 ? (
-            <div className="grid grid-cols-4 gap-2">
-              {galleryImages.map((img, i) => {
-                const isMain = !!imageUrl && img.image_url === imageUrl;
-                const isHover = !!hoverImageUrl && img.image_url === hoverImageUrl;
-                return (
-                <div key={i} className="group relative">
-                  <img src={img.image_url} alt="" className={`h-24 w-full rounded-sm bg-white object-contain ${isMain ? "ring-2 ring-accent" : isHover ? "ring-2 ring-sky-500" : ""}`} />
-                  {(isMain || isHover) && (
-                    <span className="pointer-events-none absolute left-1 top-1 flex flex-col gap-0.5">
-                      {isMain && <span className="rounded-sm bg-accent px-1 py-0.5 text-[9px] font-bold uppercase text-accent-foreground">Principale</span>}
-                      {isHover && <span className="rounded-sm bg-sky-600 px-1 py-0.5 text-[9px] font-bold uppercase text-white">Survol</span>}
-                    </span>
-                  )}
-                  <select value={img.color || ""} onChange={(e) => setGalleryImages((prev) => prev.map((g, j) => (j === i ? { ...g, color: e.target.value || null } : g)))} className="mt-1 w-full rounded-sm border border-border bg-background px-1 py-0.5 text-[11px]" aria-label="Couleur de la photo">
-                    {PHOTO_COLORS.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
-                  </select>
-                  <div className="mt-1 grid grid-cols-2 gap-1">
-                    <button onClick={() => pickAsMain(img)} disabled={isMain} title="Utiliser comme image principale" className={`inline-flex items-center justify-center gap-1 rounded-sm border px-1 py-1 text-[11px] font-medium ${isMain ? "border-accent bg-accent text-accent-foreground" : "border-border hover:border-accent hover:text-accent"}`}><Star className="h-3 w-3" /> Principale</button>
-                    <button onClick={() => pickAsHover(img)} disabled={isHover} title="Utiliser comme image de survol" className={`inline-flex items-center justify-center gap-1 rounded-sm border px-1 py-1 text-[11px] font-medium ${isHover ? "border-sky-600 bg-sky-600 text-white" : "border-border hover:border-sky-600 hover:text-sky-700"}`}><MousePointer2 className="h-3 w-3" /> Survol</button>
-                  </div>
-                  <button onClick={() => removeGalleryImage(i)} className="absolute right-1 top-1 rounded-full bg-background/80 p-1 opacity-0 transition-opacity group-hover:opacity-100" title="Retirer de la galerie"><X className="h-3 w-3 text-destructive" /></button>
-                </div>
-                );
-              })}
+          <div className="mb-2 flex flex-wrap items-start justify-between gap-2">
+            <div>
+              <label className="block text-xs font-medium text-muted-foreground">Photos du produit ({photos.length})</label>
+              <p className="mt-0.5 max-w-2xl text-[11px] text-muted-foreground">
+                <strong>Principale</strong> = photo des listes et première photo de la fiche · <strong>Survol</strong> = photo montrée au passage de la souris (facultative).
+                La couleur de la photo principale est la couleur affichée par défaut. Les flèches changent l'ordre des photos sur la fiche.
+              </p>
+              <ImageHint kind="product" className="mt-1" />
             </div>
-          ) : <p className="text-xs text-muted-foreground">Aucune image dans la galerie.</p>}
+            <input type="file" ref={galleryInputRef} className="hidden" accept="image/*" multiple onChange={handleGalleryUpload} />
+            <button onClick={() => galleryInputRef.current?.click()} className="inline-flex items-center gap-1.5 rounded-sm border border-border px-3 py-1.5 text-xs font-medium text-accent hover:border-accent"><Upload className="h-3.5 w-3.5" /> Ajouter des photos</button>
+          </div>
+          {loadingGallery ? <p className="text-xs text-muted-foreground">Chargement des photos…</p> : photos.length > 0 ? (
+            <>
+              {!imageUrl && <p className="mb-2 rounded-sm bg-amber-50 px-3 py-2 text-xs text-amber-900">Aucune photo principale : choisissez-en une (bouton « Principale »).</p>}
+              {hoverPhoto && mainPhoto && (hoverPhoto.color || "") !== (mainPhoto.color || "") && (
+                <p className="mb-2 rounded-sm bg-sky-50 px-3 py-2 text-xs text-sky-900">La photo de survol n'est pas de la même couleur que la photo principale : dans les listes, la machine changera de couleur au passage de la souris.</p>
+              )}
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+                {photos.map((img, i) => {
+                  const isMain = !!imageUrl && img.image_url === imageUrl;
+                  const isHover = !!hoverImageUrl && img.image_url === hoverImageUrl;
+                  return (
+                    <div key={img.image_url} className={`relative rounded-sm border p-1.5 ${isMain ? "border-accent ring-1 ring-accent" : isHover ? "border-sky-500 ring-1 ring-sky-500" : "border-border"}`}>
+                      <img src={img.image_url} alt="" className="h-32 w-full rounded-sm bg-white object-contain" />
+                      {(isMain || isHover) && (
+                        <span className="pointer-events-none absolute left-2 top-2 rounded-sm px-1.5 py-0.5 text-[10px] font-bold uppercase text-white" style={{ background: isMain ? "hsl(var(--accent))" : "#0284c7" }}>{isMain ? "Principale" : "Survol"}</span>
+                      )}
+                      <button onClick={() => removePhoto(i)} className="absolute right-2 top-2 rounded-full border border-border bg-background/90 p-1 text-muted-foreground hover:text-destructive" title="Retirer cette photo" aria-label="Retirer cette photo"><X className="h-3 w-3" /></button>
+                      <div className="mt-1.5 grid grid-cols-2 gap-1">
+                        <button onClick={() => pickAsMain(i)} aria-pressed={isMain} title="Photo principale" className={`inline-flex items-center justify-center gap-1 rounded-sm border px-1 py-1 text-[11px] font-semibold ${isMain ? "border-accent bg-accent text-accent-foreground" : "border-border hover:border-accent hover:text-accent"}`}><Star className="h-3 w-3" /> Principale</button>
+                        <button onClick={() => pickAsHover(i)} aria-pressed={isHover} title={isHover ? "Retirer le survol" : "Photo de survol"} className={`inline-flex items-center justify-center gap-1 rounded-sm border px-1 py-1 text-[11px] font-semibold ${isHover ? "border-sky-600 bg-sky-600 text-white" : "border-border hover:border-sky-600 hover:text-sky-700"}`}><MousePointer2 className="h-3 w-3" /> Survol</button>
+                      </div>
+                      <div className="mt-1 flex items-center gap-1">
+                        <button onClick={() => movePhoto(i, -1)} disabled={i === 0} className="rounded-sm border border-border p-1 text-muted-foreground hover:text-foreground disabled:opacity-30" title="Avancer" aria-label="Avancer la photo"><ChevronLeft className="h-3 w-3" /></button>
+                        <select value={img.color || ""} onChange={(e) => setPhotos((prev) => prev.map((g, j) => (j === i ? { ...g, color: e.target.value || null } : g)))} className="min-w-0 flex-1 rounded-sm border border-border bg-background px-1 py-0.5 text-[11px]" aria-label="Couleur de la photo">
+                          {PHOTO_COLORS.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
+                        </select>
+                        <button onClick={() => movePhoto(i, 1)} disabled={i === photos.length - 1} className="rounded-sm border border-border p-1 text-muted-foreground hover:text-foreground disabled:opacity-30" title="Reculer" aria-label="Reculer la photo"><ChevronRight className="h-3 w-3" /></button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          ) : (
+            <button onClick={() => galleryInputRef.current?.click()} className="flex h-32 w-full flex-col items-center justify-center gap-2 rounded-sm border border-dashed border-border text-muted-foreground hover:border-accent hover:text-accent">
+              <Upload className="h-6 w-6" /> <span className="text-xs">Ajouter des photos (la première devient la photo principale)</span>
+            </button>
+          )}
         </div>
 
         <div>
