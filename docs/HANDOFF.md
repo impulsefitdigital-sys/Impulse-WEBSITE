@@ -335,6 +335,16 @@ Retours d'Adil après la mise en ligne, et check-up de l'infrastructure.
 - Le bouton WhatsApp ne s'ouvrait pas : le réglage Admin → Coordonnées contenait « 06 61 46 46 03 » et le lien devenait `wa.me/06 61 46 46 03` (wa.me exige 212661464603). Nouveau `src/lib/whatsapp.ts` : `normalizeWhatsApp` accepte tous les formats (06…, +212…, 00212…) et `whatsappHref` construit le lien (repli : +212 661-464603).
 - Même numéro +212 661-464603 partout : bouton flottant (site, LP1, LP2) et boutons WhatsApp affichés après l'envoi d'un formulaire sur la LP1 et la LP2 (avant : 0668 818 164). Vérifié : wa.me/212661464603 ouvre « Discuter sur WhatsApp avec le +212 661-464603 ».
 
+### 05/11/2026 — Catalogue Meta (49 machines du stock LP1)
+- `public/catalogue-meta/<ref>.jpg` : 49 images JPG 1080 × 1080 sur fond blanc (Meta n'accepte que JPG / PNG / GIF), servies à `https://impulsemorocco.com/catalogue-meta/<ref>.jpg`. Même couleur que la landing (rouge pour SL / ECP, noir sinon).
+- Fichier à importer dans Meta Commerce Manager : `_ANALYSE_CLAUDE\catalogue-meta\catalogue-meta-impulse-stock.csv` (modèle Meta). `id` = identifiant du produit du site (le même que `content_ids` envoyé par le Pixel sur les fiches) ; `price` = prix barré (× 1,20), `sale_price` = prix de la landing (HT) ; `link` = fiche de la LP1.
+- À refaire si les prix ou les photos changent (prix dans `src/data/stock-landing.ts`).
+
+### 05/11/2026 (bis) — Demandes du client (réunion du 04/11)
+- Admin → Produits : chaque photo de la galerie a deux boutons **Principale** / **Survol** (plus besoin de réimporter une photo pour la mettre en image principale ou de survol), pastilles sur la photo utilisée, bouton « Inverser principale / survol », croix pour retirer l'image de survol. Choisir une photo de couleur comme principale met à jour la couleur par défaut (`ProductForm.tsx`).
+- Accueil, carte « Une présence mondiale » : image fixe (plus de zoom, de déplacement ni de boutons + / − / maison / plein écran ; le doigt fait défiler la page), 98 pays + le Maroc mis en avant, points plus petits (agrandis sur téléphone) (`WorldPresenceSection.tsx`). Liste des pays indicative, à ajuster.
+- Carrousel de l'accueil (et de la LP2) sur téléphone : la bannière garde ses proportions 1600 × 625 et reste entière (plus de recadrage du texte de l'image) ; bouton éventuel du slide sous la bannière (`impulse-theme.css`, bloc `max-width:680px`).
+
 ## 4. Architecture cible
 
 ```

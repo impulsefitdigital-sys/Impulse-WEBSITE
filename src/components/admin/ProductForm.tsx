@@ -2,7 +2,7 @@ import { optimizeImage, uploadOptions, ImageHint } from "@/lib/images";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, Upload, X, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Upload, X, Plus, Trash2, Star, MousePointer2, ArrowLeftRight } from "lucide-react";
 import { toast } from "sonner";
 
 interface Spec { label: string; value: string; }
@@ -196,6 +196,16 @@ const ProductForm = ({ product, onClose }: { product: any | null; onClose: () =>
   };
 
   const removeGalleryImage = (index: number) => setGalleryImages((prev) => prev.filter((_, i) => i !== index));
+  // une photo de la galerie devient l'image principale ou l'image de survol (sans réimporter le fichier)
+  const pickAsMain = (img: GalleryImage) => {
+    setImageUrl(img.image_url);
+    if (img.color && img.color !== defaultColor) {
+      setDefaultColor(img.color);
+      toast.success(`Image principale changée (couleur par défaut : ${PHOTO_COLORS.find((c) => c.value === img.color)?.label || img.color})`);
+    } else toast.success("Image principale changée");
+  };
+  const pickAsHover = (img: GalleryImage) => { setHoverImageUrl(img.image_url); toast.success("Image de survol changée"); };
+  const swapMainHover = () => { const m = imageUrl; setImageUrl(hoverImageUrl); setHoverImageUrl(m); };
   const addSpec = () => setSpecs((prev) => [...prev, { label: "", value: "" }]);
   const removeSpec = (i: number) => setSpecs((prev) => prev.filter((_, idx) => idx !== i));
   const updateSpec = (i: number, field: keyof Spec, val: string) => setSpecs((prev) => prev.map((s, idx) => (idx === i ? { ...s, [field]: val } : s)));
@@ -409,7 +419,7 @@ const ProductForm = ({ product, onClose }: { product: any | null; onClose: () =>
             {imageUrl ? (
               <div className="relative">
                 <img src={imageUrl} alt="" className="h-40 w-full rounded-sm bg-white object-contain" />
-                <button onClick={() => mainImageRef.current?.click()} className="absolute bottom-2 right-2 rounded-sm bg-background/80 px-2 py-1 text-xs text-foreground backdrop-blur-sm">Changer</button>
+                <button onClick={() => mainImageRef.current?.click()} className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-sm bg-background/80 px-2 py-1 text-xs text-foreground backdrop-blur-sm"><Upload className="h-3 w-3" /> Importer</button>
               </div>
             ) : (
               <button onClick={() => mainImageRef.current?.click()} className="flex h-40 w-full flex-col items-center justify-center gap-2 rounded-sm border border-dashed border-border text-muted-foreground hover:border-accent hover:text-accent">
@@ -423,7 +433,8 @@ const ProductForm = ({ product, onClose }: { product: any | null; onClose: () =>
             {hoverImageUrl ? (
               <div className="relative">
                 <img src={hoverImageUrl} alt="" className="h-40 w-full rounded-sm bg-white object-contain" />
-                <button onClick={() => hoverImageRef.current?.click()} className="absolute bottom-2 right-2 rounded-sm bg-background/80 px-2 py-1 text-xs text-foreground backdrop-blur-sm">Changer</button>
+                <button onClick={() => hoverImageRef.current?.click()} className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-sm bg-background/80 px-2 py-1 text-xs text-foreground backdrop-blur-sm"><Upload className="h-3 w-3" /> Importer</button>
+                <button onClick={() => setHoverImageUrl("")} className="absolute right-2 top-2 rounded-full bg-background/80 p-1 text-muted-foreground backdrop-blur-sm hover:text-destructive" title="Retirer l'image de survol" aria-label="Retirer l'image de survol"><X className="h-3 w-3" /></button>
               </div>
             ) : (
               <button onClick={() => hoverImageRef.current?.click()} className="flex h-40 w-full flex-col items-center justify-center gap-2 rounded-sm border border-dashed border-border text-muted-foreground hover:border-accent hover:text-accent">
@@ -431,6 +442,12 @@ const ProductForm = ({ product, onClose }: { product: any | null; onClose: () =>
               </button>
             )}
           </div>
+        </div>
+        <div className="-mt-2 flex flex-wrap items-center justify-between gap-2 text-[11px] text-muted-foreground">
+          <span>Pour changer l'image principale ou de survol, choisissez une photo de la galerie (boutons <strong>Principale</strong> / <strong>Survol</strong> sous chaque photo) ou importez-en une nouvelle.</span>
+          {imageUrl && hoverImageUrl && (
+            <button onClick={swapMainHover} className="inline-flex items-center gap-1 rounded-sm border border-border px-2 py-1 text-xs text-foreground hover:bg-secondary"><ArrowLeftRight className="h-3 w-3" /> Inverser principale / survol</button>
+          )}
         </div>
 
         <div>
@@ -441,15 +458,29 @@ const ProductForm = ({ product, onClose }: { product: any | null; onClose: () =>
           </div>
           {galleryImages.length > 0 ? (
             <div className="grid grid-cols-4 gap-2">
-              {galleryImages.map((img, i) => (
+              {galleryImages.map((img, i) => {
+                const isMain = !!imageUrl && img.image_url === imageUrl;
+                const isHover = !!hoverImageUrl && img.image_url === hoverImageUrl;
+                return (
                 <div key={i} className="group relative">
-                  <img src={img.image_url} alt="" className="h-24 w-full rounded-sm object-contain bg-white" />
+                  <img src={img.image_url} alt="" className={`h-24 w-full rounded-sm bg-white object-contain ${isMain ? "ring-2 ring-accent" : isHover ? "ring-2 ring-sky-500" : ""}`} />
+                  {(isMain || isHover) && (
+                    <span className="pointer-events-none absolute left-1 top-1 flex flex-col gap-0.5">
+                      {isMain && <span className="rounded-sm bg-accent px-1 py-0.5 text-[9px] font-bold uppercase text-accent-foreground">Principale</span>}
+                      {isHover && <span className="rounded-sm bg-sky-600 px-1 py-0.5 text-[9px] font-bold uppercase text-white">Survol</span>}
+                    </span>
+                  )}
                   <select value={img.color || ""} onChange={(e) => setGalleryImages((prev) => prev.map((g, j) => (j === i ? { ...g, color: e.target.value || null } : g)))} className="mt-1 w-full rounded-sm border border-border bg-background px-1 py-0.5 text-[11px]" aria-label="Couleur de la photo">
                     {PHOTO_COLORS.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
                   </select>
-                  <button onClick={() => removeGalleryImage(i)} className="absolute right-1 top-1 rounded-full bg-background/80 p-1 opacity-0 transition-opacity group-hover:opacity-100"><X className="h-3 w-3 text-destructive" /></button>
+                  <div className="mt-1 grid grid-cols-2 gap-1">
+                    <button onClick={() => pickAsMain(img)} disabled={isMain} title="Utiliser comme image principale" className={`inline-flex items-center justify-center gap-1 rounded-sm border px-1 py-1 text-[11px] font-medium ${isMain ? "border-accent bg-accent text-accent-foreground" : "border-border hover:border-accent hover:text-accent"}`}><Star className="h-3 w-3" /> Principale</button>
+                    <button onClick={() => pickAsHover(img)} disabled={isHover} title="Utiliser comme image de survol" className={`inline-flex items-center justify-center gap-1 rounded-sm border px-1 py-1 text-[11px] font-medium ${isHover ? "border-sky-600 bg-sky-600 text-white" : "border-border hover:border-sky-600 hover:text-sky-700"}`}><MousePointer2 className="h-3 w-3" /> Survol</button>
+                  </div>
+                  <button onClick={() => removeGalleryImage(i)} className="absolute right-1 top-1 rounded-full bg-background/80 p-1 opacity-0 transition-opacity group-hover:opacity-100" title="Retirer de la galerie"><X className="h-3 w-3 text-destructive" /></button>
                 </div>
-              ))}
+                );
+              })}
             </div>
           ) : <p className="text-xs text-muted-foreground">Aucune image dans la galerie.</p>}
         </div>

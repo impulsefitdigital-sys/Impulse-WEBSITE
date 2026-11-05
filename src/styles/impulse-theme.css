@@ -367,10 +367,15 @@
 .imp .hero-stats-band .stats{margin-top:0;border-left:0;border-right:0}
 @media(max-width:680px){
   .imp .hero-arrow{display:none}
-  /* shorter box on phones so more of the wide banner's width is visible (cover crops less) */
-  .imp .hero-media{height:clamp(300px,44vh,380px)}
-  .imp .hero-bg{display:none}
-  .imp .hero-fg{object-fit:cover}
+  /* téléphone (demande du client 04/11/2026) : la bannière garde ses proportions d'origine (1600 × 625) et
+     reste entière — plus de recadrage qui coupait le texte écrit sur l'image. Une image « téléphone »
+     envoyée dans l'admin s'affiche aussi entière (fond flouté autour si ses proportions diffèrent). */
+  .imp .hero-media{height:auto;aspect-ratio:auto;max-height:none}
+  .imp .hero-track{height:auto;aspect-ratio:1600/625}
+  .imp .hero-fg{object-fit:contain}
+  .imp .hero-slide.active .hero-fg{animation:none}
+  .imp .hero-scrim{display:none}
+  .imp .hero-dots{top:calc(100vw * 625 / 1600 - 14px);bottom:auto}
   .imp .hero-media h1{font-size:clamp(1.6rem,7vw,2.4rem)}
 }
 @media(prefers-reduced-motion:reduce){
@@ -1107,5 +1112,6 @@
 .imp .hero-cta{position:absolute;z-index:3;left:max(28px,4vw);bottom:clamp(40px,7%,72px);animation:imp-hero-cta .5s ease-out both}
 .imp .hero-cta .btn{box-shadow:0 10px 30px rgba(0,0,0,.35)}
 @keyframes imp-hero-cta{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-@media(max-width:680px){.imp .hero-cta{left:50%;bottom:34px;transform:translateX(-50%);animation:none;white-space:nowrap}}
+/* téléphone : le bouton passe sous la bannière (il ne cache plus le texte de l'image) */
+@media(max-width:680px){.imp .hero-cta{position:static;display:flex;justify-content:center;padding:12px 16px 14px;background:#0e0e10;animation:none;white-space:nowrap}}
 @media(prefers-reduced-motion:reduce){.imp .hero-cta{animation:none}}
